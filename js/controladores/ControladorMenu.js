@@ -13,7 +13,13 @@ class ControladorMenu {
     const menuOrdenado = this.config.menu.sort((a, b) => a.orden - b.orden);
 
     // Generar HTML del menú lateral
-    let menuHTML = menuOrdenado.map(item => item.toHTML()).join('');
+    let menuHTML = `
+      <div class="sidebar-logo">
+        <img src="assets/img/logo-saia.png" alt="Logo">
+      </div>
+    `;
+
+    menuHTML += menuOrdenado.map(item => item.toHTML()).join('');
 
     // Agregar botón de configuración al final
     menuHTML += `

@@ -14,6 +14,10 @@ class App {
     this.temaHelper.aplicarTema();
     console.log('Tema aplicado:', this.temaHelper.obtenerTemaActual());
 
+    // Cargar sidebar
+    this.cargarSidebar();
+    console.log('Sidebar cargado');
+
     // Cargar menú
     await this.controladorMenu.cargarMenu();
     console.log('Menú cargado');
@@ -82,6 +86,43 @@ class App {
                 </div>
             </div>
         `;
+  }
+
+  cargarSidebar() {
+    const sidebar = document.getElementById('sidebar');
+    console.log('Sidebar element:', sidebar);
+
+    if (!sidebar) {
+      console.error('No se encontró el elemento sidebar');
+      return;
+    }
+
+    sidebar.innerHTML = `
+      <div class="sidebar-logo">
+        <img src="assets/img/logo-saia.png" alt="Logo">
+      </div>
+      <div class="menu-item" data-tooltip="Dashboard">
+        <i class="fas fa-home"></i>
+      </div>
+      <div class="menu-item" data-tooltip="Tickets">
+        <i class="fas fa-ticket-alt"></i>
+      </div>
+      <div class="menu-item" data-tooltip="Usuarios">
+        <i class="fas fa-users"></i>
+      </div>
+      <div class="menu-item" data-tooltip="Configuración">
+        <i class="fas fa-cog"></i>
+      </div>
+    `;
+
+    // Verificar si el logo se cargó correctamente
+    const logoImg = sidebar.querySelector('.sidebar-logo img');
+    console.log('Logo image element:', logoImg);
+
+    if (logoImg) {
+      logoImg.onload = () => console.log('Logo cargado correctamente');
+      logoImg.onerror = () => console.error('Error al cargar el logo');
+    }
   }
 }
 
