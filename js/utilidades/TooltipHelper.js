@@ -5,15 +5,19 @@ class TooltipHelper {
 
   inicializarTooltips() {
     document.addEventListener('mouseover', e => {
-      const target = e.target;
-      if (target.hasAttribute('data-tooltip')) {
+      // Buscar el elemento más cercano con data-tooltip (ya sea el elemento actual o un padre)
+      const target = e.target.closest('[data-tooltip]');
+      if (target) {
         this.mostrarTooltip(target);
       }
     });
 
     document.addEventListener('mouseout', e => {
-      const target = e.target;
-      if (target.hasAttribute('data-tooltip')) {
+      // Verificar si el elemento al que se movió el mouse está fuera del elemento con tooltip
+      const target = e.target.closest('[data-tooltip]');
+      const relatedTarget = e.relatedTarget;
+
+      if (target && (!relatedTarget || !target.contains(relatedTarget))) {
         this.ocultarTooltip();
       }
     });
