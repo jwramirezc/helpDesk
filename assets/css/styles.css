@@ -2,11 +2,12 @@
 :root {
   --sidebar-width: 60px;
   --header-height: 60px;
-  --primary-color: #007bff;
+  --primary-color: #0d85e8;
   --secondary-color: #6c757d;
   --background-color: #ffffff;
   --text-color: #212529;
   --mobile-menu-width: 250px;
+  --sidebar-bg-color: #2b303b;
 }
 
 /* Estilos generales */
@@ -20,7 +21,7 @@ body {
 #sidebar {
   width: var(--sidebar-width);
   height: 100vh;
-  background-color: var(--primary-color);
+  background-color: var(--sidebar-bg-color);
   position: fixed;
   left: 0;
   top: 0;
@@ -60,7 +61,7 @@ body {
   top: 10px;
   left: 10px;
   z-index: 1001;
-  background: var(--primary-color);
+  background: var(--sidebar-bg-color);
   border: none;
   color: white;
   padding: 10px;
@@ -152,6 +153,7 @@ body {
   border-radius: 8px;
   cursor: pointer;
   transition: all 0.3s ease;
+  position: relative;
 }
 
 .menu-item:hover {
@@ -223,7 +225,7 @@ body {
   min-height: 100vh;
 }
 
-/* Tooltips personalizados */
+/* Tooltips  */
 .custom-tooltip {
   position: absolute;
   background-color: rgba(0, 0, 0, 0.8);
@@ -232,6 +234,34 @@ body {
   border-radius: 4px;
   font-size: 0.875rem;
   z-index: 1001;
+  top: 50%;
+  transform: translateY(-50%);
+  left: calc(100% + 10px);
+  white-space: nowrap;
+}
+
+.custom-tooltip::before {
+  content: '';
+  position: absolute;
+  left: -6px;
+  top: 50%;
+  transform: translateY(-50%);
+  border-style: solid;
+  border-width: 6px 6px 6px 0;
+  border-color: transparent rgba(0, 0, 0, 0.8) transparent transparent;
+}
+
+/* Ajuste para el menú móvil */
+.mobile-menu-item .custom-tooltip {
+  left: auto;
+  right: calc(100% + 10px);
+}
+
+.mobile-menu-item .custom-tooltip::before {
+  left: auto;
+  right: -6px;
+  border-width: 6px 0 6px 6px;
+  border-color: transparent transparent transparent rgba(0, 0, 0, 0.8);
 }
 
 /* Responsive */
