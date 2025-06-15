@@ -43,8 +43,8 @@ class App {
     header.innerHTML = `
             <div class="user-info">
                 <div class="notifications">
-                    <i class="fas fa-bell"></i>
-                    <span class="notification-badge">0</span>
+                    <i class="far fa-bell"></i>
+                    <span class="notification-badge"></span>
                 </div>
                 <div class="user-details">
                     <span class="user-name">${usuario.nombre} ${usuario.apellidos}</span>
