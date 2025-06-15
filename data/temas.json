@@ -1,0 +1,37 @@
+{
+  "temas": [
+    {
+      "id": "default",
+      "nombre": "Tema por defecto",
+      "modo": "claro",
+      "colores": {
+        "primario": "#007bff",
+        "secundario": "#6c757d",
+        "fondo": "#ffffff",
+        "texto": "#212529"
+      }
+    },
+    {
+      "id": "dark",
+      "nombre": "Tema oscuro",
+      "modo": "oscuro",
+      "colores": {
+        "primario": "#0d6efd",
+        "secundario": "#6c757d",
+        "fondo": "#212529",
+        "texto": "#ffffff"
+      }
+    },
+    {
+      "id": "corporate",
+      "nombre": "Tema corporativo",
+      "modo": "claro",
+      "colores": {
+        "primario": "#2c3e50",
+        "secundario": "#34495e",
+        "fondo": "#ecf0f1",
+        "texto": "#2c3e50"
+      }
+    }
+  ]
+}
