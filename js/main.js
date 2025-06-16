@@ -40,14 +40,30 @@ class App {
     const usuario = this.controladorUsuario.obtenerUsuarioActual();
     console.log('Usuario actual:', usuario);
 
+    // Obtener el estado de las notificaciones desde el archivo JSON
+    let tieneNotificaciones = false;
+    try {
+      const response = await fetch('data/notifications.json');
+      const data = await response.json();
+      tieneNotificaciones = data.tieneNotificaciones;
+    } catch (error) {
+      console.error('Error al cargar las notificaciones:', error);
+    }
+
     header.innerHTML = `
             <div class="user-info">
                 <div class="notifications">
                     <i class="far fa-bell"></i>
-                    <span class="notification-badge"></span>
+                    ${
+                      tieneNotificaciones
+                        ? '<span class="notification-badge"></span>'
+                        : ''
+                    }
                 </div>
                 <div class="user-details">
-                    <span class="user-name">${usuario.nombre} ${usuario.apellidos}</span>
+                    <span class="user-name">${usuario.nombre} ${
+      usuario.apellidos
+    }</span>
                     <span class="user-company">${usuario.empresa}</span>
                 </div>
                 <div class="user-avatar">
