@@ -101,7 +101,7 @@ class ControladorMenu {
   }
 
   actualizarInfoUsuario() {
-    const userAvatar = this.mobileMenu.querySelector('.user-avatar img');
+    const userAvatar = this.mobileMenu.querySelector('.mobile-menu-header img');
     const userName = this.mobileMenu.querySelector('.user-name');
     const userCompany = this.mobileMenu.querySelector('.user-company');
 

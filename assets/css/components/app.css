@@ -334,7 +334,7 @@
 .notification-badge {
   position: absolute;
   top: 0;
-  right: 0;
+  right: 4px;
   background-color: var(--danger-color);
   color: white;
   font-size: 0.75rem;
