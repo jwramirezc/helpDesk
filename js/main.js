@@ -43,7 +43,7 @@ class App {
     // Obtener el estado de las notificaciones desde el archivo JSON
     let tieneNotificaciones = false;
     try {
-      const response = await fetch('data/notifications.json');
+      const response = await fetch('data/notificationes.json');
       const data = await response.json();
       tieneNotificaciones = data.tieneNotificaciones;
     } catch (error) {
@@ -81,7 +81,7 @@ class App {
             <div class="container">
                 <div class="row">
                     <div class="col-12">
-                        <h1>Bienvenido al Portal HELP DESK</h1>
+                        <h3>Bienvenido al Portal HELP DESK</h3>
                         <p>Seleccione una opción del menú para comenzar.</p>
                     </div>
                 </div>
