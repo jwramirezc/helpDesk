@@ -7,6 +7,7 @@ class ControladorMenu {
     this.mobileMenuItems = document.querySelector('.mobile-menu-items');
     this.usuario = this.config.usuario;
     this.menuItems = null;
+    this.temaHelper = new TemaHelper();
   }
 
   async cargarMenu() {
@@ -58,6 +59,9 @@ class ControladorMenu {
 
       // Actualizar sidebar
       this.sidebar.innerHTML = menuHTML;
+
+      // Actualizar ícono del tema según el tema actual
+      this.actualizarIconoTema();
 
       // Generar HTML del menú móvil
       let mobileMenuHTML = `
@@ -111,6 +115,26 @@ class ControladorMenu {
     if (userCompany) userCompany.textContent = this.usuario.empresa;
   }
 
+  actualizarIconoTema() {
+    const temaActual = this.temaHelper.obtenerTemaActual();
+
+    // Actualizar ícono en el menú de escritorio
+    const themeButton = this.sidebar.querySelector('#menu_theme i');
+    if (themeButton) {
+      themeButton.className =
+        temaActual.modo === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+
+    // Actualizar ícono en el menú móvil
+    const mobileThemeButton = this.mobileMenuItems?.querySelector(
+      '#mobile_menu_theme i'
+    );
+    if (mobileThemeButton) {
+      mobileThemeButton.className =
+        temaActual.modo === 'light' ? 'fas fa-moon' : 'fas fa-sun';
+    }
+  }
+
   agregarEventos() {
     // Eventos del menú lateral
     this.sidebar.addEventListener('click', e => {
@@ -122,6 +146,8 @@ class ControladorMenu {
         this.cerrarSesion();
       } else if (id === 'menu_config') {
         this.abrirConfiguracion();
+      } else if (id === 'menu_theme') {
+        this.cambiarTema();
       } else {
         this.seleccionarItem(id);
       }
@@ -147,6 +173,8 @@ class ControladorMenu {
           this.cerrarSesion();
         } else if (id === 'menu_config') {
           this.abrirConfiguracion();
+        } else if (id === 'menu_theme') {
+          this.cambiarTema();
         } else {
           this.seleccionarItem(id);
         }
@@ -240,5 +268,16 @@ class ControladorMenu {
       // Aquí se podría implementar la lógica para guardar los cambios en el servidor
       this.cargarMenu();
     }
+  }
+
+  cambiarTema() {
+    const temaActual = this.temaHelper.obtenerTemaActual();
+    const nuevoModo = temaActual.modo === 'light' ? 'dark' : 'light';
+
+    // Cambiar el tema
+    this.temaHelper.cambiarModo(nuevoModo);
+
+    // Actualizar los íconos
+    this.actualizarIconoTema();
   }
 }

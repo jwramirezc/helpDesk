@@ -398,9 +398,32 @@
 
 /* Tema Light */
 [data-theme='light'] {
-  --sidebar-bg-color: #f5f5f6;
-  --icon-color: var(--primary-color);
-  --icon-color-active: white;
-  --background-icon-color: #ffffff;
-  --hover-color: rgba(0, 0, 0, 0.1);
+  --background-color: #dedede; /* Fondo general claro */
+  --text-color: #1a1a1a; /* Texto oscuro para buena legibilidad */
+  --sidebar-bg-color: #ffffff; /* Sidebar blanco o muy claro */
+  --icon-color: #555555; /* Iconos en gris oscuro */
+  --icon-color-active: #1a73e8; /* Azul para iconos activos (resalta sin ser agresivo) */
+  --background-icon-color: #e8e8e8; /* Fondo gris claro para íconos */
+  --hover-color: rgba(0, 0, 0, 0.05); /* Sombra sutil en hover */
+}
+
+/* Theme Toggle Button */
+#menu_theme {
+  transition: all 0.3s ease;
+}
+
+#menu_theme i {
+  transition: transform 0.3s ease;
+}
+
+#menu_theme:hover i {
+  transform: rotate(30deg);
+}
+
+[data-theme='dark'] #menu_theme i {
+  color: var(--icon-color-active);
+}
+
+[data-theme='light'] #menu_theme i {
+  color: var(--icon-color);
 }

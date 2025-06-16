@@ -34,6 +34,12 @@
     ],
     "bottom": [
       {
+        "id": "menu_theme",
+        "icon": "fas fa-moon",
+        "name": "Tema",
+        "vista": "theme"
+      },
+      {
         "id": "menu_config",
         "icon": "fas fa-cog",
         "name": "Configuración",
