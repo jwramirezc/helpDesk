@@ -1,7 +1,6 @@
 class Configuracion {
   constructor(datos = {}) {
     this.usuario = new Usuario(datos.usuario);
-    this.menu = (datos.menu || []).map(item => new MenuItem(item));
     this.tema = datos.tema || {
       modo: 'claro',
       colores: {
@@ -25,7 +24,6 @@ class Configuracion {
   toJSON() {
     return {
       usuario: this.usuario.toJSON(),
-      menu: this.menu.map(item => item.toJSON()),
       tema: this.tema,
       notificaciones: this.notificaciones,
     };

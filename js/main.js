@@ -14,19 +14,14 @@ class App {
 
   async inicializar() {
     try {
-      console.log('Inicializando aplicación...');
-
       // Cargar tema
       this.temaHelper.aplicarTema();
-      console.log('Tema aplicado:', this.temaHelper.obtenerTemaActual());
 
       // Inicializar componentes
       await this.inicializarComponentes();
-      console.log('Componentes inicializados');
 
       // Inicializar tooltips
       this.tooltipHelper.inicializarTooltips();
-      console.log('Tooltips inicializados');
     } catch (error) {
       console.error('Error al inicializar la aplicación:', error);
     }
@@ -35,25 +30,20 @@ class App {
   async inicializarComponentes() {
     // Inicializar menú
     await this.controladorMenu.cargarMenu();
-    console.log('Menú inicializado');
 
     // Inicializar sidebar
     this.controladorSidebar.inicializar();
-    console.log('Sidebar inicializado');
 
     // Inicializar header
     await this.controladorHeader.inicializar();
-    console.log('Header inicializado');
 
     // Inicializar contenido
     this.controladorContenido.inicializar();
-    console.log('Contenido inicializado');
   }
 }
 
 // Inicializar la aplicación cuando el DOM esté listo
 document.addEventListener('DOMContentLoaded', () => {
-  console.log('DOM cargado, iniciando aplicación...');
   const app = new App();
   app.inicializar();
 });

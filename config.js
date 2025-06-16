@@ -11,37 +11,34 @@ const CONFIG = {
     idioma: 'es',
   },
 
-  // Configuración del menú
-  menu: [
-    {
-      id: 'menu_helpdesk',
-      icono: 'fa-ticket',
-      titulo: 'Help Desk',
-      visible: true,
-      orden: 1,
-    },
-    {
-      id: 'menu_pqr',
-      icono: 'fa-comments',
-      titulo: 'PQR',
-      visible: true,
-      orden: 2,
-    },
-    {
-      id: 'menu_consultas',
-      icono: 'fa-search',
-      titulo: 'Consultas',
-      visible: true,
-      orden: 3,
-    },
-    {
-      id: 'menu_reportes',
-      icono: 'fa-chart-bar',
-      titulo: 'Reportes',
-      visible: true,
-      orden: 4,
-    },
-  ],
+  // Configuración del menú estándar
+  menu: {
+    top: [
+      {
+        id: 'menu_home',
+        icono: 'fa-home',
+        titulo: 'Home',
+        visible: true,
+        orden: 1,
+      },
+    ],
+    bottom: [
+      {
+        id: 'menu_config',
+        icono: 'fa-cog',
+        titulo: 'Configuración',
+        visible: true,
+        orden: 1,
+      },
+      {
+        id: 'menu_logout',
+        icono: 'fa-sign-out-alt',
+        titulo: 'Cerrar Sesión',
+        visible: true,
+        orden: 2,
+      },
+    ],
+  },
 
   // Configuración del tema
   tema: {

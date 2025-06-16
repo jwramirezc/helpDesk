@@ -2,30 +2,48 @@
   "menuItems": {
     "top": [
       {
-        "id": "dashboard",
+        "id": "menu_home",
         "icon": "fas fa-home",
-        "name": "Dashboard",
-        "vista": "dashboard"
+        "name": "Home",
+        "vista": "home"
       },
       {
-        "id": "tickets",
-        "icon": "fas fa-ticket-alt",
-        "name": "Tickets",
-        "vista": "tickets"
+        "id": "menu_helpdesk",
+        "icon": "fas fa-ticket",
+        "name": "Help Desk",
+        "vista": "helpdesk"
       },
       {
-        "id": "usuarios",
-        "icon": "fas fa-users",
-        "name": "Usuarios",
-        "vista": "usuarios"
+        "id": "menu_pqrs",
+        "icon": "fas fa-comments",
+        "name": "PQRS",
+        "vista": "pqrs"
+      },
+      {
+        "id": "menu_consultas",
+        "icon": "fas fa-search",
+        "name": "Consultas",
+        "vista": "consultas"
+      },
+      {
+        "id": "menu_reportes",
+        "icon": "fas fa-chart-bar",
+        "name": "Reportes",
+        "vista": "reportes"
       }
     ],
     "bottom": [
       {
-        "id": "configuracion",
+        "id": "menu_config",
         "icon": "fas fa-cog",
         "name": "Configuración",
         "vista": "configuracion"
+      },
+      {
+        "id": "menu_logout",
+        "icon": "fas fa-sign-out-alt",
+        "name": "Cerrar Sesión",
+        "vista": "logout"
       }
     ]
   }
