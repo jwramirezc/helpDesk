@@ -68,12 +68,14 @@ class ControladorMenu {
     const mobileMenuHeader = this.mobileMenu.querySelector(
       '.mobile-menu-header'
     );
-    mobileMenuHeader.querySelector('img').src = this.usuario.avatar;
-    mobileMenuHeader.querySelector(
-      '.user-name'
-    ).textContent = `${this.usuario.nombre} ${this.usuario.apellidos}`;
-    mobileMenuHeader.querySelector('.user-company').textContent =
-      this.usuario.empresa;
+    if (mobileMenuHeader) {
+      mobileMenuHeader.querySelector('img').src = this.usuario.avatar;
+      mobileMenuHeader.querySelector(
+        '.user-name'
+      ).textContent = `${this.usuario.nombre} ${this.usuario.apellidos}`;
+      mobileMenuHeader.querySelector('.user-company').textContent =
+        this.usuario.empresa;
+    }
   }
 
   agregarEventos() {
@@ -91,30 +93,36 @@ class ControladorMenu {
     });
 
     // Eventos del menú móvil
-    this.mobileMenuToggle.addEventListener('click', () => {
-      this.mobileMenu.classList.toggle('active');
-    });
+    if (this.mobileMenuToggle) {
+      this.mobileMenuToggle.addEventListener('click', e => {
+        e.stopPropagation();
+        this.mobileMenu.classList.toggle('active');
+      });
+    }
 
-    this.mobileMenuItems.addEventListener('click', e => {
-      const menuItem = e.target.closest('.mobile-menu-item');
-      if (!menuItem) return;
+    if (this.mobileMenuItems) {
+      this.mobileMenuItems.addEventListener('click', e => {
+        const menuItem = e.target.closest('.mobile-menu-item');
+        if (!menuItem) return;
 
-      e.preventDefault();
-      const id = menuItem.id.replace('mobile_', '');
+        e.preventDefault();
+        const id = menuItem.id.replace('mobile_', '');
 
-      if (id === 'menu_config') {
-        this.abrirConfiguracion();
-      } else {
-        this.seleccionarItem(id);
-      }
+        if (id === 'menu_config') {
+          this.abrirConfiguracion();
+        } else {
+          this.seleccionarItem(id);
+        }
 
-      // Cerrar menú móvil después de seleccionar
-      this.mobileMenu.classList.remove('active');
-    });
+        // Cerrar menú móvil después de seleccionar
+        this.mobileMenu.classList.remove('active');
+      });
+    }
 
     // Cerrar menú móvil al hacer clic fuera
     document.addEventListener('click', e => {
       if (
+        this.mobileMenu &&
         !this.mobileMenu.contains(e.target) &&
         !this.mobileMenuToggle.contains(e.target) &&
         this.mobileMenu.classList.contains('active')
@@ -129,19 +137,23 @@ class ControladorMenu {
     this.sidebar.querySelectorAll('.menu-item').forEach(item => {
       item.classList.remove('active');
     });
-    this.mobileMenuItems.querySelectorAll('.mobile-menu-item').forEach(item => {
-      item.classList.remove('active');
-    });
+    if (this.mobileMenuItems) {
+      this.mobileMenuItems
+        .querySelectorAll('.mobile-menu-item')
+        .forEach(item => {
+          item.classList.remove('active');
+        });
+    }
 
     // Agregar clase active al item seleccionado
     const item = this.sidebar.querySelector(`#${id}`);
-    const mobileItem = this.mobileMenuItems.querySelector(`#mobile_${id}`);
+    const mobileItem = this.mobileMenuItems?.querySelector(`#mobile_${id}`);
     if (item) item.classList.add('active');
     if (mobileItem) mobileItem.classList.add('active');
   }
 
   abrirConfiguracion() {
-    // Aquí se implementará la lógica para abrir la configuración
+    // Implementar lógica para abrir configuración
     console.log('Abrir configuración');
   }
 

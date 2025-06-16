@@ -7,6 +7,7 @@ class App {
     );
     this.controladorSidebar = new ControladorSidebar(this.controladorContenido);
     this.controladorHeader = new ControladorHeader(this.controladorUsuario);
+    this.controladorMenu = new ControladorMenu();
     this.temaHelper = new TemaHelper();
     this.tooltipHelper = new TooltipHelper();
   }
@@ -32,6 +33,10 @@ class App {
   }
 
   async inicializarComponentes() {
+    // Inicializar menú
+    await this.controladorMenu.cargarMenu();
+    console.log('Menú inicializado');
+
     // Inicializar sidebar
     this.controladorSidebar.inicializar();
     console.log('Sidebar inicializado');
