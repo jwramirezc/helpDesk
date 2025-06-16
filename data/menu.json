@@ -1,0 +1,32 @@
+{
+  "menuItems": {
+    "top": [
+      {
+        "id": "dashboard",
+        "icon": "fas fa-home",
+        "name": "Dashboard",
+        "vista": "dashboard"
+      },
+      {
+        "id": "tickets",
+        "icon": "fas fa-ticket-alt",
+        "name": "Tickets",
+        "vista": "tickets"
+      },
+      {
+        "id": "usuarios",
+        "icon": "fas fa-users",
+        "name": "Usuarios",
+        "vista": "usuarios"
+      }
+    ],
+    "bottom": [
+      {
+        "id": "configuracion",
+        "icon": "fas fa-cog",
+        "name": "Configuración",
+        "vista": "configuracion"
+      }
+    ]
+  }
+}

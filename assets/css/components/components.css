@@ -1,0 +1,159 @@
+/* Tooltip styles */
+.custom-tooltip {
+  position: absolute;
+  background-color: #2c3e50;
+  color: white;
+  padding: 8px 12px;
+  border-radius: 4px;
+  font-size: 14px;
+  z-index: var(--z-index-tooltip);
+  pointer-events: none;
+  white-space: nowrap;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+}
+
+/* Base tooltip arrow */
+.tooltip-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  pointer-events: none;
+  z-index: var(--z-index-tooltip);
+}
+
+/* Arrow pointing up (for notification bell) */
+.tooltip-arrow-up {
+  border-left: 6px solid transparent;
+  border-right: 6px solid transparent;
+  border-bottom: 6px solid #2c3e50;
+}
+
+/* Arrow pointing left (for sidebar items) */
+.tooltip-arrow-left {
+  border-top: 6px solid transparent;
+  border-bottom: 6px solid transparent;
+  border-right: 6px solid #2c3e50;
+}
+
+/* Notification Bell */
+.notification-bell {
+  position: relative;
+  cursor: pointer;
+}
+
+.notification-bell .custom-tooltip {
+  transform: translateX(-50%);
+  margin-top: 10px;
+}
+
+/* Sidebar Items */
+.sidebar-item {
+  position: relative;
+  cursor: pointer;
+}
+
+.sidebar-item .custom-tooltip {
+  transform: translateY(-50%);
+  margin-left: 10px;
+}
+
+/* Mobile Menu Items */
+.mobile-menu-item .custom-tooltip {
+  display: none !important;
+}
+
+/* Buttons */
+.btn {
+  padding: 8px 16px;
+  border-radius: 4px;
+  border: none;
+  cursor: pointer;
+  font-size: 14px;
+  transition: all 0.3s ease;
+}
+
+.btn-primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.btn-primary:hover {
+  background-color: #2980b9;
+}
+
+.btn-secondary {
+  background-color: #95a5a6;
+  color: white;
+}
+
+.btn-secondary:hover {
+  background-color: #7f8c8d;
+}
+
+/* Form Elements */
+.form-control {
+  padding: 8px 12px;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+  font-size: 14px;
+  width: 100%;
+}
+
+.form-control:focus {
+  outline: none;
+  border-color: #3498db;
+  box-shadow: 0 0 0 2px rgba(52, 152, 219, 0.2);
+}
+
+/* Cards */
+.card {
+  background: white;
+  border-radius: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  padding: 16px;
+}
+
+.card-header {
+  padding-bottom: 12px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid #eee;
+}
+
+.card-body {
+  padding: 12px 0;
+}
+
+.card-footer {
+  padding-top: 12px;
+  margin-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+/* Badges */
+.badge {
+  display: inline-block;
+  padding: 4px 8px;
+  border-radius: 12px;
+  font-size: 12px;
+  font-weight: 600;
+}
+
+.badge-primary {
+  background-color: #3498db;
+  color: white;
+}
+
+.badge-success {
+  background-color: #2ecc71;
+  color: white;
+}
+
+.badge-warning {
+  background-color: #f1c40f;
+  color: #2c3e50;
+}
+
+.badge-danger {
+  background-color: #e74c3c;
+  color: white;
+}

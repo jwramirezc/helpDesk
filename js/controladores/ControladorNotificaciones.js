@@ -25,6 +25,14 @@ class ControladorNotificaciones {
     if (tieneNotificaciones) {
       if (!badge) {
         const notifications = document.querySelector('.notifications');
+        if (!notifications) {
+          const header = document.getElementById('header');
+          const newNotifications = document.createElement('div');
+          newNotifications.className = 'notifications';
+          newNotifications.setAttribute('data-tooltip', 'Notificaciones');
+          newNotifications.innerHTML = '<i class="fas fa-bell"></i>';
+          header.appendChild(newNotifications);
+        }
         const newBadge = document.createElement('span');
         newBadge.className = 'notification-badge';
         notifications.appendChild(newBadge);
