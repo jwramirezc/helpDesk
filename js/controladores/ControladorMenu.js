@@ -164,12 +164,26 @@ class ControladorMenu {
       const menuItem = e.target.closest('.menu-item');
       if (!menuItem) return;
       const id = menuItem.id;
+
+      if (id === 'menu_theme') {
+        this.cambiarTema();
+        return;
+      }
+
+      // Remover clase active de todos los items excepto el tema
+      this.sidebar
+        .querySelectorAll('.menu-item:not(#menu_theme)')
+        .forEach(item => {
+          item.classList.remove('active');
+        });
+
+      // Agregar clase active al item seleccionado
+      menuItem.classList.add('active');
+
       if (id === 'menu_logout') {
         this.cerrarSesion();
       } else if (id === 'menu_config') {
         this.abrirConfiguracion();
-      } else if (id === 'menu_theme') {
-        this.cambiarTema();
       } else {
         this.seleccionarItem(id);
       }
@@ -191,12 +205,25 @@ class ControladorMenu {
         e.preventDefault();
         const id = menuItem.id.replace('mobile_', '');
 
+        if (id === 'menu_theme') {
+          this.cambiarTema();
+          return;
+        }
+
+        // Remover clase active de todos los items móviles excepto el tema
+        this.mobileMenuItems
+          .querySelectorAll('.mobile-menu-item:not(#mobile_menu_theme)')
+          .forEach(item => {
+            item.classList.remove('active');
+          });
+
+        // Agregar clase active al item seleccionado
+        menuItem.classList.add('active');
+
         if (id === 'menu_logout') {
           this.cerrarSesion();
         } else if (id === 'menu_config') {
           this.abrirConfiguracion();
-        } else if (id === 'menu_theme') {
-          this.cambiarTema();
         } else {
           this.seleccionarItem(id);
         }
@@ -304,10 +331,5 @@ class ControladorMenu {
 
     // Actualizar los íconos
     this.actualizarIconoTema();
-
-    // Restaurar visualmente el item que estaba activo antes de cambiar el tema
-    if (this.itemActivo) {
-      this.seleccionarItem(this.itemActivo);
-    }
   }
 }
