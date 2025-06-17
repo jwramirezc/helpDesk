@@ -31,9 +31,6 @@ class App {
     // Inicializar menú
     await this.controladorMenu.cargarMenu();
 
-    // Inicializar sidebar
-    this.controladorSidebar.inicializar();
-
     // Inicializar header
     await this.controladorHeader.inicializar();
 

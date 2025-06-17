@@ -8,6 +8,8 @@ class ControladorMenu {
     this.usuario = this.config.usuario;
     this.menuItems = null;
     this.temaHelper = new TemaHelper();
+    // Almacenar el item activo actual
+    this.itemActivo = null;
   }
 
   async cargarMenu() {
@@ -20,10 +22,17 @@ class ControladorMenu {
       const data = await response.json();
       this.menuItems = data.menuItems;
 
+      // Determinar logo según el tema
+      const temaActual = this.temaHelper.obtenerTemaActual();
+      const logoPath =
+        temaActual.modo === 'dark'
+          ? 'assets/img/logo-saia-dark.png'
+          : 'assets/img/logo-saia-light.png';
+
       // Generar HTML del menú lateral
       let menuHTML = `
-        <div class="sidebar-logo">
-          <img src="assets/img/logo-saia.png" alt="Logo">
+        <div class="sidebar-logo sidebar-item" id="sidebar_logo" data-tooltip="saiasoftware.com" style="cursor:pointer;">
+          <img src="${logoPath}" alt="Logo">
         </div>
         <div class="sidebar-menu">
           <div class="menu-top">
@@ -133,14 +142,27 @@ class ControladorMenu {
       mobileThemeButton.className =
         temaActual.modo === 'light' ? 'fas fa-moon' : 'fas fa-sun';
     }
+
+    // Cambiar el logo según el tema
+    const logoImg = this.sidebar.querySelector('.sidebar-logo img');
+    if (logoImg) {
+      logoImg.src =
+        temaActual.modo === 'dark'
+          ? 'assets/img/logo-saia-dark.png'
+          : 'assets/img/logo-saia-light.png';
+    }
   }
 
   agregarEventos() {
     // Eventos del menú lateral
     this.sidebar.addEventListener('click', e => {
+      const logo = e.target.closest('#sidebar_logo');
+      if (logo) {
+        window.open('https://www.saiasoftware.com', '_blank');
+        return;
+      }
       const menuItem = e.target.closest('.menu-item');
       if (!menuItem) return;
-
       const id = menuItem.id;
       if (id === 'menu_logout') {
         this.cerrarSesion();
@@ -215,6 +237,9 @@ class ControladorMenu {
     const mobileItem = this.mobileMenuItems?.querySelector(`#mobile_${id}`);
     if (item) item.classList.add('active');
     if (mobileItem) mobileItem.classList.add('active');
+
+    // Guardar el item activo
+    this.itemActivo = id;
   }
 
   abrirConfiguracion() {
@@ -279,5 +304,10 @@ class ControladorMenu {
 
     // Actualizar los íconos
     this.actualizarIconoTema();
+
+    // Restaurar visualmente el item que estaba activo antes de cambiar el tema
+    if (this.itemActivo) {
+      this.seleccionarItem(this.itemActivo);
+    }
   }
 }

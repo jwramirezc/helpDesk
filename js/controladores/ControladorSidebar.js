@@ -66,9 +66,6 @@ class ControladorSidebar {
     }
 
     this.sidebar.innerHTML = `
-      <div class="sidebar-logo">
-        <img src="assets/img/logo-saia.png" alt="Logo">
-      </div>
       <div class="sidebar-menu">
         <div class="menu-top">
           ${this.menuItems.top
