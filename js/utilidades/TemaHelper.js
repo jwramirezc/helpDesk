@@ -28,8 +28,8 @@ class TemaHelper {
     // Obtener el modo actual del tema
     const modo = this.config.tema.modo;
 
-    // Aplicar el atributo data-theme al elemento html
-    document.documentElement.setAttribute('data-theme', modo);
+    // Aplicar el atributo data-theme al elemento body
+    document.body.setAttribute('data-theme', modo);
 
     // Guardar en localStorage
     LocalStorageHelper.guardar('config', this.config);

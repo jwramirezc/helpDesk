@@ -8,6 +8,7 @@
   --icon-color-active: white;
   --background-icon-color: #21252c;
   --hover-color: rgba(255, 255, 255, 0.1);
+  --text-color: #1a1a1a; /* Color de texto por defecto */
 }
 
 /* Sidebar */
@@ -293,6 +294,7 @@
 .user-name {
   font-weight: 500;
   white-space: nowrap;
+  color: var(--text-color);
 }
 
 .user-company {
@@ -398,13 +400,13 @@
 
 /* Tema Light */
 [data-theme='light'] {
-  --background-color: #dedede; /* Fondo general claro */
-  --text-color: #1a1a1a; /* Texto oscuro para buena legibilidad */
-  --sidebar-bg-color: #ffffff; /* Sidebar blanco o muy claro */
-  --icon-color: #555555; /* Iconos en gris oscuro */
-  --icon-color-active: #1a73e8; /* Azul para iconos activos (resalta sin ser agresivo) */
-  --background-icon-color: #e8e8e8; /* Fondo gris claro para íconos */
-  --hover-color: rgba(0, 0, 0, 0.05); /* Sombra sutil en hover */
+  --background-color: #dedede;
+  --text-color: #1a1a1a;
+  --sidebar-bg-color: #f5f5f6;
+  --icon-color: #555555;
+  --icon-color-active: white;
+  --background-icon-color: #e8e8e8;
+  --hover-color: rgba(0, 0, 0, 0.05);
 }
 
 /* Theme Toggle Button */
