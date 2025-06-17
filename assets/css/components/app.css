@@ -251,7 +251,7 @@
 /* Header */
 #header {
   height: var(--header-height);
-  background-color: var(--background-color);
+  background-color: transparent; /* Sin color de fondo en escritorio */
   border-bottom: 1px solid var(--secondary-color);
   padding: 0.5rem 1rem;
   display: flex;
@@ -294,7 +294,7 @@
 .user-name {
   font-weight: 500;
   white-space: nowrap;
-  color: var(--text-color);
+  color: var(--secondary-color);
 }
 
 .user-company {
@@ -367,6 +367,8 @@
   }
 
   #header {
+    /* Mantener color de fondo solo en pantallas móviles */
+    background-color: var(--background-color);
     left: 0;
     transition: left 0.3s ease;
   }
