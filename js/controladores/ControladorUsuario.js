@@ -1,32 +1,28 @@
 class ControladorUsuario {
-  constructor() {
-    this.config = Configuracion.cargar();
+  /**
+   * @param {ConfigService} configService Servicio de configuración compartido.
+   */
+  constructor(configService = new ConfigService()) {
+    this.configService = configService;
   }
 
   obtenerUsuarioActual() {
-    return this.config.usuario;
+    return this.configService.getUser();
   }
 
   actualizarUsuario(datos) {
-    this.config.usuario = new Usuario(datos);
-    this.config.guardar();
+    this.configService.updateUser(datos);
   }
 
   actualizarAvatar(ruta) {
-    this.config.usuario.avatar = ruta;
-    this.config.guardar();
+    this.configService.updateAvatar(ruta);
   }
 
   actualizarIdioma(idioma) {
-    this.config.usuario.idioma = idioma;
-    this.config.guardar();
+    this.configService.updateLanguage(idioma);
   }
 
   obtenerPreferencias() {
-    return {
-      idioma: this.config.usuario.idioma,
-      tema: this.config.tema,
-      notificaciones: this.config.notificaciones,
-    };
+    return this.configService.getPreferences();
   }
 }

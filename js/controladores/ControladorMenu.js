@@ -1,6 +1,10 @@
 class ControladorMenu {
-  constructor() {
-    this.config = Configuracion.cargar();
+  constructor(configService = null, menuService = new MenuService()) {
+    // Servicios inyectados
+    this.configService = configService;
+    this.menuService = menuService;
+
+    this.config = configService ? configService.config : Configuracion.cargar();
     this.sidebar = document.getElementById('sidebar');
     this.mobileMenu = document.querySelector('.mobile-menu');
     this.mobileMenuToggle = document.querySelector('.mobile-menu-toggle');
@@ -10,17 +14,14 @@ class ControladorMenu {
     this.temaHelper = new TemaHelper();
     // Almacenar el item activo actual
     this.itemActivo = null;
+    // Vista (DOM)
+    this.menuView = new MenuView(this.sidebar, this.mobileMenu);
   }
 
   async cargarMenu() {
     try {
-      // Cargar elementos del menú
-      const response = await fetch('data/menu.json');
-      if (!response.ok) {
-        throw new Error('Error al cargar el menú');
-      }
-      const data = await response.json();
-      this.menuItems = data.menuItems;
+      // Obtener elementos del menú desde MenuService
+      this.menuItems = await this.menuService.getMenuItems();
 
       // Determinar logo según el tema
       const temaActual = this.temaHelper.obtenerTemaActual();
@@ -29,79 +30,11 @@ class ControladorMenu {
           ? 'assets/img/logo-saia-dark.png'
           : 'assets/img/logo-saia-light.png';
 
-      // Generar HTML del menú lateral
-      let menuHTML = `
-        <div class="sidebar-logo sidebar-item" id="sidebar_logo" data-tooltip="saiasoftware.com" style="cursor:pointer;">
-          <img src="${logoPath}" alt="Logo">
-        </div>
-        <div class="sidebar-menu">
-          <div class="menu-top">
-            ${this.menuItems.top
-              .map(
-                item => `
-              <div class="menu-item" 
-                   id="${item.id}" 
-                   data-tooltip="${item.name}"
-                   data-vista="${item.vista}">
-                <i class="${item.icon}"></i>
-              </div>
-            `
-              )
-              .join('')}
-          </div>
-          <div class="menu-bottom">
-            ${this.menuItems.bottom
-              .map(
-                item => `
-              <div class="menu-item" 
-                   id="${item.id}" 
-                   data-tooltip="${item.name}"
-                   data-vista="${item.vista}">
-                <i class="${item.icon}"></i>
-              </div>
-            `
-              )
-              .join('')}
-          </div>
-        </div>
-      `;
-
-      // Actualizar sidebar
-      this.sidebar.innerHTML = menuHTML;
+      // Renderizar vista a través de MenuView
+      this.menuView.render(this.menuItems, logoPath);
 
       // Actualizar ícono del tema según el tema actual
       this.actualizarIconoTema();
-
-      // Generar HTML del menú móvil
-      let mobileMenuHTML = `
-        <div class="mobile-menu-top">
-          ${this.menuItems.top
-            .map(
-              item => `
-            <a href="#" class="mobile-menu-item" id="mobile_${item.id}" data-vista="${item.vista}">
-              <i class="${item.icon}"></i>
-              <span>${item.name}</span>
-            </a>
-          `
-            )
-            .join('')}
-        </div>
-        <div class="mobile-menu-bottom">
-          ${this.menuItems.bottom
-            .map(
-              item => `
-            <a href="#" class="mobile-menu-item" id="mobile_${item.id}" data-vista="${item.vista}">
-              <i class="${item.icon}"></i>
-              <span>${item.name}</span>
-            </a>
-          `
-            )
-            .join('')}
-        </div>
-      `;
-
-      // Actualizar menú móvil
-      this.mobileMenuItems.innerHTML = mobileMenuHTML;
 
       // Actualizar información del usuario en el menú móvil
       this.actualizarInfoUsuario();

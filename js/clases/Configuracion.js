@@ -18,7 +18,7 @@ class Configuracion {
   }
 
   guardar() {
-    LocalStorageHelper.guardar('config', this.toJSON());
+    LocalStorageAdapter.set('config', this.toJSON());
   }
 
   toJSON() {
@@ -30,7 +30,7 @@ class Configuracion {
   }
 
   static cargar() {
-    const datos = LocalStorageHelper.obtener('config');
+    const datos = LocalStorageAdapter.get('config');
     return datos ? new Configuracion(datos) : new Configuracion();
   }
 }

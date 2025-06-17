@@ -1,81 +1,48 @@
-// Configuración inicial de la aplicación
-const CONFIG = {
-  // Configuración del usuario por defecto
-  usuario: {
-    id: 'usr001',
-    nombre: 'Juan',
-    apellidos: 'Pérez',
-    empresa: 'Empresa XYZ',
-    avatar: 'assets/img/avatar1.png',
-    telefono: '+57 3012345678',
-    idioma: 'es',
-  },
+// Se reemplaza la constante CONFIG por la carga de archivos JSON.
 
-  // Configuración del menú estándar
-  menu: {
-    top: [
-      {
-        id: 'menu_home',
-        icono: 'fa-home',
-        titulo: 'Home',
-        visible: true,
-        orden: 1,
-      },
-    ],
-    bottom: [
-      {
-        id: 'menu_config',
-        icono: 'fa-cog',
-        titulo: 'Configuración',
-        visible: true,
-        orden: 1,
-      },
-      {
-        id: 'menu_logout',
-        icono: 'fa-sign-out-alt',
-        titulo: 'Cerrar Sesión',
-        visible: true,
-        orden: 2,
-      },
-    ],
-  },
-
-  // Configuración del tema
-  tema: {
-    modo: 'claro',
-    colores: {
-      primario: '#007bff',
-      secundario: '#6c757d',
-      fondo: '#ffffff',
-      texto: '#212529',
-    },
-  },
-
-  // Configuración de notificaciones
-  notificaciones: {
-    activas: true,
-    sonido: true,
-    intervalo: 300000, // 5 minutos
-  },
-};
-
-// Inicialización de localStorage
-function inicializarLocalStorage() {
-  // Limpiar localStorage para asegurar una inicialización limpia
-  localStorage.clear();
-
-  // Guardar la configuración inicial
-  localStorage.setItem('config', JSON.stringify(CONFIG));
-
-  // Mostrar mensaje de inicialización en la consola
-  console.log('Configuración inicial cargada:', CONFIG);
+/**
+ * Carga un archivo JSON de forma SINCRÓNICA.
+ * Esto garantiza que la configuración esté lista antes de que
+ * se ejecuten los siguientes scripts incluidos en index.html.
+ * @param {string} path Ruta al archivo JSON.
+ * @returns {object|null}
+ */
+function cargarJSONSync(path) {
+  try {
+    const request = new XMLHttpRequest();
+    request.open('GET', path, false); // "false" -> llamada sincrónica
+    request.send(null);
+    if (request.status === 200) {
+      return JSON.parse(request.responseText);
+    }
+    console.error(
+      `Error ${request.status} al intentar cargar el archivo ${path}`
+    );
+  } catch (error) {
+    console.error('Excepción al cargar JSON:', error);
+  }
+  return null;
 }
 
-// Ejecutar inicialización al cargar
-document.addEventListener('DOMContentLoaded', () => {
-  inicializarLocalStorage();
-  console.log(
-    'Datos cargados en localStorage:',
-    localStorage.getItem('config')
-  );
-});
+function inicializarLocalStorage() {
+  // Si ya existe una configuración previa, no la sobre-escribimos
+  if (localStorage.getItem('config')) {
+    console.log('Configuración existente detectada; se mantiene.');
+    return;
+  }
+
+  // Cargar configuración base y menú desde archivos JSON
+  const configBase = cargarJSONSync('data/default-config.json') || {};
+  const menuJSON = cargarJSONSync('data/menu.json') || {};
+
+  // Normalizar estructura del menú
+  configBase.menu = menuJSON.menuItems || menuJSON.menu || {};
+
+  // Guardar en localStorage
+  localStorage.setItem('config', JSON.stringify(configBase));
+
+  console.log('Configuración inicial cargada desde archivos JSON:', configBase);
+}
+
+// Ejecutar la inicialización al cargar el DOM
+document.addEventListener('DOMContentLoaded', inicializarLocalStorage);

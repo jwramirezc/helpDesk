@@ -1,7 +1,9 @@
 class ControladorHeader {
-  constructor(controladorUsuario) {
+  constructor(controladorUsuario, i18nService) {
     this.controladorUsuario = controladorUsuario;
+    this.i18nService = i18nService;
     this.header = document.getElementById('header');
+    this.headerView = new HeaderView(this.header);
   }
 
   async inicializar() {
@@ -13,25 +15,9 @@ class ControladorHeader {
     const usuario = this.controladorUsuario.obtenerUsuarioActual();
     const tieneNotificaciones = await this.verificarNotificaciones();
 
-    this.header.innerHTML = `
-      <div class="user-info">
-        <div class="notifications tooltip-bottom" data-tooltip="Notificaciones">
-          <i class="far fa-bell"></i>
-          ${
-            tieneNotificaciones
-              ? '<span class="notification-badge"></span>'
-              : ''
-          }
-        </div>
-        <div class="user-details">
-          <span class="user-name">${usuario.nombre} ${usuario.apellidos}</span>
-          <span class="user-company">${usuario.empresa}</span>
-        </div>
-        <div class="user-avatar">
-          <img src="${usuario.avatar}" alt="Avatar">
-        </div>
-      </div>
-    `;
+    // Pasar función traductora si existe en window.app (Main)
+    const t = this.i18nService.t.bind(this.i18nService);
+    this.headerView.render(usuario, tieneNotificaciones, t);
   }
 
   async verificarNotificaciones() {

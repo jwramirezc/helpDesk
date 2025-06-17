@@ -43,3 +43,44 @@ class LocalStorageHelper {
     return localStorage.getItem(clave) !== null;
   }
 }
+
+// Adapter que envuelve LocalStorageHelper y expone una interfaz más genérica
+class LocalStorageAdapter {
+  // Métodos nuevos y más genéricos
+  static set(key, value) {
+    return LocalStorageHelper.guardar(key, value);
+  }
+
+  static get(key) {
+    return LocalStorageHelper.obtener(key);
+  }
+
+  static remove(key) {
+    return LocalStorageHelper.eliminar(key);
+  }
+
+  static clear() {
+    return LocalStorageHelper.limpiar();
+  }
+
+  static has(key) {
+    return LocalStorageHelper.existe(key);
+  }
+
+  // Métodos legacy (alias) para permitir transición gradual
+  static guardar(...args) {
+    return LocalStorageHelper.guardar(...args);
+  }
+  static obtener(...args) {
+    return LocalStorageHelper.obtener(...args);
+  }
+  static eliminar(...args) {
+    return LocalStorageHelper.eliminar(...args);
+  }
+  static limpiar(...args) {
+    return LocalStorageHelper.limpiar(...args);
+  }
+  static existe(...args) {
+    return LocalStorageHelper.existe(...args);
+  }
+}

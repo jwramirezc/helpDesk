@@ -1,13 +1,13 @@
 class TemaHelper {
   constructor() {
     // Intentar cargar la configuración del localStorage
-    this.config = LocalStorageHelper.obtener('config');
+    this.config = LocalStorageAdapter.get('config');
 
     // Si no existe configuración, crear una por defecto
     if (!this.config || !this.config.tema) {
       this.config = {
         tema: {
-          modo: 'light', // Tema por defecto
+          modo: 'dark', // Tema por defecto
           colores: {
             primario: '#007bff',
             secundario: '#6c757d',
@@ -17,7 +17,7 @@ class TemaHelper {
         },
       };
       // Guardar configuración por defecto
-      LocalStorageHelper.guardar('config', this.config);
+      LocalStorageAdapter.set('config', this.config);
     }
 
     // Aplicar el tema al iniciar
@@ -32,7 +32,7 @@ class TemaHelper {
     document.body.setAttribute('data-theme', modo);
 
     // Guardar en localStorage
-    LocalStorageHelper.guardar('config', this.config);
+    LocalStorageAdapter.set('config', this.config);
 
     // Aplicar colores personalizados
     const root = document.documentElement;
@@ -61,7 +61,7 @@ class TemaHelper {
 
   actualizarColores(colores) {
     this.config.tema.colores = { ...this.config.tema.colores, ...colores };
-    LocalStorageHelper.guardar('config', this.config);
+    LocalStorageAdapter.set('config', this.config);
     this.aplicarTema();
   }
 
