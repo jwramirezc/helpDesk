@@ -4,8 +4,9 @@
       "id": "light",
       "nombre": "Tema Claro",
       "modo": "light",
+      "logo": "public/images/logo-saia-light.png",
       "colores": {
-        "primario": "#0d6efd",
+        "primario": "#007bff",
         "secundario": "#6c757d",
         "fondo": "#ffffff",
         "texto": "#1a1a1a",
@@ -20,15 +21,16 @@
       "id": "dark",
       "nombre": "Tema Oscuro",
       "modo": "dark",
+      "logo": "public/images/logo-saia-dark.png",
       "colores": {
         "primario": "#0d6efd",
         "secundario": "#6c757d",
         "fondo": "#ffffff",
-        "texto": "#ffffff",
+        "texto": "#1a1a1a",
         "sidebar-bg": "#2b303b",
         "icon-color": "white",
         "icon-color-active": "white",
-        "background-icon": "#",
+        "background-icon": "#21252c",
         "hover-color": "rgba(255, 255, 255, 0.1)"
       }
     }

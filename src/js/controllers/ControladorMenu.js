@@ -23,12 +23,8 @@ class ControladorMenu {
       // Obtener elementos del menú desde MenuService
       this.menuItems = await this.menuService.getMenuItems();
 
-      // Determinar logo según el tema
-      const temaActual = this.temaHelper.obtenerTemaActual();
-      const logoPath =
-        this.configService.getTema() === 'dark'
-          ? 'public/images/logo-saia-dark.png'
-          : 'public/images/logo-saia-light.png';
+      // Obtener logo desde el tema actual
+      const logoPath = this.temaHelper.obtenerLogoTemaActual();
 
       // Renderizar vista a través de MenuView
       this.menuView.render(this.menuItems, logoPath);
@@ -76,13 +72,10 @@ class ControladorMenu {
         temaActual.modo === 'light' ? 'fas fa-moon' : 'fas fa-sun';
     }
 
-    // Cambiar el logo según el tema
+    // Cambiar el logo según el tema actual
     const logoImg = this.sidebar.querySelector('.sidebar-logo img');
     if (logoImg) {
-      logoImg.src =
-        this.configService.getTema() === 'dark'
-          ? 'public/images/logo-saia-dark.png'
-          : 'public/images/logo-saia-light.png';
+      logoImg.src = this.temaHelper.obtenerLogoTemaActual();
     }
   }
 

@@ -154,4 +154,9 @@ class TemaHelper {
     const modo = this.config.tema.modo;
     return this.obtenerTemaPorId(modo);
   }
+
+  obtenerLogoTemaActual() {
+    const tema = this.obtenerTemaActualCompleto();
+    return tema ? tema.logo : 'public/images/logo-saia-dark.png';
+  }
 }
