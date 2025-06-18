@@ -4,7 +4,7 @@ class Usuario {
     this.nombre = datos.nombre || '';
     this.apellidos = datos.apellidos || '';
     this.empresa = datos.empresa || '';
-    this.avatar = datos.avatar || 'assets/img/avatar1.png';
+    this.avatar = datos.avatar || 'public/images/avatar1.png';
     this.telefono = datos.telefono || '';
     this.idioma = datos.idioma || 'es';
   }

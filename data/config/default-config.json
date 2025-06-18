@@ -4,7 +4,7 @@
     "nombre": "Juan",
     "apellidos": "Valdez",
     "empresa": "Empresa XYZ",
-    "avatar": "assets/img/avatar1.png",
+    "avatar": "public/images/avatar1.png",
     "telefono": "+57 3012345678",
     "idioma": "es"
   },

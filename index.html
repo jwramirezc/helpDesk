@@ -6,7 +6,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Portal Help Desk</title>
     <link rel="icon" href="favicon.ico" type="image/x-icon">
-    <link rel="stylesheet" href="assets/css/main.css">
+    <link rel="stylesheet" href="src/styles/main.css">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
 
     <!-- Bootstrap 5 CSS -->
@@ -66,27 +66,28 @@
     <!-- Configuración inicial -->
     <script src="config.js"></script>
     <!-- Utilidades -->
-    <script src="js/utilidades/LocalStorageHelper.js"></script>
-    <script src="js/utilidades/TooltipHelper.js"></script>
-    <script src="js/utilidades/TemaHelper.js"></script>
+    <script src="src/js/utils/LocalStorageHelper.js"></script>
+    <script src="src/js/utils/TooltipHelper.js"></script>
+    <script src="src/js/utils/TemaHelper.js"></script>
     <!-- Clases -->
-    <script src="js/clases/Usuario.js"></script>
-    <script src="js/clases/Configuracion.js"></script>
-    <script src="js/views/MenuView.js"></script>
-    <script src="js/views/SidebarView.js"></script>
-    <script src="js/views/HeaderView.js"></script>
-    <!-- Controladores -->
-    <script src="js/controladores/ControladorUsuario.js"></script>
-    <script src="js/controladores/ControladorMenu.js"></script>
-    <script src="js/controladores/ControladorHeader.js"></script>
-    <script src="js/controladores/ControladorSidebar.js"></script>
-    <script src="js/controladores/ControladorContenido.js"></script>
-    <!-- Main JS -->
-    <script src="js/main.js"></script>
+    <script src="src/js/models/Usuario.js"></script>
+    <script src="src/js/models/Configuracion.js"></script>
     <!-- Servicios / Managers -->
-    <script src="js/managers/ConfigService.js"></script>
-    <script src="js/managers/MenuService.js"></script>
-    <script src="js/managers/I18nService.js"></script>
+    <script src="src/js/services/ConfigService.js"></script>
+    <script src="src/js/services/MenuService.js"></script>
+    <script src="src/js/services/I18nService.js"></script>
+    <!-- Vistas -->
+    <script src="src/js/views/MenuView.js"></script>
+    <script src="src/js/views/SidebarView.js"></script>
+    <script src="src/js/views/HeaderView.js"></script>
+    <!-- Controladores -->
+    <script src="src/js/controllers/ControladorUsuario.js"></script>
+    <script src="src/js/controllers/ControladorMenu.js"></script>
+    <script src="src/js/controllers/ControladorHeader.js"></script>
+    <script src="src/js/controllers/ControladorSidebar.js"></script>
+    <script src="src/js/controllers/ControladorContenido.js"></script>
+    <!-- Main JS -->
+    <script src="src/js/main.js"></script>
 </body>
 
 </html>

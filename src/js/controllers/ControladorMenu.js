@@ -26,9 +26,9 @@ class ControladorMenu {
       // Determinar logo según el tema
       const temaActual = this.temaHelper.obtenerTemaActual();
       const logoPath =
-        temaActual.modo === 'dark'
-          ? 'assets/img/logo-saia-dark.png'
-          : 'assets/img/logo-saia-light.png';
+        this.configService.getTema() === 'dark'
+          ? 'public/images/logo-saia-dark.png'
+          : 'public/images/logo-saia-light.png';
 
       // Renderizar vista a través de MenuView
       this.menuView.render(this.menuItems, logoPath);
@@ -80,9 +80,9 @@ class ControladorMenu {
     const logoImg = this.sidebar.querySelector('.sidebar-logo img');
     if (logoImg) {
       logoImg.src =
-        temaActual.modo === 'dark'
-          ? 'assets/img/logo-saia-dark.png'
-          : 'assets/img/logo-saia-light.png';
+        this.configService.getTema() === 'dark'
+          ? 'public/images/logo-saia-dark.png'
+          : 'public/images/logo-saia-light.png';
     }
   }
 
@@ -256,11 +256,25 @@ class ControladorMenu {
   }
 
   cambiarTema() {
-    const temaActual = this.temaHelper.obtenerTemaActual();
-    const nuevoModo = temaActual.modo === 'light' ? 'dark' : 'light';
+    const temaActual = this.temaHelper.obtenerTemaActualCompleto();
+    const temasDisponibles = this.temaHelper.obtenerTemasDisponibles();
 
-    // Cambiar el tema
-    this.temaHelper.cambiarModo(nuevoModo);
+    if (!temaActual || !temasDisponibles.length) {
+      // Fallback al comportamiento anterior
+      const modoActual = this.temaHelper.obtenerTemaActual().modo;
+      const nuevoModo = modoActual === 'light' ? 'dark' : 'light';
+      this.temaHelper.cambiarModo(nuevoModo);
+    } else {
+      // Encontrar el siguiente tema en la lista
+      const indiceActual = temasDisponibles.findIndex(
+        t => t.id === temaActual.id
+      );
+      const siguienteIndice = (indiceActual + 1) % temasDisponibles.length;
+      const siguienteTema = temasDisponibles[siguienteIndice];
+
+      // Cambiar al siguiente tema
+      this.temaHelper.cambiarModo(siguienteTema.id);
+    }
 
     // Actualizar los íconos
     this.actualizarIconoTema();

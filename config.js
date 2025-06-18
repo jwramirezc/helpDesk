@@ -32,8 +32,8 @@ function inicializarLocalStorage() {
   }
 
   // Cargar configuración base y menú desde archivos JSON
-  const configBase = cargarJSONSync('data/default-config.json') || {};
-  const menuJSON = cargarJSONSync('data/menu.json') || {};
+  const configBase = cargarJSONSync('data/config/default-config.json') || {};
+  const menuJSON = cargarJSONSync('data/config/menu.json') || {};
 
   // Normalizar estructura del menú
   configBase.menu = menuJSON.menuItems || menuJSON.menu || {};

@@ -33,6 +33,11 @@ class ConfigService {
     return this.config.tema;
   }
 
+  // Alias para mantener compatibilidad
+  getTema() {
+    return this.config.tema.modo;
+  }
+
   getNotifications() {
     return this.config.notificaciones;
   }

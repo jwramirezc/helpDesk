@@ -22,7 +22,7 @@ class ControladorHeader {
 
   async verificarNotificaciones() {
     try {
-      const response = await fetch('data/notificationes.json');
+      const response = await fetch('data/config/notificationes.json');
       const data = await response.json();
       return data.tieneNotificaciones;
     } catch (error) {
