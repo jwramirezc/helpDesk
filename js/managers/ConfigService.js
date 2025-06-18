@@ -4,7 +4,7 @@ class ConfigService {
     this.config = Configuracion.cargar();
   }
 
-  /* ------------------------- MÉTODOS DE USUARIO ------------------------- */
+  /*  MÉTODOS DE USUARIO  */
   getUser() {
     return this.config.usuario;
   }
@@ -28,7 +28,7 @@ class ConfigService {
     this.save();
   }
 
-  /* ----------------------- PREFERENCIAS & TEMAS ------------------------ */
+  /*  PREFERENCIAS & TEMAS */
   getTheme() {
     return this.config.tema;
   }
@@ -45,7 +45,7 @@ class ConfigService {
     };
   }
 
-  /* --------------------------- PERSISTENCIA ---------------------------- */
+  /*  PERSISTENCIA  */
   save() {
     this.config.guardar();
   }
