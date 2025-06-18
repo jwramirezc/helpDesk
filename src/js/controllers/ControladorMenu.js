@@ -1,8 +1,13 @@
 class ControladorMenu {
-  constructor(configService = null, menuService = new MenuService()) {
+  constructor(
+    configService = null,
+    menuService = new MenuService(),
+    controladorContenido = null
+  ) {
     // Servicios inyectados
     this.configService = configService;
     this.menuService = menuService;
+    this.controladorContenido = controladorContenido;
 
     this.config = configService ? configService.config : Configuracion.cargar();
     this.sidebar = document.getElementById('sidebar');
@@ -250,6 +255,9 @@ class ControladorMenu {
 
     // Guardar el item activo
     this.itemActivo = id;
+
+    // Obtener la vista del item seleccionado y cargarla
+    this.cargarVista(id);
   }
 
   abrirConfiguracion() {
@@ -328,5 +336,19 @@ class ControladorMenu {
 
     // Actualizar los íconos
     this.actualizarIconoTema();
+  }
+
+  cargarVista(id) {
+    // Buscar el item en el menú para obtener su vista
+    const item =
+      this.menuItems?.top.find(item => item.id === id) ||
+      this.menuItems?.bottom.find(item => item.id === id);
+
+    if (item && item.vista && this.controladorContenido) {
+      console.log('Cargando vista:', item.vista, 'para el item:', id);
+      this.controladorContenido.cargarVista(item.vista);
+    } else {
+      console.log('No se pudo cargar la vista para el item:', id);
+    }
   }
 }

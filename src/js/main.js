@@ -26,7 +26,8 @@ class App {
     );
     this.controladorMenu = new ControladorMenu(
       this.configService,
-      this.menuService
+      this.menuService,
+      this.controladorContenido
     );
     this.temaHelper = new TemaHelper();
     this.tooltipHelper = new TooltipHelper();
