@@ -11,9 +11,10 @@ class MenuView {
   /**
    * Dibuja ambos menús (sidebar y móvil) y devuelve nada.
    * @param {{top: Array, bottom: Array}} menuItems Estructura obtenida de MenuService.
-   * @param {string} logoPath Ruta al logo segun tema.
+   * @param {string} logoPath Ruta al logo del sidebar segun tema.
+   * @param {string} logoMovilPath Ruta al logo móvil segun tema.
    */
-  render(menuItems, logoPath) {
+  render(menuItems, logoPath, logoMovilPath) {
     if (!this.sidebar || !this.mobileMenu) return;
 
     // Sidebar (desktop)
@@ -53,6 +54,9 @@ class MenuView {
       this.mobileMenu.querySelector('.mobile-menu-items');
     if (mobileMenuItemsContainer) {
       const mobileHTML = `
+        <div class="mobile-menu-logo">
+          <img src="${logoMovilPath}" alt="Logo Móvil">
+        </div>
         <div class="mobile-menu-top">
           ${menuItems.top
             .map(

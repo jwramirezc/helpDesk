@@ -23,34 +23,24 @@ class ControladorMenu {
       // Obtener elementos del menú desde MenuService
       this.menuItems = await this.menuService.getMenuItems();
 
-      // Obtener logo desde el tema actual
+      // Obtener logos desde el tema actual
       const logoPath = this.temaHelper.obtenerLogoTemaActual();
+      const logoMovilPath = this.temaHelper.obtenerLogoMovilTemaActual();
 
       // Renderizar vista a través de MenuView
-      this.menuView.render(this.menuItems, logoPath);
+      this.menuView.render(this.menuItems, logoPath, logoMovilPath);
 
       // Actualizar ícono del tema según el tema actual
       this.actualizarIconoTema();
 
-      // Actualizar información del usuario en el menú móvil
-      this.actualizarInfoUsuario();
-
       // Agregar eventos
       this.agregarEventos();
+
+      // Inicializar comportamiento del toggle
+      this.manejarCambioTamanio();
     } catch (error) {
       console.error('Error al cargar el menú:', error);
     }
-  }
-
-  actualizarInfoUsuario() {
-    const userAvatar = this.mobileMenu.querySelector('.mobile-menu-header img');
-    const userName = this.mobileMenu.querySelector('.user-name');
-    const userCompany = this.mobileMenu.querySelector('.user-company');
-
-    if (userAvatar) userAvatar.src = this.usuario.avatar;
-    if (userName)
-      userName.textContent = `${this.usuario.nombre} ${this.usuario.apellidos}`;
-    if (userCompany) userCompany.textContent = this.usuario.empresa;
   }
 
   actualizarIconoTema() {
@@ -72,10 +62,18 @@ class ControladorMenu {
         temaActual.modo === 'light' ? 'fas fa-moon' : 'fas fa-sun';
     }
 
-    // Cambiar el logo según el tema actual
+    // Cambiar el logo del sidebar según el tema actual
     const logoImg = this.sidebar.querySelector('.sidebar-logo img');
     if (logoImg) {
       logoImg.src = this.temaHelper.obtenerLogoTemaActual();
+    }
+
+    // Cambiar el logo móvil según el tema actual
+    const mobileLogoImg = this.mobileMenu?.querySelector(
+      '.mobile-menu-logo img'
+    );
+    if (mobileLogoImg) {
+      mobileLogoImg.src = this.temaHelper.obtenerLogoMovilTemaActual();
     }
   }
 
@@ -119,7 +117,16 @@ class ControladorMenu {
     if (this.mobileMenuToggle) {
       this.mobileMenuToggle.addEventListener('click', e => {
         e.stopPropagation();
-        this.mobileMenu.classList.toggle('active');
+        this.abrirMenuMovil();
+      });
+    }
+
+    // Evento para el botón de cerrar del menú móvil
+    const mobileMenuClose = document.querySelector('.mobile-menu-close');
+    if (mobileMenuClose) {
+      mobileMenuClose.addEventListener('click', e => {
+        e.stopPropagation();
+        this.cerrarMenuMovil();
       });
     }
 
@@ -155,7 +162,7 @@ class ControladorMenu {
         }
 
         // Cerrar menú móvil después de seleccionar
-        this.mobileMenu.classList.remove('active');
+        this.cerrarMenuMovil();
       });
     }
 
@@ -167,9 +174,59 @@ class ControladorMenu {
         !this.mobileMenuToggle.contains(e.target) &&
         this.mobileMenu.classList.contains('active')
       ) {
-        this.mobileMenu.classList.remove('active');
+        this.cerrarMenuMovil();
       }
     });
+
+    // Manejar cambios de tamaño de ventana
+    window.addEventListener('resize', () => {
+      this.manejarCambioTamanio();
+    });
+  }
+
+  // Método para abrir el menú móvil
+  abrirMenuMovil() {
+    if (this.mobileMenu) {
+      this.mobileMenu.classList.add('active');
+      // Ocultar el botón toggle cuando el menú está abierto
+      if (this.mobileMenuToggle) {
+        this.mobileMenuToggle.classList.add('hidden');
+      }
+    }
+  }
+
+  // Método para cerrar el menú móvil
+  cerrarMenuMovil() {
+    if (this.mobileMenu) {
+      this.mobileMenu.classList.remove('active');
+      // Mostrar el botón toggle cuando el menú está cerrado
+      if (this.mobileMenuToggle) {
+        this.mobileMenuToggle.classList.remove('hidden');
+      }
+    }
+  }
+
+  // Método para manejar cambios de tamaño de ventana
+  manejarCambioTamanio() {
+    const isMobile = window.innerWidth <= 768;
+
+    if (isMobile) {
+      // En móvil, asegurar que el toggle esté visible si el menú está cerrado
+      if (
+        this.mobileMenuToggle &&
+        !this.mobileMenu.classList.contains('active')
+      ) {
+        this.mobileMenuToggle.classList.remove('hidden');
+      }
+    } else {
+      // En desktop, ocultar el toggle y cerrar el menú móvil
+      if (this.mobileMenuToggle) {
+        this.mobileMenuToggle.classList.add('hidden');
+      }
+      if (this.mobileMenu) {
+        this.mobileMenu.classList.remove('active');
+      }
+    }
   }
 
   seleccionarItem(id) {
