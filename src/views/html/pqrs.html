@@ -1,0 +1,250 @@
+<!-- Vista PQRS - Sistema de Peticiones, Quejas, Reclamos y Sugerencias -->
+<div class="pqrs-container">
+    <!-- Header de la vista -->
+    <div class="pqrs-header">
+        <div class="row align-items-center">
+            <div class="col-md-6">
+                <h2 class="pqrs-title">
+                    <i class="fas fa-comments me-2"></i>
+                    PQRS
+                </h2>
+                <p class="pqrs-subtitle text-muted">Peticiones, Quejas, Reclamos y Sugerencias</p>
+            </div>
+            <div class="col-md-6 text-end">
+                <button id="nueva-pqrs-btn" class="btn btn-primary">
+                    <i class="fas fa-plus me-2"></i>
+                    Nueva PQRS
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard de estadísticas -->
+    <div class="pqrs-stats">
+        <div class="row">
+            <div class="col-md-3 mb-3">
+                <div class="pqrs-stat-card">
+                    <div class="stat-icon bg-primary">
+                        <i class="fas fa-file-alt"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="pqrs-totales">28</h3>
+                        <p class="stat-label">Total PQRS</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="pqrs-stat-card">
+                    <div class="stat-icon bg-warning">
+                        <i class="fas fa-clock"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="pqrs-pendientes">12</h3>
+                        <p class="stat-label">Pendientes</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="pqrs-stat-card">
+                    <div class="stat-icon bg-info">
+                        <i class="fas fa-spinner"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="pqrs-proceso">8</h3>
+                        <p class="stat-label">En Proceso</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-3 mb-3">
+                <div class="pqrs-stat-card">
+                    <div class="stat-icon bg-success">
+                        <i class="fas fa-check-circle"></i>
+                    </div>
+                    <div class="stat-content">
+                        <h3 class="stat-number" id="pqrs-resueltas">8</h3>
+                        <p class="stat-label">Resueltas</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Filtros y búsqueda -->
+    <div class="pqrs-filtros">
+        <div class="card">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-md-3 mb-2">
+                        <label for="filtro-tipo" class="form-label">Tipo PQRS</label>
+                        <select id="filtro-tipo" class="form-select">
+                            <option value="">Todos los tipos</option>
+                            <option value="peticion">Petición</option>
+                            <option value="queja">Queja</option>
+                            <option value="reclamo">Reclamo</option>
+                            <option value="sugerencia">Sugerencia</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label for="filtro-estado" class="form-label">Estado</label>
+                        <select id="filtro-estado" class="form-select">
+                            <option value="">Todos los estados</option>
+                            <option value="pendiente">Pendiente</option>
+                            <option value="en-proceso">En Proceso</option>
+                            <option value="resuelto">Resuelto</option>
+                            <option value="cerrado">Cerrado</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label for="filtro-prioridad" class="form-label">Prioridad</label>
+                        <select id="filtro-prioridad" class="form-select">
+                            <option value="">Todas las prioridades</option>
+                            <option value="baja">Baja</option>
+                            <option value="media">Media</option>
+                            <option value="alta">Alta</option>
+                            <option value="urgente">Urgente</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3 mb-2">
+                        <label for="buscar-pqrs" class="form-label">Buscar</label>
+                        <div class="input-group">
+                            <input type="text" id="buscar-pqrs" class="form-control" placeholder="Buscar PQRS...">
+                            <button class="btn btn-outline-secondary" type="button">
+                                <i class="fas fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Tabla de PQRS -->
+    <div class="pqrs-tabla">
+        <div class="card">
+            <div class="card-header d-flex justify-content-between align-items-center">
+                <h5 class="mb-0">Mis PQRS</h5>
+                <div class="btn-group" role="group">
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-refresh-pqrs">
+                        <i class="fas fa-sync-alt"></i>
+                    </button>
+                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-export-pqrs">
+                        <i class="fas fa-download"></i>
+                    </button>
+                </div>
+            </div>
+            <div class="card-body p-0">
+                <div class="table-responsive">
+                    <table class="table table-hover mb-0" id="tabla-pqrs">
+                        <thead class="table-light">
+                            <tr>
+                                <th>ID</th>
+                                <th>Tipo</th>
+                                <th>Asunto</th>
+                                <th>Prioridad</th>
+                                <th>Estado</th>
+                                <th>Fecha</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody id="pqrs-tbody">
+                            <!-- Los PQRS se cargan dinámicamente -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Paginación -->
+    <div class="pqrs-paginacion">
+        <nav aria-label="Navegación de PQRS">
+            <ul class="pagination justify-content-center" id="paginacion-pqrs">
+                <!-- La paginación se genera dinámicamente -->
+            </ul>
+        </nav>
+    </div>
+</div>
+
+<!-- Modal para nueva PQRS -->
+<div class="modal fade" id="modal-nueva-pqrs" tabindex="-1" aria-labelledby="modalNuevaPQRSLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="modalNuevaPQRSLabel">
+                    <i class="fas fa-plus me-2"></i>
+                    Nueva PQRS
+                </h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form id="form-nueva-pqrs">
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="pqrs-tipo" class="form-label">Tipo PQRS *</label>
+                            <select class="form-select" id="pqrs-tipo" required>
+                                <option value="">Seleccionar...</option>
+                                <option value="peticion">Petición</option>
+                                <option value="queja">Queja</option>
+                                <option value="reclamo">Reclamo</option>
+                                <option value="sugerencia">Sugerencia</option>
+                            </select>
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="pqrs-prioridad" class="form-label">Prioridad *</label>
+                            <select class="form-select" id="pqrs-prioridad" required>
+                                <option value="">Seleccionar...</option>
+                                <option value="baja">Baja</option>
+                                <option value="media">Media</option>
+                                <option value="alta">Alta</option>
+                                <option value="urgente">Urgente</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-8 mb-3">
+                            <label for="pqrs-asunto" class="form-label">Asunto *</label>
+                            <input type="text" class="form-control" id="pqrs-asunto" required>
+                        </div>
+                        <div class="col-md-4 mb-3">
+                            <label for="pqrs-categoria" class="form-label">Categoría</label>
+                            <select class="form-select" id="pqrs-categoria">
+                                <option value="">Seleccionar...</option>
+                                <option value="servicio">Servicio al Cliente</option>
+                                <option value="producto">Producto</option>
+                                <option value="facturacion">Facturación</option>
+                                <option value="tecnico">Soporte Técnico</option>
+                            </select>
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pqrs-descripcion" class="form-label">Descripción *</label>
+                        <textarea class="form-control" id="pqrs-descripcion" rows="4" required
+                            placeholder="Describe detalladamente tu petición, queja, reclamo o sugerencia..."></textarea>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6 mb-3">
+                            <label for="pqrs-email" class="form-label">Email de contacto</label>
+                            <input type="email" class="form-control" id="pqrs-email" placeholder="tu@email.com">
+                        </div>
+                        <div class="col-md-6 mb-3">
+                            <label for="pqrs-telefono" class="form-label">Teléfono</label>
+                            <input type="tel" class="form-control" id="pqrs-telefono" placeholder="+57 300 123 4567">
+                        </div>
+                    </div>
+                    <div class="mb-3">
+                        <label for="pqrs-adjuntos" class="form-label">Adjuntos</label>
+                        <input type="file" class="form-control" id="pqrs-adjuntos" multiple>
+                        <div class="form-text">Puedes adjuntar documentos, capturas de pantalla, etc.</div>
+                    </div>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                <button type="button" class="btn btn-primary" id="btn-guardar-pqrs">
+                    <i class="fas fa-save me-2"></i>
+                    Crear PQRS
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
