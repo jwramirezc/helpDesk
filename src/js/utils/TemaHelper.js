@@ -274,7 +274,34 @@ class TemaHelper {
 
   // Método para obtener comportamientos del tema actual
   obtenerComportamientosActuales() {
-    const tema = this.obtenerTemaActualCompleto();
-    return tema ? tema.comportamientos : {};
+    return this.config.tema.comportamientos || {};
+  }
+
+  /**
+   * Cambia al siguiente tema disponible
+   */
+  cambiarTema() {
+    const temasDisponibles = this.obtenerTemasDisponibles();
+    if (!temasDisponibles || temasDisponibles.length === 0) {
+      console.warn('No hay temas disponibles');
+      return;
+    }
+
+    const temaActual = this.obtenerTemaActualCompleto();
+    if (!temaActual) {
+      // Si no hay tema actual, usar el primero
+      this.cambiarModo(temasDisponibles[0].id);
+      return;
+    }
+
+    // Encontrar el índice del tema actual
+    const indiceActual = temasDisponibles.findIndex(
+      t => t.id === temaActual.id
+    );
+    const siguienteIndice = (indiceActual + 1) % temasDisponibles.length;
+    const siguienteTema = temasDisponibles[siguienteIndice];
+
+    // Cambiar al siguiente tema
+    this.cambiarModo(siguienteTema.id);
   }
 }

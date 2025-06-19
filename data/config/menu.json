@@ -3,53 +3,85 @@
     "top": [
       {
         "id": "menu_home",
+        "label": "Home",
         "icon": "fas fa-home",
-        "name": "Home",
-        "vista": "home"
+        "type": "item",
+        "target": "home.html"
       },
       {
         "id": "menu_helpdesk",
+        "label": "Help Desk",
         "icon": "fas fa-ticket",
-        "name": "Help Desk",
-        "vista": "helpdesk"
+        "type": "item",
+        "target": "helpdesk.html"
       },
       {
         "id": "menu_pqrs",
+        "label": "PQRS",
         "icon": "fas fa-comments",
-        "name": "PQRS",
-        "vista": "pqrs"
+        "type": "item",
+        "target": "pqrs.html"
       },
       {
         "id": "menu_consultas",
+        "label": "Consultas",
         "icon": "fas fa-search",
-        "name": "Consultas",
-        "vista": "consultas"
+        "type": "item",
+        "target": "consultas.html"
       },
       {
         "id": "menu_reportes",
+        "label": "Reportes",
         "icon": "fas fa-chart-bar",
-        "name": "Reportes",
-        "vista": "reportes"
+        "type": "item",
+        "target": "reportes.html"
       }
     ],
     "bottom": [
       {
         "id": "menu_theme",
+        "label": "Tema",
         "icon": "fas fa-moon",
-        "name": "Tema",
-        "vista": "theme"
+        "type": "item",
+        "target": "theme.html"
       },
       {
         "id": "menu_config",
+        "label": "Configuración",
         "icon": "fas fa-cog",
-        "name": "Configuración",
-        "vista": "configuracion"
+        "type": "submenu",
+        "openAction": "alert",
+        "message": "Submenú Configuración activado",
+        "children": [
+          {
+            "id": "menu_config_usuarios",
+            "label": "Usuarios",
+            "icon": "fas fa-users",
+            "type": "item",
+            "target": "configuracion/usuarios.html"
+          },
+          {
+            "id": "menu_config_perfiles",
+            "label": "Perfiles",
+            "icon": "fas fa-user-shield",
+            "type": "item",
+            "target": "configuracion/perfiles.html"
+          },
+          {
+            "id": "menu_config_sistema",
+            "label": "Sistema",
+            "icon": "fas fa-cogs",
+            "type": "item",
+            "target": "configuracion/sistema.html"
+          }
+        ]
       },
       {
         "id": "menu_logout",
+        "label": "Cerrar Sesión",
         "icon": "fas fa-sign-out-alt",
-        "name": "Cerrar Sesión",
-        "vista": "logout"
+        "type": "item",
+        "target": "logout.html"
       }
     ]
   }

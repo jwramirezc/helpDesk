@@ -1,0 +1,150 @@
+/* Estilos base del menú */
+.menu-item,
+.mobile-menu-item {
+  position: relative;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* Estados activos para desktop */
+.menu-item.active {
+  background-color: var(--primary-color);
+}
+
+.menu-item.active i {
+  color: var(--icon-color-active);
+}
+
+.menu-item.has-submenu.active::after {
+  background-color: var(--icon-color-active);
+  opacity: 1;
+}
+
+/* Estados activos para móvil */
+.mobile-menu-item.active {
+  background-color: var(--primary-color);
+  color: var(--icon-color-active);
+}
+
+.mobile-menu-item.active i {
+  color: var(--icon-color-active);
+}
+
+.mobile-menu-item.has-submenu.active .submenu-arrow {
+  transform: translateX(4px);
+  opacity: 1;
+}
+
+/* Estilos para submenús */
+.menu-item.has-submenu::after {
+  content: '';
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: 50%;
+  background-color: var(--icon-color);
+  opacity: 0.5;
+  transition: all 0.3s ease;
+}
+
+.menu-item.has-submenu:hover::after {
+  opacity: 1;
+}
+
+/* Indicador de submenú en móvil */
+.mobile-menu-item.has-submenu {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.submenu-arrow {
+  margin-left: auto;
+  font-size: 0.8rem;
+  opacity: 0.7;
+  transition: transform 0.3s ease;
+}
+
+.mobile-menu-item.has-submenu:hover .submenu-arrow {
+  transform: translateX(4px);
+}
+
+/* Estilos para submenús móviles */
+.mobile-submenu-header {
+  display: flex;
+  align-items: center;
+  padding: 1rem;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  background-color: var(--background-color, #f8f9fa);
+}
+
+.mobile-back-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.5rem 1rem;
+  border: none;
+  background: none;
+  color: var(--text-color, #333);
+  cursor: pointer;
+  font-size: 0.9rem;
+  transition: all 0.3s ease;
+}
+
+.mobile-back-button:hover {
+  background-color: var(--hover-color, #e9ecef);
+  border-radius: 4px;
+}
+
+.mobile-back-button i {
+  font-size: 1rem;
+}
+
+.mobile-submenu-title {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  margin-left: 1rem;
+  font-weight: 600;
+  color: var(--text-color, #333);
+}
+
+.mobile-submenu-title i {
+  font-size: 1.2rem;
+  color: var(--primary-color, #007bff);
+}
+
+.mobile-submenu-items {
+  padding: 0.5rem 0;
+}
+
+/* Animaciones para transiciones de vista */
+.mobile-menu-items {
+  transition: all 0.3s ease;
+}
+
+/* Responsive adjustments */
+@media (max-width: 767px) {
+  .mobile-menu-item {
+    padding: 1rem;
+    border-bottom: 1px solid var(--border-color, #e0e0e0);
+  }
+
+  .mobile-menu-item:last-child {
+    border-bottom: none;
+  }
+
+  .mobile-menu-item span {
+    margin-left: 1rem;
+    font-size: 1rem;
+  }
+
+  .mobile-submenu-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+  }
+}

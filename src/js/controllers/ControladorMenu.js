@@ -21,10 +21,15 @@ class ControladorMenu {
     this.itemActivo = null;
     // Vista (DOM)
     this.menuView = new MenuView(this.sidebar, this.mobileMenu);
+    // Flag para controlar si estamos en un submenú
+    this.isInSubmenu = false;
   }
 
   async cargarMenu() {
     try {
+      // Limpiar estado activo al cargar inicialmente
+      this.menuService.limpiarEstadoActivo();
+
       // Obtener elementos del menú desde MenuService
       this.menuItems = await this.menuService.getMenuItems();
 
@@ -43,6 +48,9 @@ class ControladorMenu {
 
       // Inicializar comportamiento del toggle
       this.manejarCambioTamanio();
+
+      // Actualizar la vista para reflejar los estados activos
+      this.actualizarVistaMenu();
     } catch (error) {
       console.error('Error al cargar el menú:', error);
     }
@@ -84,37 +92,42 @@ class ControladorMenu {
 
   agregarEventos() {
     // Eventos del menú lateral
-    this.sidebar.addEventListener('click', e => {
+    this.sidebar.addEventListener('click', async e => {
       const logo = e.target.closest('#sidebar_logo');
       if (logo) {
         window.open('https://www.saiasoftware.com', '_blank');
         return;
       }
+
       const menuItem = e.target.closest('.menu-item');
       if (!menuItem) return;
+
       const id = menuItem.id;
+      const type = menuItem.dataset.type;
+      const action = menuItem.dataset.action;
+      const message = menuItem.dataset.message;
+      const target = menuItem.dataset.target;
 
       if (id === 'menu_theme') {
         this.cambiarTema();
         return;
       }
 
-      // Remover clase active de todos los items excepto el tema
-      this.sidebar
-        .querySelectorAll('.menu-item:not(#menu_theme)')
-        .forEach(item => {
-          item.classList.remove('active');
-        });
+      // Si es un submenú con acción alert, mostrar el mensaje
+      if (type === 'submenu' && action === 'alert') {
+        // Activar solo Configuración y desactivar los demás
+        await this.activarSoloItem(id);
+        alert(message);
+        return;
+      }
 
-      // Agregar clase active al item seleccionado
-      menuItem.classList.add('active');
-
-      if (id === 'menu_logout') {
-        this.cerrarSesion();
-      } else if (id === 'menu_config') {
-        this.abrirConfiguracion();
-      } else {
-        this.seleccionarItem(id);
+      // Si es un ítem normal, cargar la vista en el contenedor principal
+      if (type === 'item' && target) {
+        // Activar solo este ítem y desactivar los demás
+        await this.activarSoloItem(id);
+        // Cargar la vista en el contenedor principal
+        await this.cargarVista(id);
+        return;
       }
     });
 
@@ -131,44 +144,13 @@ class ControladorMenu {
     if (mobileMenuClose) {
       mobileMenuClose.addEventListener('click', e => {
         e.stopPropagation();
+        this.isInSubmenu = false; // Resetear el estado al cerrar el menú
         this.cerrarMenuMovil();
       });
     }
 
     if (this.mobileMenuItems) {
-      this.mobileMenuItems.addEventListener('click', e => {
-        const menuItem = e.target.closest('.mobile-menu-item');
-        if (!menuItem) return;
-
-        e.preventDefault();
-        const id = menuItem.id.replace('mobile_', '');
-
-        if (id === 'menu_theme') {
-          this.cambiarTema();
-          return;
-        }
-
-        // Remover clase active de todos los items móviles excepto el tema
-        this.mobileMenuItems
-          .querySelectorAll('.mobile-menu-item:not(#mobile_menu_theme)')
-          .forEach(item => {
-            item.classList.remove('active');
-          });
-
-        // Agregar clase active al item seleccionado
-        menuItem.classList.add('active');
-
-        if (id === 'menu_logout') {
-          this.cerrarSesion();
-        } else if (id === 'menu_config') {
-          this.abrirConfiguracion();
-        } else {
-          this.seleccionarItem(id);
-        }
-
-        // Cerrar menú móvil después de seleccionar
-        this.cerrarMenuMovil();
-      });
+      this.agregarEventosMenuMovil();
     }
 
     // Cerrar menú móvil al hacer clic fuera
@@ -177,7 +159,8 @@ class ControladorMenu {
         this.mobileMenu &&
         !this.mobileMenu.contains(e.target) &&
         !this.mobileMenuToggle.contains(e.target) &&
-        this.mobileMenu.classList.contains('active')
+        this.mobileMenu.classList.contains('active') &&
+        !this.isInSubmenu // No cerrar si estamos en un submenú
       ) {
         this.cerrarMenuMovil();
       }
@@ -186,6 +169,257 @@ class ControladorMenu {
     // Manejar cambios de tamaño de ventana
     window.addEventListener('resize', () => {
       this.manejarCambioTamanio();
+    });
+  }
+
+  /**
+   * Agrega eventos específicos para el menú móvil principal
+   */
+  agregarEventosMenuMovil() {
+    if (this.mobileMenuItems) {
+      // Remover eventos previos para evitar duplicados
+      this.mobileMenuItems.removeEventListener(
+        'click',
+        this.handleMobileMenuClick
+      );
+
+      // Agregar el nuevo evento
+      this.handleMobileMenuClick = async e => {
+        const menuItem = e.target.closest('.mobile-menu-item');
+        if (!menuItem) return;
+
+        e.preventDefault();
+        e.stopPropagation(); // Evitar que el clic se propague
+
+        const id = menuItem.id.replace('mobile_', '');
+        const type = menuItem.dataset.type;
+        const action = menuItem.dataset.action;
+        const message = menuItem.dataset.message;
+        const target = menuItem.dataset.target;
+
+        if (id === 'menu_theme') {
+          this.cambiarTema();
+          return;
+        }
+
+        // Comportamiento adaptativo para submenús
+        if (type === 'submenu') {
+          if (window.innerWidth >= 768) {
+            // En PC: mostrar alert (comportamiento actual)
+            if (action === 'alert') {
+              alert(message);
+            }
+          } else {
+            // En móvil: mostrar submenú en vista separada
+            const parentItem = await this.menuService.findItemById(id);
+            if (parentItem && parentItem.children.length > 0) {
+              this.isInSubmenu = true; // Indicar que estamos en un submenú
+              // Activar solo Configuración y desactivar los demás
+              await this.activarSoloItem(id);
+              this.menuView.showMobileSubmenu(parentItem);
+              this.agregarEventosSubmenuMovil();
+            }
+          }
+          return;
+        }
+
+        // Si es un ítem normal, cargar la vista en el contenedor principal
+        if (type === 'item' && target) {
+          // Activar solo este ítem y desactivar los demás
+          await this.activarSoloItem(id);
+          // Cerrar el menú móvil antes de cargar la vista
+          this.cerrarMenuMovil();
+          // Cargar la vista en el contenedor principal
+          await this.cargarVista(id);
+          return;
+        }
+
+        // Solo cerrar el menú si no estamos en un submenú
+        if (!this.isInSubmenu) {
+          this.cerrarMenuMovil();
+        }
+      };
+
+      this.mobileMenuItems.addEventListener(
+        'click',
+        this.handleMobileMenuClick
+      );
+    }
+  }
+
+  /**
+   * Agrega eventos para el botón de volver en submenús móviles
+   */
+  agregarEventosSubmenuMovil() {
+    const backButton = document.getElementById('mobile_back_button');
+    if (backButton) {
+      // Remover eventos previos para evitar duplicados
+      backButton.removeEventListener('click', this.handleBackButtonClick);
+
+      // Agregar el nuevo evento
+      this.handleBackButtonClick = e => {
+        e.preventDefault();
+        e.stopPropagation(); // Evitar que el clic se propague
+        this.isInSubmenu = false; // Indicar que salimos del submenú
+        this.menuView.showMobileMainMenu();
+        this.agregarEventosMenuMovil();
+        // Asegurar que solo Configuración quede activo
+        this.actualizarVistaMenu();
+      };
+
+      backButton.addEventListener('click', this.handleBackButtonClick);
+    }
+
+    // Agregar eventos para los subítems
+    const submenuItems = document.querySelectorAll(
+      '.mobile-submenu-items .mobile-menu-item'
+    );
+    submenuItems.forEach(item => {
+      item.addEventListener('click', async e => {
+        e.preventDefault();
+        e.stopPropagation();
+
+        const id = item.id.replace('mobile_', '');
+        const type = item.dataset.type;
+        const target = item.dataset.target;
+
+        if (type === 'item' && target) {
+          // Activar solo este subítem y desactivar los demás
+          await this.activarSoloItem(id);
+          // Cerrar el menú móvil
+          this.cerrarMenuMovil();
+          // Cargar la vista en el contenedor principal
+          await this.cargarVista(id);
+        }
+      });
+    });
+  }
+
+  /**
+   * Activa solo un ítem y desactiva todos los demás
+   * @param {string} itemId - ID del ítem a activar
+   */
+  async activarSoloItem(itemId) {
+    // Desactivar todos los ítems primero
+    const allMenuItems = await this.menuService.getMenuItems();
+
+    // Desactivar todos los ítems top
+    for (const item of allMenuItems.top) {
+      item.setActive(false);
+      // También desactivar todos los subítems
+      for (const child of item.children) {
+        child.setActive(false);
+      }
+    }
+
+    // Desactivar todos los ítems bottom
+    for (const item of allMenuItems.bottom) {
+      item.setActive(false);
+      // También desactivar todos los subítems
+      for (const child of item.children) {
+        child.setActive(false);
+      }
+    }
+
+    // Activar solo el ítem seleccionado
+    const selectedItem = await this.menuService.findItemById(itemId);
+    if (selectedItem) {
+      selectedItem.setActive(true);
+      // Si tiene padre, también activarlo
+      const parent = selectedItem.getParent();
+      if (parent) {
+        parent.setActive(true);
+      }
+    }
+
+    // Actualizar la vista para reflejar los cambios
+    this.actualizarVistaMenu();
+  }
+
+  /**
+   * Activa un ítem sin desactivar otros (para submenús)
+   * @param {string} itemId - ID del ítem a activar
+   */
+  async activarItem(itemId) {
+    const selectedItem = await this.menuService.findItemById(itemId);
+    if (selectedItem) {
+      selectedItem.setActive(true);
+      // Si tiene padre, también activarlo
+      const parent = selectedItem.getParent();
+      if (parent) {
+        parent.setActive(true);
+      }
+    }
+    this.actualizarVistaMenu();
+  }
+
+  /**
+   * Actualiza la vista del menú para reflejar los estados activos
+   */
+  actualizarVistaMenu() {
+    // Actualizar el menú de escritorio
+    const desktopItems = this.sidebar.querySelectorAll('.menu-item');
+    desktopItems.forEach(item => {
+      const id = item.id;
+      const menuItem =
+        this.menuItems?.top.find(i => i.id === id) ||
+        this.menuItems?.bottom.find(i => i.id === id);
+      if (menuItem) {
+        if (menuItem.isActive()) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      }
+    });
+
+    // Actualizar el menú móvil principal
+    if (this.mobileMenuItems) {
+      const mobileItems =
+        this.mobileMenuItems.querySelectorAll('.mobile-menu-item');
+      mobileItems.forEach(item => {
+        const id = item.id.replace('mobile_', '');
+        const menuItem =
+          this.menuItems?.top.find(i => i.id === id) ||
+          this.menuItems?.bottom.find(i => i.id === id);
+        if (menuItem) {
+          if (menuItem.isActive()) {
+            item.classList.add('active');
+          } else {
+            item.classList.remove('active');
+          }
+        }
+      });
+    }
+
+    // Actualizar subítems en el menú móvil
+    const submenuItems = document.querySelectorAll(
+      '.mobile-submenu-items .mobile-menu-item'
+    );
+    submenuItems.forEach(item => {
+      const id = item.id.replace('mobile_', '');
+      // Buscar en todos los subítems de todos los ítems
+      let foundItem = null;
+      for (const menuItem of [
+        ...(this.menuItems?.top || []),
+        ...(this.menuItems?.bottom || []),
+      ]) {
+        for (const child of menuItem.children) {
+          if (child.id === id) {
+            foundItem = child;
+            break;
+          }
+        }
+        if (foundItem) break;
+      }
+
+      if (foundItem) {
+        if (foundItem.isActive()) {
+          item.classList.add('active');
+        } else {
+          item.classList.remove('active');
+        }
+      }
     });
   }
 
@@ -235,110 +469,6 @@ class ControladorMenu {
   }
 
   seleccionarItem(id) {
-    // Remover clase active de todos los items
-    this.sidebar.querySelectorAll('.menu-item').forEach(item => {
-      item.classList.remove('active');
-    });
-    if (this.mobileMenuItems) {
-      this.mobileMenuItems
-        .querySelectorAll('.mobile-menu-item')
-        .forEach(item => {
-          item.classList.remove('active');
-        });
-    }
-
-    // Agregar clase active al item seleccionado
-    const item = this.sidebar.querySelector(`#${id}`);
-    const mobileItem = this.mobileMenuItems?.querySelector(`#mobile_${id}`);
-    if (item) item.classList.add('active');
-    if (mobileItem) mobileItem.classList.add('active');
-
-    // Guardar el item activo
-    this.itemActivo = id;
-
-    // Obtener la vista del item seleccionado y cargarla
-    this.cargarVista(id);
-  }
-
-  abrirConfiguracion() {
-    // Implementar lógica para abrir configuración
-    console.log('Abrir configuración');
-  }
-
-  cerrarSesion() {
-    // Implementar lógica para cerrar sesión
-    console.log('Cerrar sesión');
-    // Aquí iría la lógica para limpiar la sesión y redirigir al login
-  }
-
-  actualizarVisibilidad(id, visible) {
-    // Buscar en elementos estándar
-    const standardItem =
-      this.config.menu.top.find(item => item.id === id) ||
-      this.config.menu.bottom.find(item => item.id === id);
-    if (standardItem) {
-      standardItem.visible = visible;
-      this.config.guardar();
-      this.cargarMenu();
-      return;
-    }
-
-    // Buscar en elementos dinámicos
-    const dynamicItem = this.menuItems?.top.find(item => item.id === id);
-    if (dynamicItem) {
-      dynamicItem.visible = visible;
-      // Aquí se podría implementar la lógica para guardar los cambios en el servidor
-      this.cargarMenu();
-    }
-  }
-
-  actualizarOrden(id, nuevoOrden) {
-    // Buscar en elementos estándar
-    const standardItem =
-      this.config.menu.top.find(item => item.id === id) ||
-      this.config.menu.bottom.find(item => item.id === id);
-    if (standardItem) {
-      standardItem.orden = nuevoOrden;
-      this.config.guardar();
-      this.cargarMenu();
-      return;
-    }
-
-    // Buscar en elementos dinámicos
-    const dynamicItem = this.menuItems?.top.find(item => item.id === id);
-    if (dynamicItem) {
-      dynamicItem.orden = nuevoOrden;
-      // Aquí se podría implementar la lógica para guardar los cambios en el servidor
-      this.cargarMenu();
-    }
-  }
-
-  cambiarTema() {
-    const temaActual = this.temaHelper.obtenerTemaActualCompleto();
-    const temasDisponibles = this.temaHelper.obtenerTemasDisponibles();
-
-    if (!temaActual || !temasDisponibles.length) {
-      // Fallback al comportamiento anterior
-      const modoActual = this.temaHelper.obtenerTemaActual().modo;
-      const nuevoModo = modoActual === 'light' ? 'dark' : 'light';
-      this.temaHelper.cambiarModo(nuevoModo);
-    } else {
-      // Encontrar el siguiente tema en la lista
-      const indiceActual = temasDisponibles.findIndex(
-        t => t.id === temaActual.id
-      );
-      const siguienteIndice = (indiceActual + 1) % temasDisponibles.length;
-      const siguienteTema = temasDisponibles[siguienteIndice];
-
-      // Cambiar al siguiente tema
-      this.temaHelper.cambiarModo(siguienteTema.id);
-    }
-
-    // Actualizar los íconos
-    this.actualizarIconoTema();
-  }
-
-  cargarVista(id) {
     // Buscar el item en el menú para obtener su vista
     const item =
       this.menuItems?.top.find(item => item.id === id) ||
@@ -349,6 +479,65 @@ class ControladorMenu {
       this.controladorContenido.cargarVista(item.vista);
     } else {
       console.log('No se pudo cargar la vista para el item:', id);
+    }
+  }
+
+  abrirConfiguracion() {
+    // Implementar lógica para abrir configuración
+    console.log('Abriendo configuración');
+  }
+
+  cerrarSesion() {
+    // Implementar lógica para cerrar sesión
+    console.log('Cerrando sesión');
+  }
+
+  actualizarVisibilidad(id, visible) {
+    const item = document.getElementById(id);
+    if (item) {
+      item.style.display = visible ? 'block' : 'none';
+    }
+  }
+
+  actualizarOrden(id, nuevoOrden) {
+    // Implementar lógica para actualizar el orden de los items
+    console.log('Actualizando orden del item:', id, 'a posición:', nuevoOrden);
+  }
+
+  cambiarTema() {
+    this.temaHelper.cambiarTema();
+    this.actualizarIconoTema();
+    // No activar el ítem tema, solo cambiar el tema
+  }
+
+  /**
+   * Carga una vista en el contenedor principal
+   * @param {string} id - ID del ítem del menú
+   */
+  async cargarVista(id) {
+    try {
+      // Si tenemos un controlador de contenido, usarlo
+      if (this.controladorContenido) {
+        await this.controladorContenido.cargarVista(id);
+        return;
+      }
+
+      // Si no hay controlador de contenido, obtener el ítem y su target
+      const menuItem = await this.menuService.findItemById(id);
+      if (menuItem && menuItem.target) {
+        const mainContent = document.getElementById('main-content');
+        if (mainContent) {
+          // Cargar el contenido HTML en el contenedor principal
+          const response = await fetch(menuItem.target);
+          if (!response.ok) {
+            throw new Error(`Error al cargar ${menuItem.target}`);
+          }
+          const html = await response.text();
+          mainContent.innerHTML = html;
+        }
+      }
+    } catch (error) {
+      console.error('Error al cargar la vista:', error);
     }
   }
 }
