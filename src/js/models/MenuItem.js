@@ -15,6 +15,15 @@ class MenuItem {
    * @param {MenuItem|null} [parent] - Referencia al ítem padre
    */
   constructor(config, parent = null) {
+    // Validaciones básicas
+    if (!config.id || !config.label || !config.type) {
+      throw new Error('MenuItem: id, label y type son requeridos');
+    }
+
+    if (!['item', 'submenu'].includes(config.type)) {
+      throw new Error('MenuItem: type debe ser "item" o "submenu"');
+    }
+
     this.id = config.id;
     this.label = config.label;
     this.type = config.type;
@@ -78,6 +87,28 @@ class MenuItem {
   }
 
   /**
+   * Verifica si el ítem tiene subítems
+   * @returns {boolean}
+   */
+  hasChildren() {
+    return this.children.length > 0;
+  }
+
+  /**
+   * Obtiene la ruta completa del ítem (padre > hijo)
+   * @returns {string}
+   */
+  getPath() {
+    const path = [this.label];
+    let current = this.parent;
+    while (current) {
+      path.unshift(current.label);
+      current = current.parent;
+    }
+    return path.join(' > ');
+  }
+
+  /**
    * Genera el HTML del ítem según su tipo y estado
    * @param {boolean} isMobile - Indica si se está renderizando para móvil
    * @returns {string}
@@ -106,17 +137,5 @@ class MenuItem {
         }
       </div>
     `;
-  }
-
-  /**
-   * Ejecuta la acción correspondiente al ítem
-   */
-  handleClick() {
-    if (this.type === 'submenu' && this.openAction === 'alert') {
-      alert(this.message);
-    } else if (this.type === 'item' && this.target) {
-      window.location.href = this.target;
-    }
-    this.setActive(true);
   }
 }

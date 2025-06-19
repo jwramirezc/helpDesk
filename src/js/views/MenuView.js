@@ -30,6 +30,12 @@ class MenuView {
       return;
     }
 
+    // Validar datos de entrada
+    if (!menuItems || !menuItems.top || !menuItems.bottom) {
+      console.error('MenuView: Datos del menú inválidos');
+      return;
+    }
+
     // Almacenar los datos actuales
     this.currentMenuItems = menuItems;
     this.currentLogoPath = logoMovilPath;
@@ -39,6 +45,13 @@ class MenuView {
 
     // Mobile menu
     this._renderMobileMenu(menuItems, logoMovilPath);
+
+    // Log para debugging
+    console.log('MenuView: Menús renderizados correctamente', {
+      desktopItems: menuItems.top.length + menuItems.bottom.length,
+      mobileView: this.currentMobileView,
+      isMobile: this.isMobile,
+    });
   }
 
   /**
@@ -69,7 +82,10 @@ class MenuView {
   _renderMobileMenu(menuItems, logoPath) {
     const mobileMenuItemsContainer =
       this.mobileMenu.querySelector('.mobile-menu-items');
-    if (!mobileMenuItemsContainer) return;
+    if (!mobileMenuItemsContainer) {
+      console.error('MenuView: Contenedor de menú móvil no encontrado');
+      return;
+    }
 
     // Validar que tenemos los datos necesarios
     if (!menuItems || !menuItems.top || !menuItems.bottom) {
@@ -122,10 +138,21 @@ class MenuView {
    * @param {MenuItem} parentItem - El ítem padre del submenú
    */
   showMobileSubmenu(parentItem) {
+    if (!parentItem || !parentItem.hasChildren()) {
+      console.warn('MenuView: Intento de mostrar submenú inválido');
+      return;
+    }
+
     this.currentMobileView = 'submenu';
     this.currentSubmenuParent = parentItem;
+
     // Usar los datos almacenados para re-renderizar
     this._renderMobileMenu(this.currentMenuItems, this.currentLogoPath);
+
+    console.log('MenuView: Submenú mostrado', {
+      parent: parentItem.label,
+      subitems: parentItem.children.length,
+    });
   }
 
   /**
@@ -134,19 +161,49 @@ class MenuView {
   showMobileMainMenu() {
     this.currentMobileView = 'main';
     this.currentSubmenuParent = null;
+
     // Usar los datos almacenados para re-renderizar
     this._renderMobileMenu(this.currentMenuItems, this.currentLogoPath);
+
+    console.log('MenuView: Vuelta al menú principal');
   }
 
   /**
-   * Actualiza solo el menú móvil (para cuando cambia el estado)
-   * @param {{top: Array<MenuItem>, bottom: Array<MenuItem>}} menuItems
-   * @param {string} logoPath
+   * Obtiene información del estado actual de la vista
+   * @returns {Object}
    */
-  updateMobileMenu(menuItems, logoPath) {
-    if (this.currentMobileView === 'main') {
-      this._renderMobileMenu(menuItems, logoPath);
+  getViewState() {
+    return {
+      currentMobileView: this.currentMobileView,
+      currentSubmenuParent: this.currentSubmenuParent?.label || null,
+      isMobile: this.isMobile,
+      hasMenuItems: !!this.currentMenuItems,
+      topItemsCount: this.currentMenuItems?.top?.length || 0,
+      bottomItemsCount: this.currentMenuItems?.bottom?.length || 0,
+    };
+  }
+
+  /**
+   * Valida que todos los elementos del DOM estén presentes
+   * @returns {boolean}
+   */
+  validateDOM() {
+    const requiredElements = [
+      this.sidebar,
+      this.mobileMenu,
+      this.mobileMenu?.querySelector('.mobile-menu-items'),
+    ];
+
+    const missingElements = requiredElements.filter(el => !el);
+
+    if (missingElements.length > 0) {
+      console.error(
+        'MenuView: Elementos del DOM faltantes:',
+        missingElements.length
+      );
+      return false;
     }
-    // Si estamos en vista de submenú, no actualizamos para mantener la vista actual
+
+    return true;
   }
 }

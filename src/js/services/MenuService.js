@@ -118,17 +118,107 @@ class MenuService {
   }
 
   /**
-   * Activa un ítem y su padre (si existe)
-   * @param {string} id - ID del ítem a activar
+   * Obtiene todos los ítems que tienen submenús
+   * @returns {Promise<Array<MenuItem>>}
    */
-  async activateItem(id) {
-    const item = await this.findItemById(id);
-    if (item) {
-      item.setActive(true);
-      const parent = item.getParent();
-      if (parent) {
-        parent.setActive(true);
+  async getSubmenuItems() {
+    const menuItems = await this.getMenuItems();
+    const submenuItems = [];
+
+    // Buscar en items top
+    for (const item of menuItems.top) {
+      if (item.hasChildren()) {
+        submenuItems.push(item);
       }
     }
+
+    // Buscar en items bottom
+    for (const item of menuItems.bottom) {
+      if (item.hasChildren()) {
+        submenuItems.push(item);
+      }
+    }
+
+    return submenuItems;
+  }
+
+  /**
+   * Obtiene estadísticas del menú para debugging
+   * @returns {Promise<Object>}
+   */
+  async getMenuStats() {
+    const menuItems = await this.getMenuItems();
+    let totalItems = 0;
+    let totalSubmenus = 0;
+    let totalSubitems = 0;
+
+    // Contar items top
+    for (const item of menuItems.top) {
+      totalItems++;
+      if (item.hasChildren()) {
+        totalSubmenus++;
+        totalSubitems += item.children.length;
+      }
+    }
+
+    // Contar items bottom
+    for (const item of menuItems.bottom) {
+      totalItems++;
+      if (item.hasChildren()) {
+        totalSubmenus++;
+        totalSubitems += item.children.length;
+      }
+    }
+
+    return {
+      totalItems,
+      totalSubmenus,
+      totalSubitems,
+      topItems: menuItems.top.length,
+      bottomItems: menuItems.bottom.length,
+    };
+  }
+
+  /**
+   * Valida la estructura del menú y reporta errores
+   * @returns {Promise<Array<string>>}
+   */
+  async validateMenuStructure() {
+    const menuItems = await this.getMenuItems();
+    const errors = [];
+
+    // Validar items top
+    for (const item of menuItems.top) {
+      if (!item.id || !item.label || !item.type) {
+        errors.push(`Item top inválido: ${item.id || 'sin ID'}`);
+      }
+
+      // Validar subitems
+      for (const child of item.children) {
+        if (!child.id || !child.label || !child.type) {
+          errors.push(
+            `Subitem inválido en ${item.id}: ${child.id || 'sin ID'}`
+          );
+        }
+      }
+    }
+
+    // Validar items bottom
+    for (const item of menuItems.bottom) {
+      if (!item.id || !item.label || !item.type) {
+        errors.push(`Item bottom inválido: ${item.id || 'sin ID'}`);
+      }
+
+      // Validar subitems
+      for (const child of item.children) {
+        if (!child.id || !child.label || !child.type) {
+          errors.push(
+            `Subitem inválido en ${item.id}: ${child.id || 'sin ID'}`
+          );
+        }
+      }
+    }
+
+    return errors;
   }
 }

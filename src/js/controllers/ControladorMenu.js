@@ -23,6 +23,31 @@ class ControladorMenu {
     this.menuView = new MenuView(this.sidebar, this.mobileMenu);
     // Flag para controlar si estamos en un submenú
     this.isInSubmenu = false;
+
+    // Validar elementos críticos del DOM
+    this._validateCriticalElements();
+  }
+
+  /**
+   * Valida que los elementos críticos del DOM estén presentes
+   * @private
+   */
+  _validateCriticalElements() {
+    const criticalElements = [
+      { name: 'sidebar', element: this.sidebar },
+      { name: 'mobileMenu', element: this.mobileMenu },
+      { name: 'mobileMenuToggle', element: this.mobileMenuToggle },
+      { name: 'mobileMenuItems', element: this.mobileMenuItems },
+    ];
+
+    const missingElements = criticalElements.filter(item => !item.element);
+
+    if (missingElements.length > 0) {
+      console.error(
+        'ControladorMenu: Elementos críticos faltantes:',
+        missingElements.map(item => item.name)
+      );
+    }
   }
 
   async cargarMenu() {
@@ -51,6 +76,9 @@ class ControladorMenu {
 
       // Actualizar la vista para reflejar los estados activos
       this.actualizarVistaMenu();
+
+      // Log de éxito
+      console.log('ControladorMenu: Menú cargado correctamente');
     } catch (error) {
       console.error('Error al cargar el menú:', error);
     }
@@ -538,6 +566,46 @@ class ControladorMenu {
       }
     } catch (error) {
       console.error('Error al cargar la vista:', error);
+    }
+  }
+
+  /**
+   * Obtiene información del estado actual del controlador
+   * @returns {Object}
+   */
+  getControllerState() {
+    return {
+      isInSubmenu: this.isInSubmenu,
+      itemActivo: this.itemActivo,
+      hasMenuItems: !!this.menuItems,
+      menuViewState: this.menuView.getViewState(),
+      mobileMenuActive: this.mobileMenu?.classList.contains('active') || false,
+    };
+  }
+
+  /**
+   * Valida la estructura del menú y reporta problemas
+   * @returns {Promise<Object>}
+   */
+  async validateMenuStructure() {
+    try {
+      const errors = await this.menuService.validateMenuStructure();
+      const stats = await this.menuService.getMenuStats();
+
+      return {
+        isValid: errors.length === 0,
+        errors,
+        stats,
+        domValid: this.menuView.validateDOM(),
+      };
+    } catch (error) {
+      console.error('Error al validar estructura del menú:', error);
+      return {
+        isValid: false,
+        errors: [error.message],
+        stats: null,
+        domValid: false,
+      };
     }
   }
 }
