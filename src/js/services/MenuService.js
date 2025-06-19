@@ -221,4 +221,95 @@ class MenuService {
 
     return errors;
   }
+
+  /**
+   * Busca ítems por texto en el label (búsqueda insensible a mayúsculas)
+   * @param {string} searchText - Texto a buscar
+   * @returns {Promise<Array<MenuItem>>}
+   */
+  async searchItems(searchText) {
+    const menuItems = await this.getMenuItems();
+    const results = [];
+    const searchLower = searchText.toLowerCase();
+
+    const searchInSection = items => {
+      for (const item of items) {
+        if (item.label.toLowerCase().includes(searchLower)) {
+          results.push(item);
+        }
+        // Buscar también en subítems
+        for (const child of item.children) {
+          if (child.label.toLowerCase().includes(searchLower)) {
+            results.push(child);
+          }
+        }
+      }
+    };
+
+    searchInSection(menuItems.top);
+    searchInSection(menuItems.bottom);
+
+    return results;
+  }
+
+  /**
+   * Obtiene todos los ítems que tienen un target específico
+   * @param {string} target - Target a buscar
+   * @returns {Promise<Array<MenuItem>>}
+   */
+  async getItemsByTarget(target) {
+    const menuItems = await this.getMenuItems();
+    const results = [];
+
+    const searchInSection = items => {
+      for (const item of items) {
+        if (item.target === target) {
+          results.push(item);
+        }
+        // Buscar también en subítems
+        for (const child of item.children) {
+          if (child.target === target) {
+            results.push(child);
+          }
+        }
+      }
+    };
+
+    searchInSection(menuItems.top);
+    searchInSection(menuItems.bottom);
+
+    return results;
+  }
+
+  /**
+   * Obtiene la ruta completa de navegación para un ítem
+   * @param {string} itemId - ID del ítem
+   * @returns {Promise<Array<MenuItem>>}
+   */
+  async getNavigationPath(itemId) {
+    const item = await this.findItemById(itemId);
+    if (!item) return [];
+
+    const path = [item];
+    let current = item.getParent();
+
+    while (current) {
+      path.unshift(current);
+      current = current.getParent();
+    }
+
+    return path;
+  }
+
+  /**
+   * Verifica si un ítem tiene permisos (placeholder para futuras implementaciones)
+   * @param {string} itemId - ID del ítem
+   * @param {Object} user - Usuario actual
+   * @returns {Promise<boolean>}
+   */
+  async hasPermission(itemId, user = null) {
+    // Por ahora retorna true, pero aquí se puede implementar lógica de permisos
+    // basada en roles, grupos, etc.
+    return true;
+  }
 }

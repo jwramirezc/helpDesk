@@ -15,11 +15,6 @@ class App {
     this.controladorContenido = new ControladorContenido(
       this.controladorUsuario
     );
-    this.controladorSidebar = new ControladorSidebar(
-      this.controladorContenido,
-      this.configService,
-      this.menuService
-    );
     this.controladorHeader = new ControladorHeader(
       this.controladorUsuario,
       this.i18nService

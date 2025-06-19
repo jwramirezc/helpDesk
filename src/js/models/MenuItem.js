@@ -24,6 +24,22 @@ class MenuItem {
       throw new Error('MenuItem: type debe ser "item" o "submenu"');
     }
 
+    // Validaciones específicas por tipo
+    if (config.type === 'item' && !config.target) {
+      console.warn(
+        `MenuItem: Ítem "${config.id}" de tipo "item" no tiene target definido`
+      );
+    }
+
+    if (
+      config.type === 'submenu' &&
+      (!config.children || config.children.length === 0)
+    ) {
+      console.warn(
+        `MenuItem: Submenú "${config.id}" no tiene children definidos`
+      );
+    }
+
     this.id = config.id;
     this.label = config.label;
     this.type = config.type;

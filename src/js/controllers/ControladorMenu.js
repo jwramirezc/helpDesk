@@ -130,33 +130,7 @@ class ControladorMenu {
       const menuItem = e.target.closest('.menu-item');
       if (!menuItem) return;
 
-      const id = menuItem.id;
-      const type = menuItem.dataset.type;
-      const action = menuItem.dataset.action;
-      const message = menuItem.dataset.message;
-      const target = menuItem.dataset.target;
-
-      if (id === 'menu_theme') {
-        this.cambiarTema();
-        return;
-      }
-
-      // Si es un submenú con acción alert, mostrar el mensaje
-      if (type === 'submenu' && action === 'alert') {
-        // Activar solo Configuración y desactivar los demás
-        await this.activarSoloItem(id);
-        alert(message);
-        return;
-      }
-
-      // Si es un ítem normal, cargar la vista en el contenedor principal
-      if (type === 'item' && target) {
-        // Activar solo este ítem y desactivar los demás
-        await this.activarSoloItem(id);
-        // Cargar la vista en el contenedor principal
-        await this.cargarVista(id);
-        return;
-      }
+      await this.handleMenuItemClick(menuItem, false);
     });
 
     // Eventos del menú móvil
@@ -201,6 +175,45 @@ class ControladorMenu {
   }
 
   /**
+   * Maneja el clic en un ítem del menú (desktop y móvil)
+   * @param {HTMLElement} menuItem - Elemento del menú clickeado
+   * @param {boolean} isMobile - Indica si es desde el menú móvil
+   */
+  async handleMenuItemClick(menuItem, isMobile = false) {
+    const id = isMobile ? menuItem.id.replace('mobile_', '') : menuItem.id;
+    const type = menuItem.dataset.type;
+    const action = menuItem.dataset.action;
+    const message = menuItem.dataset.message;
+    const target = menuItem.dataset.target;
+
+    if (id === 'menu_theme') {
+      this.cambiarTema();
+      return;
+    }
+
+    // Si es un submenú con acción alert, mostrar el mensaje
+    if (type === 'submenu' && action === 'alert') {
+      // Activar solo Configuración y desactivar los demás
+      await this.activarSoloItem(id);
+      alert(message);
+      return;
+    }
+
+    // Si es un ítem normal, cargar la vista en el contenedor principal
+    if (type === 'item' && target) {
+      // Activar solo este ítem y desactivar los demás
+      await this.activarSoloItem(id);
+      // Cerrar el menú móvil antes de cargar la vista
+      if (isMobile) {
+        this.cerrarMenuMovil();
+      }
+      // Cargar la vista en el contenedor principal
+      await this.cargarVista(id);
+      return;
+    }
+  }
+
+  /**
    * Agrega eventos específicos para el menú móvil principal
    */
   agregarEventosMenuMovil() {
@@ -221,22 +234,12 @@ class ControladorMenu {
 
         const id = menuItem.id.replace('mobile_', '');
         const type = menuItem.dataset.type;
-        const action = menuItem.dataset.action;
-        const message = menuItem.dataset.message;
-        const target = menuItem.dataset.target;
-
-        if (id === 'menu_theme') {
-          this.cambiarTema();
-          return;
-        }
 
         // Comportamiento adaptativo para submenús
         if (type === 'submenu') {
           if (window.innerWidth >= 768) {
-            // En PC: mostrar alert (comportamiento actual)
-            if (action === 'alert') {
-              alert(message);
-            }
+            // En PC: usar el handler común
+            await this.handleMenuItemClick(menuItem, true);
           } else {
             // En móvil: mostrar submenú en vista separada
             const parentItem = await this.menuService.findItemById(id);
@@ -251,16 +254,8 @@ class ControladorMenu {
           return;
         }
 
-        // Si es un ítem normal, cargar la vista en el contenedor principal
-        if (type === 'item' && target) {
-          // Activar solo este ítem y desactivar los demás
-          await this.activarSoloItem(id);
-          // Cerrar el menú móvil antes de cargar la vista
-          this.cerrarMenuMovil();
-          // Cargar la vista en el contenedor principal
-          await this.cargarVista(id);
-          return;
-        }
+        // Para ítems normales, usar el handler común
+        await this.handleMenuItemClick(menuItem, true);
 
         // Solo cerrar el menú si no estamos en un submenú
         if (!this.isInSubmenu) {
@@ -494,42 +489,6 @@ class ControladorMenu {
         this.mobileMenu.classList.remove('active');
       }
     }
-  }
-
-  seleccionarItem(id) {
-    // Buscar el item en el menú para obtener su vista
-    const item =
-      this.menuItems?.top.find(item => item.id === id) ||
-      this.menuItems?.bottom.find(item => item.id === id);
-
-    if (item && item.vista && this.controladorContenido) {
-      console.log('Cargando vista:', item.vista, 'para el item:', id);
-      this.controladorContenido.cargarVista(item.vista);
-    } else {
-      console.log('No se pudo cargar la vista para el item:', id);
-    }
-  }
-
-  abrirConfiguracion() {
-    // Implementar lógica para abrir configuración
-    console.log('Abriendo configuración');
-  }
-
-  cerrarSesion() {
-    // Implementar lógica para cerrar sesión
-    console.log('Cerrando sesión');
-  }
-
-  actualizarVisibilidad(id, visible) {
-    const item = document.getElementById(id);
-    if (item) {
-      item.style.display = visible ? 'block' : 'none';
-    }
-  }
-
-  actualizarOrden(id, nuevoOrden) {
-    // Implementar lógica para actualizar el orden de los items
-    console.log('Actualizando orden del item:', id, 'a posición:', nuevoOrden);
   }
 
   cambiarTema() {
