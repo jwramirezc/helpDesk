@@ -77,8 +77,13 @@ class ControladorMenu {
       // Actualizar la vista para reflejar los estados activos
       this.actualizarVistaMenu();
 
-      // Log de éxito
-      console.log('ControladorMenu: Menú cargado correctamente');
+      // Log de éxito solo en desarrollo
+      if (
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1'
+      ) {
+        console.log('ControladorMenu: Menú cargado correctamente');
+      }
     } catch (error) {
       console.error('Error al cargar el menú:', error);
     }

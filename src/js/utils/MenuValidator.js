@@ -1,5 +1,21 @@
 /**
  * Utilidades para validación del sistema de menús
+ *
+ * @example
+ * // Validar un ítem individual
+ * const item = { id: 'menu_home', label: 'Home', type: 'item' };
+ * const result = MenuValidator.validateMenuItem(item);
+ * console.log(result.isValid, result.errors, result.warnings);
+ *
+ * // Validar estructura completa del menú
+ * const menuData = await fetch('data/config/menu.json').then(r => r.json());
+ * const validation = MenuValidator.validateMenuStructure(menuData);
+ *
+ * // Buscar duplicados
+ * const duplicates = MenuValidator.findDuplicateIds(menuData);
+ *
+ * // Verificar targets rotos
+ * const brokenTargets = MenuValidator.findBrokenTargets(menuData);
  */
 class MenuValidator {
   /**

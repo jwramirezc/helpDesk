@@ -25,7 +25,9 @@ class MenuService {
     this._menuPromise = fetch('data/config/menu.json')
       .then(resp => {
         if (!resp.ok) {
-          throw new Error('Error al cargar data/config/menu.json');
+          throw new Error(
+            `Error al cargar data/config/menu.json: ${resp.status} ${resp.statusText}`
+          );
         }
         return resp.json();
       })
@@ -43,9 +45,20 @@ class MenuService {
         return result;
       })
       .catch(err => {
-        console.error('MenuService: Error:', err);
+        console.error('MenuService: Error al cargar menú:', err);
         // Valor por defecto minimalista para no romper la UI
-        return { top: [], bottom: [] };
+        return {
+          top: [
+            new MenuItem({
+              id: 'menu_home',
+              label: 'Home',
+              icon: 'fas fa-home',
+              type: 'item',
+              target: 'home.html',
+            }),
+          ],
+          bottom: [],
+        };
       });
 
     return this._menuPromise;
