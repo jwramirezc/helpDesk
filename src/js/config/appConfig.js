@@ -11,6 +11,7 @@ const AppConfig = {
     CONFIG: 'data/config/',
     VIEWS: 'src/views/html/',
     STYLES: 'src/styles/views/',
+    I18N: 'data/i18n/',
     MENU_JSON: 'data/config/menu.json',
     DEFAULT_CONFIG: 'data/config/default-config.json',
     TEMAS_JSON: 'data/config/temas.json',
@@ -162,6 +163,15 @@ const AppConfig = {
    */
   getStylePath(viewName) {
     return `${this.PATHS.STYLES}${viewName}${this.EXTENSIONS.CSS}`;
+  },
+
+  /**
+   * Obtiene la ruta completa para un archivo de traducción
+   * @param {string} language - Código del idioma (ej: 'es', 'en')
+   * @returns {string}
+   */
+  getI18nPath(language) {
+    return `${this.PATHS.I18N}${language}${this.EXTENSIONS.JSON}`;
   },
 
   /**

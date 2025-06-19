@@ -40,7 +40,8 @@ class ControladorHeader {
 
   async verificarNotificaciones() {
     try {
-      const response = await fetch('data/config/notificationes.json');
+      // Usar AppConfig para obtener la ruta de notificaciones
+      const response = await fetch(AppConfig.PATHS.NOTIFICACIONES_JSON);
       const data = await response.json();
       return data.tieneNotificaciones;
     } catch (error) {

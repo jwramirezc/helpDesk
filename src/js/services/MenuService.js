@@ -22,11 +22,14 @@ class MenuService {
   async getMenuItems() {
     if (this._menuPromise) return this._menuPromise;
 
-    this._menuPromise = fetch('data/config/menu.json')
+    // Usar AppConfig para obtener la ruta del menú
+    const menuPath = AppConfig.PATHS.MENU_JSON;
+
+    this._menuPromise = fetch(menuPath)
       .then(resp => {
         if (!resp.ok) {
           throw new Error(
-            `Error al cargar data/config/menu.json: ${resp.status} ${resp.statusText}`
+            `Error al cargar ${menuPath}: ${resp.status} ${resp.statusText}`
           );
         }
         return resp.json();
@@ -54,7 +57,7 @@ class MenuService {
               label: 'Home',
               icon: 'fas fa-home',
               type: 'item',
-              target: 'home.html',
+              target: AppConfig.getViewPath('home'),
             }),
           ],
           bottom: [],
@@ -239,6 +242,10 @@ class MenuService {
    * Busca ítems por texto en el label (búsqueda insensible a mayúsculas)
    * @param {string} searchText - Texto a buscar
    * @returns {Promise<Array<MenuItem>>}
+   *
+   * @status READY - Listo para implementar
+   * @priority HIGH - Prioridad alta para UX
+   * @useCase "Barra de búsqueda en menú, filtrado dinámico"
    */
   async searchItems(searchText) {
     const menuItems = await this.getMenuItems();
@@ -269,6 +276,10 @@ class MenuService {
    * Obtiene todos los ítems que tienen un target específico
    * @param {string} target - Target a buscar
    * @returns {Promise<Array<MenuItem>>}
+   *
+   * @status READY - Listo para implementar
+   * @priority MEDIUM - Prioridad media
+   * @useCase "Análisis de navegación, auditoría de rutas"
    */
   async getItemsByTarget(target) {
     const menuItems = await this.getMenuItems();
@@ -298,6 +309,10 @@ class MenuService {
    * Obtiene la ruta completa de navegación para un ítem
    * @param {string} itemId - ID del ítem
    * @returns {Promise<Array<MenuItem>>}
+   *
+   * @status READY - Listo para implementar
+   * @priority MEDIUM - Prioridad media
+   * @useCase "Breadcrumbs dinámicos, navegación jerárquica"
    */
   async getNavigationPath(itemId) {
     const item = await this.findItemById(itemId);
@@ -319,10 +334,103 @@ class MenuService {
    * @param {string} itemId - ID del ítem
    * @param {Object} user - Usuario actual
    * @returns {Promise<boolean>}
+   *
+   * @status PLACEHOLDER - Requiere implementación de sistema de permisos
+   * @priority LOW - Prioridad baja
+   * @useCase "Sistema de roles y permisos, control de acceso granular"
    */
   async hasPermission(itemId, user = null) {
     // Por ahora retorna true, pero aquí se puede implementar lógica de permisos
     // basada en roles, grupos, etc.
     return true;
+  }
+
+  /**
+   * Obtiene información detallada del servicio para debugging
+   * @returns {Promise<Object>}
+   */
+  async getServiceInfo() {
+    const menuItems = await this.getMenuItems();
+    const stats = await this.getMenuStats();
+    const submenuItems = await this.getSubmenuItems();
+    const validation = await this.validateMenuStructure();
+
+    return {
+      serviceName: 'MenuService',
+      isInitialized: !!this._menuPromise,
+      hasCachedData: !!this._menuPromise,
+      stats,
+      submenuCount: submenuItems.length,
+      validationErrors: validation.length,
+      validationPassed: validation.length === 0,
+      topItemsCount: menuItems.top.length,
+      bottomItemsCount: menuItems.bottom.length,
+      totalItems: stats.totalItems,
+    };
+  }
+
+  /**
+   * Limpia el caché del menú (útil para forzar recarga)
+   */
+  clearCache() {
+    this._menuPromise = null;
+    console.log('MenuService: Caché limpiado');
+  }
+
+  /**
+   * Recarga el menú desde el servidor
+   * @returns {Promise<{top: Array<MenuItem>, bottom: Array<MenuItem>}>}
+   */
+  async reload() {
+    this.clearCache();
+    return await this.getMenuItems();
+  }
+
+  /**
+   * Obtiene todos los ítems activos
+   * @returns {Promise<Array<MenuItem>>}
+   */
+  async getActiveItems() {
+    const menuItems = await this.getMenuItems();
+    const activeItems = [];
+
+    const findActiveInSection = items => {
+      for (const item of items) {
+        if (item.isActive()) {
+          activeItems.push(item);
+        }
+        // Buscar también en subítems
+        for (const child of item.children) {
+          if (child.isActive()) {
+            activeItems.push(child);
+          }
+        }
+      }
+    };
+
+    findActiveInSection(menuItems.top);
+    findActiveInSection(menuItems.bottom);
+
+    return activeItems;
+  }
+
+  /**
+   * Obtiene la ruta de navegación como string
+   * @param {string} itemId - ID del ítem
+   * @returns {Promise<string>}
+   */
+  async getNavigationPathString(itemId) {
+    const path = await this.getNavigationPath(itemId);
+    return path.map(item => item.label).join(' > ');
+  }
+
+  /**
+   * Verifica si un ítem existe
+   * @param {string} itemId - ID del ítem a verificar
+   * @returns {Promise<boolean>}
+   */
+  async itemExists(itemId) {
+    const item = await this.findItemById(itemId);
+    return item !== null;
   }
 }

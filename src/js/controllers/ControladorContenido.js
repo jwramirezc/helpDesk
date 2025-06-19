@@ -29,10 +29,11 @@ class ControladorContenido {
                 <h5>Información del Usuario</h5>
               </div>
               <div class="card-body">
-                <p><strong>Nombre:</strong> ${usuario.nombre} ${usuario.apellidos}</p>
+                <p><strong>Nombre:</strong> ${usuario.nombreCompleto}</p>
                 <p><strong>Empresa:</strong> ${usuario.empresa}</p>
                 <p><strong>Teléfono:</strong> ${usuario.telefono}</p>
                 <p><strong>ID:</strong> ${usuario.id}</p>
+                <p><strong>Iniciales:</strong> ${usuario.iniciales}</p>
               </div>
             </div>
           </div>
