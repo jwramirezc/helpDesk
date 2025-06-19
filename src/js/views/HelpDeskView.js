@@ -14,12 +14,23 @@ class HelpDeskView {
     this.paginaActual = 1;
     this.ticketsPorPagina = 10;
     this.modal = null;
-
-    this.inicializar();
+    this.isInitialized = false;
+    // No auto-inicializar en el constructor
   }
 
   /**
    * Inicializa la vista
+   */
+  init() {
+    if (this.isInitialized) return;
+
+    console.log('HelpDeskView: Inicializando vista helpdesk');
+    this.inicializar();
+    this.isInitialized = true;
+  }
+
+  /**
+   * Inicializa la vista (método interno)
    */
   inicializar() {
     this.cargarDatosIniciales();
@@ -618,4 +629,9 @@ class HelpDeskView {
       this.modal.dispose();
     }
   }
+}
+
+// Exportar la clase al objeto window global
+if (typeof window !== 'undefined') {
+  window.HelpDeskView = HelpDeskView;
 }

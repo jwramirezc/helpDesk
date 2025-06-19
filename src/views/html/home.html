@@ -1,0 +1,214 @@
+<!-- Vista Home - Página de inicio -->
+<div class="home-container">
+    <!-- Header de la vista -->
+    <div class="home-header">
+        <div class="row align-items-center">
+            <div class="col-md-8">
+                <h2 class="home-title">
+                    <i class="fas fa-home me-2"></i>
+                    Bienvenido al Portal HELP DESK
+                </h2>
+                <p class="home-subtitle text-muted">Tu centro de control para gestión de soporte técnico</p>
+            </div>
+            <div class="col-md-4 text-end">
+                <div class="home-time">
+                    <i class="fas fa-clock me-2"></i>
+                    <span id="current-time"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Dashboard principal -->
+    <div class="home-dashboard">
+        <div class="row">
+            <!-- Tarjetas de acceso rápido -->
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="home-card">
+                    <div class="card-icon bg-primary">
+                        <i class="fas fa-ticket-alt"></i>
+                    </div>
+                    <div class="card-content">
+                        <h4>Help Desk</h4>
+                        <p>Gestiona tus tickets de soporte técnico</p>
+                        <button class="btn btn-primary btn-sm" onclick="navigateToHelpDesk()">
+                            Ir a Help Desk
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="home-card">
+                    <div class="card-icon bg-warning">
+                        <i class="fas fa-comments"></i>
+                    </div>
+                    <div class="card-content">
+                        <h4>PQRS</h4>
+                        <p>Peticiones, Quejas, Reclamos y Sugerencias</p>
+                        <button class="btn btn-warning btn-sm" onclick="navigateToPQRS()">
+                            Ir a PQRS
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="home-card">
+                    <div class="card-icon bg-info">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <div class="card-content">
+                        <h4>Consultas</h4>
+                        <p>Consulta información y reportes</p>
+                        <button class="btn btn-info btn-sm" onclick="navigateToConsultas()">
+                            Ir a Consultas
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-lg-3 mb-4">
+                <div class="home-card">
+                    <div class="card-icon bg-success">
+                        <i class="fas fa-chart-bar"></i>
+                    </div>
+                    <div class="card-content">
+                        <h4>Reportes</h4>
+                        <p>Visualiza estadísticas y reportes</p>
+                        <button class="btn btn-success btn-sm" onclick="navigateToReportes()">
+                            Ver Reportes
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Información del usuario -->
+    <div class="home-user-info">
+        <div class="row">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-user me-2"></i>Información del Usuario</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="user-info-item">
+                            <strong>Nombre:</strong> <span id="user-name">Cargando...</span>
+                        </div>
+                        <div class="user-info-item">
+                            <strong>Empresa:</strong> <span id="user-company">Cargando...</span>
+                        </div>
+                        <div class="user-info-item">
+                            <strong>Teléfono:</strong> <span id="user-phone">Cargando...</span>
+                        </div>
+                        <div class="user-info-item">
+                            <strong>ID:</strong> <span id="user-id">Cargando...</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-chart-pie me-2"></i>Resumen de Actividad</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="activity-item">
+                            <i class="fas fa-ticket-alt text-primary"></i>
+                            <span>Tickets activos: <strong id="active-tickets">0</strong></span>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-comments text-warning"></i>
+                            <span>PQRS pendientes: <strong id="pending-pqrs">0</strong></span>
+                        </div>
+                        <div class="activity-item">
+                            <i class="fas fa-clock text-info"></i>
+                            <span>Última actividad: <strong id="last-activity">Hoy</strong></span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Noticias y anuncios -->
+    <div class="home-news">
+        <div class="row">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-header">
+                        <h5><i class="fas fa-bullhorn me-2"></i>Noticias y Anuncios</h5>
+                    </div>
+                    <div class="card-body">
+                        <div class="news-item">
+                            <div class="news-date">15 Dic 2024</div>
+                            <div class="news-content">
+                                <h6>Nuevas funcionalidades disponibles</h6>
+                                <p>Hemos agregado nuevas características al portal para mejorar tu experiencia.</p>
+                            </div>
+                        </div>
+                        <div class="news-item">
+                            <div class="news-date">10 Dic 2024</div>
+                            <div class="news-content">
+                                <h6>Mantenimiento programado</h6>
+                                <p>El sistema estará en mantenimiento el próximo domingo de 2:00 AM a 6:00 AM.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Funciones de navegación
+    function navigateToHelpDesk() {
+        // Simular clic en el ítem del menú Help Desk
+        const helpDeskItem = document.getElementById('menu_helpdesk');
+        if (helpDeskItem) {
+            helpDeskItem.click();
+        }
+    }
+
+    function navigateToPQRS() {
+        // Simular clic en el ítem del menú PQRS
+        const pqrsItem = document.getElementById('menu_pqrs');
+        if (pqrsItem) {
+            pqrsItem.click();
+        }
+    }
+
+    function navigateToConsultas() {
+        // Simular clic en el ítem del menú Consultas
+        const consultasItem = document.getElementById('menu_consultas');
+        if (consultasItem) {
+            consultasItem.click();
+        }
+    }
+
+    function navigateToReportes() {
+        // Simular clic en el ítem del menú Reportes
+        const reportesItem = document.getElementById('menu_reportes');
+        if (reportesItem) {
+            reportesItem.click();
+        }
+    }
+
+    // Actualizar hora actual
+    function updateCurrentTime() {
+        const now = new Date();
+        const timeString = now.toLocaleTimeString('es-ES');
+        const timeElement = document.getElementById('current-time');
+        if (timeElement) {
+            timeElement.textContent = timeString;
+        }
+    }
+
+    // Actualizar cada segundo
+    setInterval(updateCurrentTime, 1000);
+    updateCurrentTime();
+</script>

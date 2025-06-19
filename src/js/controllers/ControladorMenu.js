@@ -544,15 +544,37 @@ class ControladorMenu {
    */
   async cargarVista(id) {
     try {
-      // Si tenemos un controlador de contenido, usarlo
-      if (this.controladorContenido) {
-        await this.controladorContenido.cargarVista(id);
+      // Obtener el ítem del menú para acceder a su target
+      const menuItem = await this.menuService.findItemById(id);
+
+      if (!menuItem) {
+        console.error(`Ítem del menú no encontrado: ${id}`);
         return;
       }
 
-      // Si no hay controlador de contenido, obtener el ítem y su target
-      const menuItem = await this.menuService.findItemById(id);
-      if (menuItem && menuItem.target) {
+      // Si tenemos un controlador de contenido, extraer el nombre del archivo del target
+      if (this.controladorContenido) {
+        // Extraer el nombre del archivo sin extensión del target
+        let vistaName = '';
+
+        if (menuItem.target) {
+          // Obtener el nombre del archivo sin extensión
+          const fileName = menuItem.target.split('/').pop(); // Obtener el último segmento
+          vistaName = fileName.replace('.html', ''); // Remover la extensión
+        } else {
+          // Si no hay target, usar el ID sin el prefijo 'menu_'
+          vistaName = id.replace('menu_', '');
+        }
+
+        console.log(
+          `Cargando vista: ${vistaName} para el ítem: ${id} (target: ${menuItem.target})`
+        );
+        await this.controladorContenido.cargarVista(vistaName);
+        return;
+      }
+
+      // Si no hay controlador de contenido, cargar directamente el HTML
+      if (menuItem.target) {
         const mainContent = document.getElementById('main-content');
         if (mainContent) {
           // Cargar el contenido HTML en el contenedor principal
@@ -563,6 +585,8 @@ class ControladorMenu {
           const html = await response.text();
           mainContent.innerHTML = html;
         }
+      } else {
+        console.warn(`Ítem ${id} no tiene target definido`);
       }
     } catch (error) {
       console.error('Error al cargar la vista:', error);

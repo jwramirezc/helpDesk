@@ -33,32 +33,8 @@
         "id": "menu_reportes",
         "label": "Reportes",
         "icon": "fas fa-chart-bar",
-        "type": "submenu",
-        "openAction": "alert",
-        "message": "Submenú de reportes activado",
-        "children": [
-          {
-            "id": "reporte1",
-            "label": "Reporte 1",
-            "icon": "fas fa-chart-bar",
-            "type": "item",
-            "target": "reportes/reportes1.html"
-          },
-          {
-            "id": "reporte2",
-            "label": "Reporte 2",
-            "icon": "fas fa-chart-bar",
-            "type": "item",
-            "target": "reportes/reportes2.html"
-          },
-          {
-            "id": "reporte3",
-            "label": "Reporte 3",
-            "icon": "fas fa-chart-bar",
-            "type": "item",
-            "target": "reportes/reportes3.html"
-          }
-        ]
+        "type": "item",
+        "target": "reportes.html"
       }
     ],
     "bottom": [

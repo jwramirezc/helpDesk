@@ -145,6 +145,15 @@ class ControladorContenido {
 
         // Crear nueva instancia
         this.vistaActual = new window[nombreClase]();
+
+        // Inicializar la vista si tiene método init
+        if (
+          this.vistaActual.init &&
+          typeof this.vistaActual.init === 'function'
+        ) {
+          this.vistaActual.init();
+        }
+
         console.log(`Vista JS inicializada: ${nombreClase}`);
       } catch (error) {
         console.error(`Error al inicializar vista JS ${nombreClase}:`, error);

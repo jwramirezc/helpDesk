@@ -1,0 +1,276 @@
+/* Estilos para la vista Home */
+
+.home-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header de la vista */
+.home-header {
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 2px solid var(--border-color, #e0e0e0);
+}
+
+.home-title {
+  color: var(--primary-color, #007bff);
+  margin-bottom: 10px;
+  font-weight: 600;
+}
+
+.home-subtitle {
+  font-size: 1.1rem;
+  margin-bottom: 0;
+}
+
+.home-time {
+  font-size: 1.2rem;
+  font-weight: 500;
+  color: var(--text-color, #333);
+}
+
+/* Dashboard principal */
+.home-dashboard {
+  margin-bottom: 30px;
+}
+
+.home-card {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.home-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.card-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 20px;
+  font-size: 1.5rem;
+  color: white;
+}
+
+.card-content h4 {
+  margin-bottom: 10px;
+  color: var(--text-color, #333);
+  font-weight: 600;
+}
+
+.card-content p {
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 20px;
+  flex-grow: 1;
+}
+
+.card-content .btn {
+  align-self: flex-start;
+}
+
+/* Información del usuario */
+.home-user-info {
+  margin-bottom: 30px;
+}
+
+.user-info-item {
+  margin-bottom: 15px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.user-info-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+}
+
+.user-info-item strong {
+  color: var(--primary-color, #007bff);
+  margin-right: 10px;
+}
+
+.activity-item {
+  display: flex;
+  align-items: center;
+  margin-bottom: 15px;
+  padding: 10px 0;
+}
+
+.activity-item i {
+  margin-right: 15px;
+  font-size: 1.2rem;
+  width: 20px;
+  text-align: center;
+}
+
+.activity-item span {
+  color: var(--text-color, #333);
+}
+
+.activity-item strong {
+  color: var(--primary-color, #007bff);
+}
+
+/* Noticias y anuncios */
+.home-news {
+  margin-bottom: 30px;
+}
+
+.news-item {
+  display: flex;
+  margin-bottom: 20px;
+  padding-bottom: 20px;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.news-item:last-child {
+  border-bottom: none;
+  margin-bottom: 0;
+  padding-bottom: 0;
+}
+
+.news-date {
+  background: var(--primary-color, #007bff);
+  color: white;
+  padding: 8px 12px;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  font-weight: 500;
+  margin-right: 20px;
+  min-width: 100px;
+  text-align: center;
+  height: fit-content;
+}
+
+.news-content h6 {
+  color: var(--text-color, #333);
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+
+.news-content p {
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 0;
+  line-height: 1.5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .home-container {
+    padding: 15px;
+  }
+
+  .home-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .home-time {
+    margin-top: 15px;
+    text-align: center;
+  }
+
+  .home-card {
+    margin-bottom: 20px;
+  }
+
+  .news-item {
+    flex-direction: column;
+  }
+
+  .news-date {
+    margin-right: 0;
+    margin-bottom: 10px;
+    align-self: flex-start;
+  }
+}
+
+@media (max-width: 576px) {
+  .home-container {
+    padding: 10px;
+  }
+
+  .home-title {
+    font-size: 1.5rem;
+  }
+
+  .home-subtitle {
+    font-size: 1rem;
+  }
+
+  .card-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+  }
+
+  .home-card {
+    padding: 20px;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.home-card {
+  animation: fadeInUp 0.6s ease-out;
+}
+
+.home-card:nth-child(1) {
+  animation-delay: 0.1s;
+}
+.home-card:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.home-card:nth-child(3) {
+  animation-delay: 0.3s;
+}
+.home-card:nth-child(4) {
+  animation-delay: 0.4s;
+}
+
+/* Estados de hover mejorados */
+.home-card .btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+/* Estilos para modo oscuro */
+@media (prefers-color-scheme: dark) {
+  .home-card {
+    background: var(--dark-bg, #2d3748);
+    color: var(--dark-text, #e2e8f0);
+  }
+
+  .home-title {
+    color: var(--dark-primary, #63b3ed);
+  }
+
+  .user-info-item strong {
+    color: var(--dark-primary, #63b3ed);
+  }
+
+  .activity-item strong {
+    color: var(--dark-primary, #63b3ed);
+  }
+}
