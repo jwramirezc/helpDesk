@@ -192,6 +192,44 @@ const AppConfig = {
   getIcon(category, type) {
     return this.ICONS[category]?.[type] || '';
   },
+
+  /**
+   * Valida la ruta de un archivo CSS
+   * @param {string} viewName - Nombre de la vista
+   * @returns {string} Ruta del archivo CSS
+   */
+  validateStylePath(viewName) {
+    const stylePath = this.getStylePath(viewName);
+    console.log(`AppConfig: Validando ruta CSS: ${stylePath}`);
+    return stylePath;
+  },
+
+  /**
+   * Obtiene la lista de estilos disponibles
+   * @returns {Array} Lista de nombres de vistas con CSS
+   */
+  getAvailableStyles() {
+    return ['home', 'helpdesk', 'pqrs', 'consultas', 'reportes'];
+  },
+
+  /**
+   * Verifica si un archivo CSS existe
+   * @param {string} viewName - Nombre de la vista
+   * @returns {Promise<boolean>} True si el archivo existe
+   */
+  async checkStyleExists(viewName) {
+    const stylePath = this.getStylePath(viewName);
+    try {
+      const response = await fetch(stylePath, { method: 'HEAD' });
+      return response.ok;
+    } catch (error) {
+      console.error(
+        `AppConfig: Error verificando existencia de CSS para ${viewName}:`,
+        error
+      );
+      return false;
+    }
+  },
 };
 
 // Exportar para uso global

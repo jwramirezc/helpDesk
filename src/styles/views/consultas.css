@@ -1,0 +1,433 @@
+/* Estilos para la vista Consultas */
+
+.consultas-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header de la vista */
+.consultas-header {
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 2px solid var(--border-color, #e0e0e0);
+}
+
+.consultas-title {
+  color: var(--primary-color, #007bff);
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.consultas-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 0;
+}
+
+/* Formularios de consulta */
+.consulta-form {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  transition: box-shadow 0.3s ease;
+}
+
+.consulta-form:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.consulta-form h4 {
+  color: var(--text-color, #333);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.form-group {
+  margin-bottom: 20px;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color, #333);
+}
+
+.form-group input,
+.form-group select,
+.form-group textarea {
+  width: 100%;
+  padding: 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 5px;
+  font-size: 1rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.form-group input:focus,
+.form-group select:focus,
+.form-group textarea:focus {
+  outline: none;
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.form-group textarea {
+  min-height: 100px;
+  resize: vertical;
+}
+
+/* Botones de acción */
+.consulta-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+}
+
+.btn-consulta {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-consulta-primary {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+}
+
+.btn-consulta-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.btn-consulta-secondary {
+  background-color: var(--secondary-color, #6c757d);
+  color: white;
+}
+
+.btn-consulta-secondary:hover {
+  background-color: #545b62;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(108, 117, 125, 0.3);
+}
+
+.btn-consulta-outline {
+  background-color: transparent;
+  color: var(--primary-color, #007bff);
+  border: 2px solid var(--primary-color, #007bff);
+}
+
+.btn-consulta-outline:hover {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Resultados de consulta */
+.consulta-results {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.consulta-results h4 {
+  color: var(--text-color, #333);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Tabla de resultados */
+.results-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.results-table th,
+.results-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.results-table th {
+  background-color: var(--light-color, #f8f9fa);
+  font-weight: 600;
+  color: var(--text-color, #333);
+}
+
+.results-table tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Estados de resultados */
+.result-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.result-status.success {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.result-status.warning {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.result-status.error {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+.result-status.info {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: #17a2b8;
+}
+
+/* Filtros y búsqueda */
+.consulta-filters {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.filters-row {
+  display: flex;
+  gap: 15px;
+  align-items: end;
+  flex-wrap: wrap;
+}
+
+.filter-group {
+  flex: 1;
+  min-width: 200px;
+}
+
+.filter-group label {
+  display: block;
+  margin-bottom: 5px;
+  font-weight: 500;
+  color: var(--text-color, #333);
+  font-size: 0.9rem;
+}
+
+.filter-group input,
+.filter-group select {
+  width: 100%;
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 4px;
+  font-size: 0.9rem;
+}
+
+/* Paginación */
+.consulta-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.pagination-info {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.9rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  background-color: white;
+  color: var(--text-color, #333);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.pagination-btn:hover {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border-color: var(--primary-color, #007bff);
+}
+
+.pagination-btn.active {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border-color: var(--primary-color, #007bff);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Estados de carga */
+.consulta-loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted, #6c757d);
+}
+
+.consulta-loading i {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.consulta-empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted, #6c757d);
+}
+
+.consulta-empty i {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .consultas-container {
+    padding: 15px;
+  }
+
+  .consultas-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .consultas-title {
+    font-size: 1.5rem;
+  }
+
+  .consulta-form,
+  .consulta-results,
+  .consulta-filters {
+    padding: 15px;
+  }
+
+  .filters-row {
+    flex-direction: column;
+  }
+
+  .filter-group {
+    min-width: auto;
+  }
+
+  .consulta-actions {
+    flex-direction: column;
+  }
+
+  .btn-consulta {
+    justify-content: center;
+  }
+
+  .results-table {
+    font-size: 0.9rem;
+  }
+
+  .results-table th,
+  .results-table td {
+    padding: 8px;
+  }
+
+  .consulta-pagination {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .consultas-container {
+    padding: 10px;
+  }
+
+  .consultas-title {
+    font-size: 1.25rem;
+  }
+
+  .consulta-form,
+  .consulta-results,
+  .consulta-filters {
+    padding: 10px;
+  }
+
+  .btn-consulta {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+}
+
+/* Animaciones */
+.consulta-form,
+.consulta-results,
+.consulta-filters {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tema oscuro */
+@media (prefers-color-scheme: dark) {
+  .consulta-form,
+  .consulta-results,
+  .consulta-filters {
+    background-color: var(--dark-color, #343a40);
+    color: var(--light-color, #f8f9fa);
+  }
+
+  .results-table th {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light-color, #f8f9fa);
+  }
+
+  .results-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}

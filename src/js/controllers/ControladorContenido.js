@@ -89,6 +89,8 @@ class ControladorContenido {
    * @param {string} vista - Nombre de la vista
    */
   async cargarCSSVista(vista) {
+    console.log(`ControladorContenido: Cargando CSS para vista: ${vista}`);
+
     // Remover CSS anterior si existe
     if (this.cssCargado) {
       const linkAnterior = document.querySelector(
@@ -96,11 +98,16 @@ class ControladorContenido {
       );
       if (linkAnterior) {
         linkAnterior.remove();
+        console.log(
+          `ControladorContenido: CSS anterior removido: ${this.cssCargado}`
+        );
       }
     }
 
     // Cargar nuevo CSS usando AppConfig
     const stylePath = AppConfig.getStylePath(vista);
+    console.log(`ControladorContenido: Ruta CSS: ${stylePath}`);
+
     const link = document.createElement('link');
     link.rel = 'stylesheet';
     link.href = stylePath;
@@ -112,14 +119,21 @@ class ControladorContenido {
       if (response.ok) {
         document.head.appendChild(link);
         this.cssCargado = vista;
-        console.log(`CSS cargado para vista: ${vista}`);
-      } else {
         console.log(
-          `CSS para vista ${vista} no encontrado, usando estilos por defecto`
+          `ControladorContenido: CSS cargado exitosamente para vista: ${vista}`
         );
+      } else {
+        console.warn(
+          `ControladorContenido: CSS no encontrado para vista ${vista}, usando estilos por defecto`
+        );
+        console.warn(`ControladorContenido: Ruta intentada: ${stylePath}`);
       }
     } catch (error) {
-      console.log(`Error al cargar CSS para vista ${vista}:`, error);
+      console.error(
+        `ControladorContenido: Error al cargar CSS para vista ${vista}:`,
+        error
+      );
+      console.error(`ControladorContenido: Ruta intentada: ${stylePath}`);
     }
   }
 

@@ -1,0 +1,567 @@
+/* Estilos para la vista Reportes */
+
+.reportes-container {
+  padding: 20px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+/* Header de la vista */
+.reportes-header {
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 2px solid var(--border-color, #e0e0e0);
+}
+
+.reportes-title {
+  color: var(--primary-color, #007bff);
+  margin-bottom: 10px;
+  font-weight: 600;
+  font-size: 2rem;
+}
+
+.reportes-subtitle {
+  font-size: 1.1rem;
+  color: var(--text-muted, #6c757d);
+  margin-bottom: 0;
+}
+
+/* Filtros de reportes */
+.reportes-filters {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+  transition: box-shadow 0.3s ease;
+}
+
+.reportes-filters:hover {
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+}
+
+.reportes-filters h4 {
+  color: var(--text-color, #333);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+.filters-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 20px;
+  margin-bottom: 20px;
+}
+
+.filter-item {
+  display: flex;
+  flex-direction: column;
+}
+
+.filter-item label {
+  margin-bottom: 8px;
+  font-weight: 500;
+  color: var(--text-color, #333);
+  font-size: 0.9rem;
+}
+
+.filter-item input,
+.filter-item select {
+  padding: 10px 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  border-radius: 5px;
+  font-size: 0.9rem;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+}
+
+.filter-item input:focus,
+.filter-item select:focus {
+  outline: none;
+  border-color: var(--primary-color, #007bff);
+  box-shadow: 0 0 0 3px rgba(0, 123, 255, 0.1);
+}
+
+.filter-actions {
+  display: flex;
+  gap: 15px;
+  justify-content: flex-end;
+  align-items: center;
+}
+
+/* Gráficos y tablas */
+.reportes-content {
+  background: white;
+  border-radius: 10px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
+}
+
+.reportes-content h4 {
+  color: var(--text-color, #333);
+  margin-bottom: 20px;
+  font-weight: 600;
+}
+
+/* Dashboard de reportes */
+.reportes-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.reporte-card {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease, box-shadow 0.3s ease;
+  border-left: 4px solid var(--primary-color, #007bff);
+}
+
+.reporte-card:hover {
+  transform: translateY(-5px);
+  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+}
+
+.reporte-card h5 {
+  color: var(--text-color, #333);
+  margin-bottom: 15px;
+  font-weight: 600;
+}
+
+.reporte-card .metric {
+  font-size: 2rem;
+  font-weight: 700;
+  color: var(--primary-color, #007bff);
+  margin-bottom: 10px;
+}
+
+.reporte-card .description {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.9rem;
+  margin-bottom: 0;
+}
+
+/* Gráficos */
+.chart-container {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.chart-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+.chart-title {
+  color: var(--text-color, #333);
+  font-weight: 600;
+  margin: 0;
+}
+
+.chart-controls {
+  display: flex;
+  gap: 10px;
+}
+
+.chart-btn {
+  padding: 6px 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  background-color: white;
+  color: var(--text-color, #333);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.8rem;
+}
+
+.chart-btn:hover {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border-color: var(--primary-color, #007bff);
+}
+
+.chart-btn.active {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border-color: var(--primary-color, #007bff);
+}
+
+.chart-canvas {
+  width: 100%;
+  height: 300px;
+  background-color: var(--light-color, #f8f9fa);
+  border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--text-muted, #6c757d);
+  font-style: italic;
+}
+
+/* Tablas de reportes */
+.reportes-table {
+  width: 100%;
+  border-collapse: collapse;
+  margin-top: 20px;
+}
+
+.reportes-table th,
+.reportes-table td {
+  padding: 12px;
+  text-align: left;
+  border-bottom: 1px solid var(--border-color, #e0e0e0);
+}
+
+.reportes-table th {
+  background-color: var(--light-color, #f8f9fa);
+  font-weight: 600;
+  color: var(--text-color, #333);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.reportes-table tr:hover {
+  background-color: rgba(0, 123, 255, 0.05);
+}
+
+/* Estados de reportes */
+.reporte-status {
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.875rem;
+  font-weight: 500;
+}
+
+.reporte-status.completed {
+  background-color: rgba(40, 167, 69, 0.1);
+  color: #28a745;
+}
+
+.reporte-status.pending {
+  background-color: rgba(255, 193, 7, 0.1);
+  color: #ffc107;
+}
+
+.reporte-status.processing {
+  background-color: rgba(23, 162, 184, 0.1);
+  color: #17a2b8;
+}
+
+.reporte-status.error {
+  background-color: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+}
+
+/* Botones de acción */
+.reportes-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 25px;
+  flex-wrap: wrap;
+}
+
+.btn-reporte {
+  padding: 12px 24px;
+  border: none;
+  border-radius: 5px;
+  font-size: 1rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  text-decoration: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.btn-reporte-primary {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+}
+
+.btn-reporte-primary:hover {
+  background-color: #0056b3;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
+}
+
+.btn-reporte-success {
+  background-color: var(--success-color, #28a745);
+  color: white;
+}
+
+.btn-reporte-success:hover {
+  background-color: #1e7e34;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
+}
+
+.btn-reporte-outline {
+  background-color: transparent;
+  color: var(--primary-color, #007bff);
+  border: 2px solid var(--primary-color, #007bff);
+}
+
+.btn-reporte-outline:hover {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  transform: translateY(-2px);
+}
+
+/* Exportación */
+.export-section {
+  background: white;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  margin-bottom: 20px;
+}
+
+.export-options {
+  display: flex;
+  gap: 15px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.export-format {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.export-format input[type='radio'] {
+  margin: 0;
+}
+
+.export-format label {
+  margin: 0;
+  font-size: 0.9rem;
+  color: var(--text-color, #333);
+}
+
+/* Paginación */
+.reportes-pagination {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  gap: 10px;
+  margin-top: 30px;
+}
+
+.pagination-info {
+  color: var(--text-muted, #6c757d);
+  font-size: 0.9rem;
+}
+
+.pagination-controls {
+  display: flex;
+  gap: 5px;
+}
+
+.pagination-btn {
+  padding: 8px 12px;
+  border: 1px solid var(--border-color, #e0e0e0);
+  background-color: white;
+  color: var(--text-color, #333);
+  border-radius: 4px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-size: 0.9rem;
+}
+
+.pagination-btn:hover {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border-color: var(--primary-color, #007bff);
+}
+
+.pagination-btn.active {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+  border-color: var(--primary-color, #007bff);
+}
+
+.pagination-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Estados de carga */
+.reportes-loading {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted, #6c757d);
+}
+
+.reportes-loading i {
+  font-size: 2rem;
+  margin-bottom: 15px;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+.reportes-empty {
+  text-align: center;
+  padding: 40px;
+  color: var(--text-muted, #6c757d);
+}
+
+.reportes-empty i {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+/* Responsive design */
+@media (max-width: 768px) {
+  .reportes-container {
+    padding: 15px;
+  }
+
+  .reportes-header {
+    text-align: center;
+    margin-bottom: 20px;
+  }
+
+  .reportes-title {
+    font-size: 1.5rem;
+  }
+
+  .reportes-filters,
+  .reportes-content,
+  .export-section {
+    padding: 15px;
+  }
+
+  .filters-grid {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .filter-actions {
+    justify-content: center;
+  }
+
+  .reportes-dashboard {
+    grid-template-columns: 1fr;
+    gap: 15px;
+  }
+
+  .reportes-actions {
+    flex-direction: column;
+  }
+
+  .btn-reporte {
+    justify-content: center;
+  }
+
+  .export-options {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  .reportes-table {
+    font-size: 0.9rem;
+  }
+
+  .reportes-table th,
+  .reportes-table td {
+    padding: 8px;
+  }
+
+  .reportes-pagination {
+    flex-direction: column;
+    gap: 15px;
+  }
+}
+
+@media (max-width: 576px) {
+  .reportes-container {
+    padding: 10px;
+  }
+
+  .reportes-title {
+    font-size: 1.25rem;
+  }
+
+  .reportes-filters,
+  .reportes-content,
+  .export-section {
+    padding: 10px;
+  }
+
+  .btn-reporte {
+    padding: 10px 16px;
+    font-size: 0.9rem;
+  }
+
+  .chart-container {
+    padding: 15px;
+  }
+
+  .chart-canvas {
+    height: 200px;
+  }
+}
+
+/* Animaciones */
+.reportes-filters,
+.reportes-content,
+.export-section,
+.reporte-card {
+  animation: fadeInUp 0.5s ease-out;
+}
+
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Tema oscuro */
+@media (prefers-color-scheme: dark) {
+  .reportes-filters,
+  .reportes-content,
+  .export-section,
+  .reporte-card,
+  .chart-container {
+    background-color: var(--dark-color, #343a40);
+    color: var(--light-color, #f8f9fa);
+  }
+
+  .reportes-table th {
+    background-color: rgba(255, 255, 255, 0.1);
+    color: var(--light-color, #f8f9fa);
+  }
+
+  .reportes-table tr:hover {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+
+  .chart-canvas {
+    background-color: rgba(255, 255, 255, 0.05);
+  }
+}
