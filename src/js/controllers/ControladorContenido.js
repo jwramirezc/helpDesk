@@ -131,14 +131,22 @@ class ControladorContenido {
     // Usar configuración centralizada de ViewConfig
     const nombreClase = ViewConfig.VIEW_CLASSES[vista];
 
+    console.log(
+      `ControladorContenido: Cargando vista JS: ${vista} -> ${nombreClase}`
+    );
+
     if (nombreClase && window[nombreClase]) {
       try {
         // Limpiar vista anterior si existe
         if (this.vistaActual && this.vistaActual.destruir) {
+          console.log(
+            `ControladorContenido: Destruyendo vista anterior: ${this.vistaActual.constructor.name}`
+          );
           this.vistaActual.destruir();
         }
 
         // Crear nueva instancia
+        console.log(`ControladorContenido: Instanciando ${nombreClase}`);
         this.vistaActual = new window[nombreClase]();
 
         // Inicializar la vista si tiene método init
@@ -146,15 +154,43 @@ class ControladorContenido {
           this.vistaActual.init &&
           typeof this.vistaActual.init === 'function'
         ) {
-          this.vistaActual.init();
+          console.log(`ControladorContenido: Inicializando ${nombreClase}`);
+          await this.vistaActual.init();
+          console.log(
+            `ControladorContenido: Vista ${nombreClase} inicializada correctamente`
+          );
+        } else {
+          console.log(
+            `ControladorContenido: Vista ${nombreClase} no tiene método init`
+          );
         }
-
-        console.log(`Vista JS inicializada: ${nombreClase}`);
       } catch (error) {
-        console.error(`Error al inicializar vista JS ${nombreClase}:`, error);
+        console.error(
+          `ControladorContenido: Error al inicializar vista JS ${nombreClase}:`,
+          error
+        );
+
+        // Mostrar error en la interfaz
+        this.mainContent.innerHTML += `
+          <div class="alert alert-warning mt-3" role="alert">
+            <h6>Advertencia</h6>
+            <p>La vista se cargó pero hubo un problema al inicializar la funcionalidad JavaScript.</p>
+            <small>Error: ${error.message}</small>
+          </div>
+        `;
       }
     } else {
-      console.log(`No se encontró clase JS para la vista: ${vista}`);
+      console.warn(
+        `ControladorContenido: Clase ${nombreClase} no encontrada para vista ${vista}`
+      );
+
+      // Mostrar advertencia en la interfaz
+      this.mainContent.innerHTML += `
+        <div class="alert alert-info mt-3" role="alert">
+          <h6>Información</h6>
+          <p>La vista se cargó correctamente pero no tiene funcionalidad JavaScript específica.</p>
+        </div>
+      `;
     }
   }
 

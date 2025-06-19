@@ -35,6 +35,41 @@ class MenuService {
         return resp.json();
       })
       .then(json => {
+        // Validar estructura del menú usando MenuValidator
+        if (typeof MenuValidator !== 'undefined') {
+          const validation = MenuValidator.validateMenuStructure(json);
+          if (!validation.isValid) {
+            console.warn(
+              'MenuService: Errores en estructura del menú:',
+              validation.errors
+            );
+            if (validation.warnings.length > 0) {
+              console.warn(
+                'MenuService: Advertencias en estructura del menú:',
+                validation.warnings
+              );
+            }
+          }
+
+          // Verificar duplicados
+          const duplicates = MenuValidator.findDuplicateIds(json);
+          if (duplicates.length > 0) {
+            console.warn(
+              'MenuService: IDs duplicados encontrados:',
+              duplicates
+            );
+          }
+
+          // Verificar targets rotos
+          const brokenTargets = MenuValidator.findBrokenTargets(json);
+          if (brokenTargets.length > 0) {
+            console.warn(
+              'MenuService: Targets potencialmente rotos:',
+              brokenTargets
+            );
+          }
+        }
+
         const menuItems = json.menuItems || { top: [], bottom: [] };
 
         const result = {

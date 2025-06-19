@@ -24,6 +24,13 @@ class ControladorMenu {
     // Flag para controlar si estamos en un submenú
     this.isInSubmenu = false;
 
+    // Inicializar debugging en modo desarrollo
+    if (typeof MenuDebugger !== 'undefined' && AppConfig.isDevelopment()) {
+      this.debugger = new MenuDebugger(this);
+      this.debugger.enable();
+      this.debugger.log('ControladorMenu inicializado');
+    }
+
     // Validar elementos críticos del DOM
     this._validateCriticalElements();
   }

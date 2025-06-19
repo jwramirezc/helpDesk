@@ -216,14 +216,98 @@ const ViewConfig = {
    * @returns {Object}
    */
   getExportConfig(type, format) {
-    const timestamp = new Date().toISOString().slice(0, 10);
-    const prefix = this.EXPORT.FILENAME_PREFIX[type] || 'export_';
-
     return {
-      filename: `${prefix}${timestamp}.${format}`,
+      filename: `${this.EXPORT.FILENAME_PREFIX[type.toUpperCase()]}${
+        new Date().toISOString().split('T')[0]
+      }.${format}`,
       format: format,
       type: type,
     };
+  },
+
+  /**
+   * Valida que una clase de vista esté disponible
+   * @param {string} viewName - Nombre de la vista
+   * @returns {boolean}
+   */
+  validateViewClass(viewName) {
+    const className = this.VIEW_CLASSES[viewName];
+    if (!className) {
+      console.error(`ViewConfig: Vista '${viewName}' no configurada`);
+      return false;
+    }
+
+    if (!window[className]) {
+      console.error(
+        `ViewConfig: Clase '${className}' no disponible globalmente`
+      );
+      return false;
+    }
+
+    return true;
+  },
+
+  /**
+   * Obtiene información de todas las vistas disponibles
+   * @returns {Object}
+   */
+  getViewsInfo() {
+    const info = {};
+
+    Object.entries(this.VIEW_CLASSES).forEach(([viewName, className]) => {
+      info[viewName] = {
+        className: className,
+        isAvailable: !!window[className],
+        hasInit:
+          window[className] &&
+          typeof window[className].prototype.init === 'function',
+        hasDestroy:
+          window[className] &&
+          typeof window[className].prototype.destruir === 'function',
+      };
+    });
+
+    return info;
+  },
+
+  /**
+   * Verifica el estado de todas las vistas
+   * @returns {Object}
+   */
+  checkViewsStatus() {
+    const status = {
+      total: Object.keys(this.VIEW_CLASSES).length,
+      available: 0,
+      missing: 0,
+      withInit: 0,
+      withDestroy: 0,
+      details: {},
+    };
+
+    Object.entries(this.VIEW_CLASSES).forEach(([viewName, className]) => {
+      const isAvailable = !!window[className];
+      const hasInit =
+        window[className] &&
+        typeof window[className].prototype.init === 'function';
+      const hasDestroy =
+        window[className] &&
+        typeof window[className].prototype.destruir === 'function';
+
+      if (isAvailable) status.available++;
+      else status.missing++;
+
+      if (hasInit) status.withInit++;
+      if (hasDestroy) status.withDestroy++;
+
+      status.details[viewName] = {
+        className,
+        isAvailable,
+        hasInit,
+        hasDestroy,
+      };
+    });
+
+    return status;
   },
 };
 

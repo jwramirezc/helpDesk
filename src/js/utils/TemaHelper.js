@@ -1,7 +1,18 @@
 class TemaHelper {
   constructor() {
+    // Verificar disponibilidad de LocalStorageAdapter
+    if (typeof LocalStorageAdapter === 'undefined') {
+      console.error('TemaHelper: LocalStorageAdapter no está disponible');
+      // Fallback a localStorage directo
+      this.useDirectStorage = true;
+    } else {
+      this.useDirectStorage = false;
+    }
+
     // Intentar cargar la configuración del localStorage
-    this.config = LocalStorageAdapter.get('config');
+    this.config = this.useDirectStorage
+      ? this._getConfigDirect()
+      : LocalStorageAdapter.get('config');
     this.temas = null;
     this.temaActual = null;
 
@@ -19,11 +30,44 @@ class TemaHelper {
         },
       };
       // Guardar configuración por defecto
-      LocalStorageAdapter.set('config', this.config);
+      this._saveConfig();
     }
 
     // Cargar temas desde JSON y aplicar el tema actual
     this.cargarTemas();
+  }
+
+  /**
+   * Método de fallback para obtener configuración directamente
+   * @private
+   */
+  _getConfigDirect() {
+    try {
+      const config = localStorage.getItem('config');
+      return config ? JSON.parse(config) : null;
+    } catch (error) {
+      console.error(
+        'TemaHelper: Error al obtener configuración directa:',
+        error
+      );
+      return null;
+    }
+  }
+
+  /**
+   * Método de fallback para guardar configuración directamente
+   * @private
+   */
+  _saveConfig() {
+    try {
+      if (this.useDirectStorage) {
+        localStorage.setItem('config', JSON.stringify(this.config));
+      } else {
+        LocalStorageAdapter.set('config', this.config);
+      }
+    } catch (error) {
+      console.error('TemaHelper: Error al guardar configuración:', error);
+    }
   }
 
   async cargarTemas() {
@@ -79,7 +123,7 @@ class TemaHelper {
     document.body.setAttribute('data-theme', tema.modo);
 
     // Guardar en localStorage
-    LocalStorageAdapter.set('config', this.config);
+    this._saveConfig();
 
     // Aplicar colores del tema
     this.aplicarColoresTema(tema.colores);

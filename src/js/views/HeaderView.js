@@ -37,3 +37,6 @@ class HeaderView {
       </div>`;
   }
 }
+
+// Exponer clase globalmente para acceso desde otros módulos
+window.HeaderView = HeaderView;

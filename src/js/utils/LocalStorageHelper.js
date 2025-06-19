@@ -84,3 +84,7 @@ class LocalStorageAdapter {
     return LocalStorageHelper.existe(...args);
   }
 }
+
+// Exponer clases globalmente para acceso desde otros módulos
+window.LocalStorageAdapter = LocalStorageAdapter;
+window.LocalStorageHelper = LocalStorageHelper;

@@ -207,3 +207,6 @@ class MenuView {
     return true;
   }
 }
+
+// Exponer clase globalmente para acceso desde otros módulos
+window.MenuView = MenuView;
