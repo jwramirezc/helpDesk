@@ -3,15 +3,33 @@ class ControladorHeader {
     this.controladorUsuario = controladorUsuario;
     this.i18nService = i18nService;
     this.header = document.getElementById('header');
-    this.headerView = new HeaderView(this.header);
+
+    // Validar que HeaderView esté disponible
+    if (typeof HeaderView === 'undefined') {
+      console.error('ControladorHeader: HeaderView no está disponible');
+      this.headerView = null;
+    } else {
+      this.headerView = new HeaderView(this.header);
+    }
   }
 
   async inicializar() {
-    await this.cargarHeader();
-    this.inicializarEventos();
+    try {
+      await this.cargarHeader();
+      this.inicializarEventos();
+    } catch (error) {
+      console.error('ControladorHeader: Error al inicializar:', error);
+    }
   }
 
   async cargarHeader() {
+    if (!this.headerView) {
+      console.error(
+        'ControladorHeader: No se puede cargar header sin HeaderView'
+      );
+      return;
+    }
+
     const usuario = this.controladorUsuario.obtenerUsuarioActual();
     const tieneNotificaciones = await this.verificarNotificaciones();
 

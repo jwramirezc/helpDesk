@@ -53,8 +53,9 @@ class ControladorContenido {
     try {
       console.log('Cargando vista:', vista);
 
-      // 1. Cargar el HTML
-      const response = await fetch(`src/views/html/${vista}.html`);
+      // 1. Cargar el HTML usando AppConfig
+      const viewPath = AppConfig.getViewPath(vista);
+      const response = await fetch(viewPath);
       if (!response.ok) {
         throw new Error(`Vista '${vista}' no encontrada`);
       }
@@ -62,7 +63,7 @@ class ControladorContenido {
       const html = await response.text();
       this.mainContent.innerHTML = html;
 
-      // 2. Cargar CSS específico de la vista
+      // 2. Cargar CSS específico de la vista usando AppConfig
       await this.cargarCSSVista(vista);
 
       // 3. Cargar e inicializar la clase JS correspondiente
@@ -97,10 +98,11 @@ class ControladorContenido {
       }
     }
 
-    // Cargar nuevo CSS
+    // Cargar nuevo CSS usando AppConfig
+    const stylePath = AppConfig.getStylePath(vista);
     const link = document.createElement('link');
     link.rel = 'stylesheet';
-    link.href = `src/styles/views/${vista}.css`;
+    link.href = stylePath;
     link.setAttribute('data-vista', vista);
 
     // Solo agregar si el archivo existe
@@ -125,16 +127,8 @@ class ControladorContenido {
    * @param {string} vista - Nombre de la vista
    */
   async cargarVistaJS(vista) {
-    // Mapeo de vistas a clases JS
-    const mapeoVistas = {
-      home: 'HomeView',
-      helpdesk: 'HelpDeskView',
-      pqrs: 'PQRSView',
-      consultas: 'ConsultasView',
-      reportes: 'ReportesView',
-    };
-
-    const nombreClase = mapeoVistas[vista];
+    // Usar configuración centralizada de ViewConfig
+    const nombreClase = ViewConfig.VIEW_CLASSES[vista];
 
     if (nombreClase && window[nombreClase]) {
       try {
