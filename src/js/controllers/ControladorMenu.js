@@ -249,7 +249,7 @@ class ControladorMenu {
 
         // Comportamiento adaptativo para submenús
         if (type === 'submenu') {
-          if (window.innerWidth >= 768) {
+          if (window.innerWidth >= MenuConfig.BREAKPOINTS.MOBILE) {
             // En PC: usar el handler común
             await this.handleMenuItemClick(menuItem, true);
           } else {
@@ -482,7 +482,7 @@ class ControladorMenu {
 
   // Método para manejar cambios de tamaño de ventana
   manejarCambioTamanio() {
-    const isMobile = window.innerWidth <= 768;
+    const isMobile = window.innerWidth <= MenuConfig.BREAKPOINTS.MOBILE;
 
     if (isMobile) {
       // En móvil, asegurar que el toggle esté visible si el menú está cerrado

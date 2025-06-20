@@ -10,6 +10,8 @@ const MenuConfig = {
     MOBILE: 768,
     TABLET: 1024,
     DESKTOP: 1200,
+    SMALL: 576,
+    MEDIUM: 992,
   },
 
   // Configuración de animaciones
@@ -83,6 +85,26 @@ const MenuConfig = {
     VALIDATE_ON_LOAD: true,
   },
 
+  // Configuración de dimensiones específicas del menú
+  DIMENSIONS: {
+    MENU_ITEM_SIZE: 50, // px
+    MENU_ITEM_ICON_SIZE: 1.5, // rem
+    TOOLTIP_OFFSET: 10, // px
+    TOOLTIP_ARROW_OFFSET: 4, // px
+  },
+
+  // Configuración de límites específicos del menú
+  LIMITS: {
+    MAX_SUBMENU_ITEMS: 10,
+    MAX_LOGS_TO_KEEP: 10,
+    FAST_OPERATION_THRESHOLD: 10, // ms
+  },
+
+  // Configuración de rutas específicas del menú
+  PATHS: {
+    DEFAULT_AVATAR: 'public/images/avatar1.png',
+  },
+
   /**
    * Obtiene la configuración según el entorno
    * @returns {Object}
@@ -113,6 +135,24 @@ const MenuConfig = {
     if (width <= this.BREAKPOINTS.TABLET) return 'tablet';
     if (width <= this.BREAKPOINTS.DESKTOP) return 'desktop';
     return 'large';
+  },
+
+  /**
+   * Obtiene una dimensión específica del menú
+   * @param {string} dimensionName - Nombre de la dimensión
+   * @returns {number}
+   */
+  getDimension(dimensionName) {
+    return this.DIMENSIONS[dimensionName.toUpperCase()] || 0;
+  },
+
+  /**
+   * Obtiene un límite específico del menú
+   * @param {string} limitName - Nombre del límite
+   * @returns {number}
+   */
+  getLimit(limitName) {
+    return this.LIMITS[limitName.toUpperCase()] || 0;
   },
 };
 

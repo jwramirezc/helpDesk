@@ -6,7 +6,7 @@ class MenuView {
   constructor(sidebar, mobileMenu) {
     this.sidebar = sidebar;
     this.mobileMenu = mobileMenu;
-    this.isMobile = window.innerWidth < 768;
+    this.isMobile = window.innerWidth < MenuConfig.BREAKPOINTS.MOBILE;
     this.currentMobileView = 'main'; // 'main' o 'submenu'
     this.currentSubmenuParent = null;
     this.currentMenuItems = null; // Almacenar los items del menú actual
@@ -14,7 +14,7 @@ class MenuView {
 
     // Escuchar cambios de tamaño de ventana
     window.addEventListener('resize', () => {
-      this.isMobile = window.innerWidth < 768;
+      this.isMobile = window.innerWidth < MenuConfig.BREAKPOINTS.MOBILE;
     });
   }
 
