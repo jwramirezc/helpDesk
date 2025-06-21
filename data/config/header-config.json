@@ -1,0 +1,132 @@
+{
+  "version": "1.0.0",
+  "structure": {
+    "userInfo": {
+      "enabled": true,
+      "order": 1,
+      "fields": [
+        {
+          "id": "user-name",
+          "type": "text",
+          "source": "user.nombre + ' ' + user.apellidos",
+          "class": "user-name",
+          "enabled": true
+        },
+        {
+          "id": "user-company",
+          "type": "text",
+          "source": "user.empresa",
+          "class": "user-company",
+          "enabled": true
+        },
+        {
+          "id": "user-role",
+          "type": "text",
+          "source": "user.rol || 'Usuario'",
+          "class": "user-role",
+          "enabled": false
+        }
+      ]
+    },
+    "userAvatar": {
+      "enabled": true,
+      "order": 2,
+      "fallbackImage": "public/images/default-avatar.png",
+      "altText": "Avatar"
+    },
+    "buttons": {
+      "enabled": true,
+      "order": 0,
+      "items": [
+        {
+          "id": "btn-notifications",
+          "type": "popover",
+          "icon": "far fa-bell",
+          "tooltip": "notifications",
+          "badge": {
+            "enabled": true,
+            "class": "notification-badge",
+            "condition": "hasNotifications"
+          },
+          "popover": {
+            "content": "notifications-panel",
+            "placement": "bottom"
+          },
+          "enabled": true,
+          "order": 1
+        },
+        {
+          "id": "btn-user-menu",
+          "type": "popover",
+          "icon": "fas fa-user-circle",
+          "tooltip": "user_menu",
+          "popover": {
+            "content": "user-menu-panel",
+            "placement": "bottom-right"
+          },
+          "enabled": false,
+          "order": 2
+        },
+        {
+          "id": "btn-theme-toggle",
+          "type": "button",
+          "icon": "fas fa-moon",
+          "tooltip": "toggle_theme",
+          "enabled": false,
+          "order": 3
+        },
+        {
+          "id": "btn-language-selector",
+          "type": "popover",
+          "icon": "fas fa-globe",
+          "tooltip": "change_language",
+          "popover": {
+            "content": "language-selector-panel",
+            "placement": "bottom"
+          },
+          "enabled": false,
+          "order": 4
+        },
+        {
+          "id": "btn-help",
+          "type": "popover",
+          "icon": "fas fa-question-circle",
+          "tooltip": "help",
+          "popover": {
+            "content": "help-panel",
+            "placement": "bottom"
+          },
+          "enabled": false,
+          "order": 5
+        }
+      ]
+    }
+  },
+  "permissions": {
+    "roles": {
+      "admin": [
+        "btn-notifications",
+        "btn-user-menu",
+        "btn-theme-toggle",
+        "btn-language-selector",
+        "btn-help"
+      ],
+      "user": [
+        "btn-notifications",
+        "btn-user-menu",
+        "btn-theme-toggle",
+        "btn-help"
+      ],
+      "guest": ["btn-theme-toggle", "btn-help"]
+    }
+  },
+  "popover": {
+    "defaults": {
+      "animation": true,
+      "backdrop": true,
+      "closeOnClickOutside": true,
+      "closeOnEscape": true,
+      "zIndex": 1000
+    }
+  }
+}

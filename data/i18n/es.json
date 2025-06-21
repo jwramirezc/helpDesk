@@ -2,5 +2,10 @@
   "notifications": "Notificaciones",
   "language": "Idioma",
   "lang_es": "Español",
-  "lang_en": "Inglés"
+  "lang_en": "Inglés",
+  "user_menu": "Menú de usuario",
+  "toggle_theme": "Cambiar tema",
+  "change_language": "Cambiar idioma",
+  "help": "Ayuda",
+  "search": "Buscar"
 }

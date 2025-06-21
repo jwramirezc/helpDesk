@@ -1,0 +1,248 @@
+/**
+ * Estilos para botones del header con configuración dinámica
+ * 
+ * Estos estilos complementan los estilos base de standard-buttons.css
+ * y proporcionan estilos específicos para el header.
+ */
+
+/* Contenedor de botones del header */
+.user-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  margin-left: auto;
+}
+
+/* Botones del header */
+.header-button {
+  position: relative;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+  background: none;
+  border: none;
+  color: #555555;
+  text-decoration: none;
+  outline: none;
+}
+
+.header-button:hover {
+  background-color: rgba(0, 0, 0, 0.05);
+  transform: translateY(-1px);
+}
+
+.header-button:active {
+  transform: translateY(0);
+}
+
+.header-button:focus {
+  box-shadow: 0 0 0 2px rgba(0, 123, 255, 0.25);
+}
+
+/* Iconos dentro de botones del header */
+.header-button i {
+  font-size: 1.2rem;
+  transition: color 0.3s ease;
+}
+
+.header-button:hover i {
+  color: #007bff;
+}
+
+/* Badge de notificaciones */
+.notification-badge {
+  position: absolute;
+  top: 2px;
+  right: 2px;
+  width: 8px;
+  height: 8px;
+  background-color: #dc3545;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  animation: pulse 2s infinite;
+}
+
+/* Animación de pulso para badges */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 6px rgba(220, 53, 69, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(220, 53, 69, 0);
+  }
+}
+
+/* Información del usuario */
+.user-details {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.user-name {
+  font-weight: 500;
+  white-space: nowrap;
+  color: #1a1a1a;
+}
+
+.user-company {
+  font-size: 0.875rem;
+  color: #1a1a1a;
+}
+
+.user-role {
+  font-size: 0.75rem;
+  color: #6c757d;
+  font-style: italic;
+}
+
+/* Avatar del usuario */
+.user-avatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  overflow: hidden;
+  border: none;
+  cursor: pointer;
+  transition: transform 0.3s ease;
+}
+
+.user-avatar:hover {
+  transform: scale(1.05);
+}
+
+.user-avatar img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+/* Estados especiales */
+.header-button.disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+  pointer-events: none;
+}
+
+.header-button.loading {
+  position: relative;
+  pointer-events: none;
+}
+
+.header-button.loading::after {
+  content: '';
+  position: absolute;
+  width: 16px;
+  height: 16px;
+  border: 2px solid transparent;
+  border-top: 2px solid currentColor;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .user-info {
+    gap: 0.5rem;
+  }
+
+  .header-button {
+    width: 36px;
+    height: 36px;
+    padding: 0.375rem;
+  }
+
+  .header-button i {
+    font-size: 1.1rem;
+  }
+
+  .user-details {
+    display: none; /* Ocultar en móvil para ahorrar espacio */
+  }
+}
+
+@media (max-width: 480px) {
+  .header-button {
+    width: 32px;
+    height: 32px;
+    padding: 0.25rem;
+  }
+
+  .header-button i {
+    font-size: 1rem;
+  }
+
+  .user-avatar {
+    width: 32px;
+    height: 32px;
+  }
+}
+
+/* Tema oscuro */
+[data-theme='dark'] .header-button {
+  color: #e9ecef;
+}
+
+[data-theme='dark'] .header-button:hover {
+  background-color: rgba(255, 255, 255, 0.1);
+}
+
+[data-theme='dark'] .header-button:hover i {
+  color: #4dabf7;
+}
+
+[data-theme='dark'] .user-name,
+[data-theme='dark'] .user-company {
+  color: #e9ecef;
+}
+
+[data-theme='dark'] .user-role {
+  color: #adb5bd;
+}
+
+[data-theme='dark'] .notification-badge {
+  border-color: #343a40;
+}
+
+/* Accesibilidad */
+.header-button:focus-visible {
+  outline: 2px solid #007bff;
+  outline-offset: 2px;
+}
+
+/* Reducción de movimiento */
+@media (prefers-reduced-motion: reduce) {
+  .header-button,
+  .header-button i,
+  .notification-badge,
+  .user-avatar {
+    animation: none;
+    transition: none;
+  }
+
+  .header-button:hover {
+    transform: none;
+  }
+
+  .user-avatar:hover {
+    transform: none;
+  }
+}

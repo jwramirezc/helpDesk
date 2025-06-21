@@ -1,0 +1,296 @@
+{
+  "_comment": "Configuración de botones estándar para componentes fuera del header",
+  "_note": "Para botones del header, usar header-config.json y HeaderConfigService",
+  "_categories": "sidebar, toolbar, floating, modal, form, dashboard",
+
+  "buttons": {
+    "btn-sidebar-help": {
+      "name": "Ayuda",
+      "icon": "fas fa-question-circle",
+      "type": "popover",
+      "category": "sidebar",
+      "position": "left",
+      "order": 1,
+      "tooltip": "Ayuda y documentación",
+      "access": true,
+      "popover": {
+        "content": "help-content",
+        "title": "Centro de Ayuda",
+        "size": "medium"
+      },
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-sidebar-settings": {
+      "name": "Configuración",
+      "icon": "fas fa-cog",
+      "type": "popover",
+      "category": "sidebar",
+      "position": "left",
+      "order": 2,
+      "tooltip": "Configuración del sistema",
+      "access": true,
+      "popover": {
+        "content": "settings-content",
+        "title": "Configuración",
+        "size": "large"
+      },
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-toolbar-save": {
+      "name": "Guardar",
+      "icon": "fas fa-save",
+      "type": "button",
+      "category": "toolbar",
+      "position": "right",
+      "order": 1,
+      "tooltip": "Guardar cambios",
+      "access": true,
+      "action": "save",
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-toolbar-export": {
+      "name": "Exportar",
+      "icon": "fas fa-download",
+      "type": "popover",
+      "category": "toolbar",
+      "position": "right",
+      "order": 2,
+      "tooltip": "Exportar datos",
+      "access": true,
+      "popover": {
+        "content": "export-options",
+        "title": "Opciones de Exportación",
+        "size": "medium"
+      },
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-floating-chat": {
+      "name": "Chat",
+      "icon": "fas fa-comments",
+      "type": "popover",
+      "category": "floating",
+      "position": "bottom-right",
+      "order": 1,
+      "tooltip": "Chat de soporte",
+      "access": true,
+      "popover": {
+        "content": "chat-widget",
+        "title": "Soporte en Vivo",
+        "size": "large"
+      },
+      "badge": {
+        "enabled": true,
+        "class": "chat-badge",
+        "count": 3
+      }
+    },
+
+    "btn-floating-feedback": {
+      "name": "Feedback",
+      "icon": "fas fa-lightbulb",
+      "type": "popover",
+      "category": "floating",
+      "position": "bottom-right",
+      "order": 2,
+      "tooltip": "Enviar feedback",
+      "access": true,
+      "popover": {
+        "content": "feedback-form",
+        "title": "Enviar Feedback",
+        "size": "medium"
+      },
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-dashboard-refresh": {
+      "name": "Actualizar",
+      "icon": "fas fa-sync-alt",
+      "type": "button",
+      "category": "dashboard",
+      "position": "top-right",
+      "order": 1,
+      "tooltip": "Actualizar dashboard",
+      "access": true,
+      "action": "refresh",
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-dashboard-filter": {
+      "name": "Filtros",
+      "icon": "fas fa-filter",
+      "type": "popover",
+      "category": "dashboard",
+      "position": "top-right",
+      "order": 2,
+      "tooltip": "Aplicar filtros",
+      "access": true,
+      "popover": {
+        "content": "dashboard-filters",
+        "title": "Filtros del Dashboard",
+        "size": "medium"
+      },
+      "badge": {
+        "enabled": true,
+        "class": "filter-badge",
+        "count": 2
+      }
+    },
+
+    "btn-form-submit": {
+      "name": "Enviar",
+      "icon": "fas fa-paper-plane",
+      "type": "button",
+      "category": "form",
+      "position": "bottom",
+      "order": 1,
+      "tooltip": "Enviar formulario",
+      "access": true,
+      "action": "submit",
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-form-reset": {
+      "name": "Limpiar",
+      "icon": "fas fa-undo",
+      "type": "button",
+      "category": "form",
+      "position": "bottom",
+      "order": 2,
+      "tooltip": "Limpiar formulario",
+      "access": true,
+      "action": "reset",
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-modal-close": {
+      "name": "Cerrar",
+      "icon": "fas fa-times",
+      "type": "button",
+      "category": "modal",
+      "position": "top-right",
+      "order": 1,
+      "tooltip": "Cerrar modal",
+      "access": true,
+      "action": "close",
+      "badge": {
+        "enabled": false
+      }
+    },
+
+    "btn-modal-confirm": {
+      "name": "Confirmar",
+      "icon": "fas fa-check",
+      "type": "button",
+      "category": "modal",
+      "position": "bottom-right",
+      "order": 1,
+      "tooltip": "Confirmar acción",
+      "access": true,
+      "action": "confirm",
+      "badge": {
+        "enabled": false
+      }
+    }
+  },
+
+  "categories": {
+    "sidebar": {
+      "name": "Barra Lateral",
+      "description": "Botones para la barra lateral de navegación",
+      "position": "left",
+      "style": "vertical"
+    },
+    "toolbar": {
+      "name": "Barra de Herramientas",
+      "description": "Botones para barras de herramientas",
+      "position": "top",
+      "style": "horizontal"
+    },
+    "floating": {
+      "name": "Botones Flotantes",
+      "description": "Botones flotantes para acciones rápidas",
+      "position": "bottom-right",
+      "style": "floating"
+    },
+    "dashboard": {
+      "name": "Dashboard",
+      "description": "Botones específicos para dashboards",
+      "position": "top-right",
+      "style": "horizontal"
+    },
+    "form": {
+      "name": "Formularios",
+      "description": "Botones para formularios",
+      "position": "bottom",
+      "style": "horizontal"
+    },
+    "modal": {
+      "name": "Modales",
+      "description": "Botones para ventanas modales",
+      "position": "top-right",
+      "style": "horizontal"
+    }
+  },
+
+  "permissions": {
+    "roles": {
+      "admin": [
+        "btn-sidebar-help",
+        "btn-sidebar-settings",
+        "btn-toolbar-save",
+        "btn-toolbar-export",
+        "btn-floating-chat",
+        "btn-floating-feedback",
+        "btn-dashboard-refresh",
+        "btn-dashboard-filter",
+        "btn-form-submit",
+        "btn-form-reset",
+        "btn-modal-close",
+        "btn-modal-confirm"
+      ],
+      "manager": [
+        "btn-sidebar-help",
+        "btn-sidebar-settings",
+        "btn-toolbar-save",
+        "btn-toolbar-export",
+        "btn-floating-chat",
+        "btn-dashboard-refresh",
+        "btn-dashboard-filter",
+        "btn-form-submit",
+        "btn-form-reset",
+        "btn-modal-close",
+        "btn-modal-confirm"
+      ],
+      "user": [
+        "btn-sidebar-help",
+        "btn-toolbar-save",
+        "btn-floating-chat",
+        "btn-dashboard-refresh",
+        "btn-form-submit",
+        "btn-modal-close",
+        "btn-modal-confirm"
+      ],
+      "guest": ["btn-sidebar-help", "btn-floating-chat"]
+    }
+  }
+}

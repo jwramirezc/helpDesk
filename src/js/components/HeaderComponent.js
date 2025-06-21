@@ -110,6 +110,19 @@ class HeaderComponent {
    * @returns {string} HTML de notificaciones
    */
   generateNotificationsHTML(t) {
+    // Usar StandardButtonsService si está disponible
+    if (window.StandardButtonsService && window.standardButtonsService) {
+      return window.standardButtonsService.generateButtonHTML(
+        'notifications',
+        t,
+        {
+          showTooltip: this.options.tooltipEnabled,
+          showBadge: this.options.notificationBadge && this.hasNotifications,
+        }
+      );
+    }
+
+    // Fallback al método original si el servicio no está disponible
     const notificationsClass = ComponentConfig.getCSSClass(
       'HEADER',
       'NOTIFICATIONS'
