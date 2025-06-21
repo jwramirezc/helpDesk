@@ -2,10 +2,51 @@ class TooltipHelper {
   constructor() {
     this.tooltip = null;
     this.arrow = null;
+    this.isInitialized = false;
+  }
+
+  /**
+   * Verifica si el componente está activo en el breakpoint actual
+   * @returns {boolean}
+   */
+  isActiveInCurrentBreakpoint() {
+    // Solo activo en desktop (>1024px)
+    const width = window.innerWidth;
+    const isActive = width >= 1025; // Desktop mínimo
+
+    // Log en desarrollo para debugging
+    if (
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    ) {
+      console.log(
+        `TooltipHelper: Ancho=${width}px, DesktopMin=1025px, Activo=${isActive}`
+      );
+    }
+
+    return isActive;
   }
 
   inicializarTooltips() {
+    // Solo inicializar en desktop
+    if (!this.isActiveInCurrentBreakpoint()) {
+      if (
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1'
+      ) {
+        console.log('TooltipHelper: No inicializando - no estamos en desktop');
+      }
+      return;
+    }
+
+    if (this.isInitialized) return;
+
     document.addEventListener('mouseover', e => {
+      // Verificación estricta: solo procesar en desktop
+      if (!this.isActiveInCurrentBreakpoint()) {
+        return;
+      }
+
       const target = e.target.closest('[data-tooltip]');
       if (target) {
         this.mostrarTooltip(target);
@@ -13,6 +54,11 @@ class TooltipHelper {
     });
 
     document.addEventListener('mouseout', e => {
+      // Verificación estricta: solo procesar en desktop
+      if (!this.isActiveInCurrentBreakpoint()) {
+        return;
+      }
+
       const target = e.target.closest('[data-tooltip]');
       const relatedTarget = e.relatedTarget;
 
@@ -20,9 +66,46 @@ class TooltipHelper {
         this.ocultarTooltip();
       }
     });
+
+    // Event listener para ocultar tooltip al hacer clic
+    document.addEventListener('click', e => {
+      // Ocultar tooltip en cualquier breakpoint al hacer clic
+      this.ocultarTooltip();
+    });
+
+    // Event listener para ocultar tooltip al cambiar breakpoint
+    window.addEventListener('resize', () => {
+      // Si cambiamos a tablet/móvil, ocultar tooltip y deshabilitar
+      if (!this.isActiveInCurrentBreakpoint()) {
+        this.ocultarTooltip();
+        this.isInitialized = false; // Permitir reinicialización si vuelve a desktop
+      }
+    });
+
+    this.isInitialized = true;
+
+    if (
+      window.location.hostname === 'localhost' ||
+      window.location.hostname === '127.0.0.1'
+    ) {
+      console.log('TooltipHelper: Inicializado en desktop');
+    }
   }
 
   mostrarTooltip(elemento) {
+    // Verificación estricta antes de mostrar
+    if (!this.isActiveInCurrentBreakpoint()) {
+      if (
+        window.location.hostname === 'localhost' ||
+        window.location.hostname === '127.0.0.1'
+      ) {
+        console.log(
+          'TooltipHelper: No mostrar tooltip - no estamos en desktop'
+        );
+      }
+      return;
+    }
+
     const texto = elemento.getAttribute('data-tooltip');
 
     // Crear tooltip si no existe

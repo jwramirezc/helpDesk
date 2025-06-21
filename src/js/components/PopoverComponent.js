@@ -15,6 +15,7 @@ class PopoverComponent {
     };
 
     this.activePopover = null;
+    this.activeTrigger = null; // Referencia al trigger activo
     this.triggers = [];
     this.init();
   }
@@ -67,6 +68,28 @@ class PopoverComponent {
         this.hideActivePopover();
       }
     });
+
+    // Event listener para actualizar posición durante scroll
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (this.activePopover && this.activeTrigger) {
+          this.updatePopoverPosition();
+        }
+      },
+      { passive: true }
+    );
+
+    // Event listener para actualizar posición durante resize
+    window.addEventListener(
+      'resize',
+      () => {
+        if (this.activePopover && this.activeTrigger) {
+          this.updatePopoverPosition();
+        }
+      },
+      { passive: true }
+    );
   }
 
   /**
@@ -101,13 +124,22 @@ class PopoverComponent {
     // Ocultar popover activo si existe
     this.hideActivePopover();
 
-    // Posicionar el popover
-    this.positionPopover(popover, trigger);
+    // Guardar referencias
+    this.activePopover = popover;
+    this.activeTrigger = trigger;
 
-    // Mostrar el popover usando configuración
+    // Mostrar el popover primero para que tenga dimensiones
     const visibleClass = ComponentConfig.getCSSClass('POPOVER', 'VISIBLE');
     popover.classList.add(visibleClass);
-    this.activePopover = popover;
+
+    // Forzar reflow para asegurar que las dimensiones estén disponibles
+    popover.offsetHeight;
+
+    // Posicionar el popover después de que tenga dimensiones
+    this.positionPopover(popover, trigger);
+
+    // Asegurar posicionamiento correcto después de que el DOM se estabilice
+    this.ensureCorrectPositioning(popover, trigger);
 
     // Log en desarrollo usando configuración centralizada
     ComponentConfig.log('PopoverComponent', 'Popover mostrado', popover.id);
@@ -123,6 +155,7 @@ class PopoverComponent {
 
     if (this.activePopover === popover) {
       this.activePopover = null;
+      this.activeTrigger = null; // Limpiar referencia al trigger
     }
 
     // Log en desarrollo usando configuración centralizada
@@ -146,12 +179,42 @@ class PopoverComponent {
   positionPopover(popover, trigger) {
     const triggerRect = trigger.getBoundingClientRect();
     const popoverRect = popover.getBoundingClientRect();
-    const scrollLeft =
-      window.pageXOffset || document.documentElement.scrollLeft;
-    const scrollTop = window.pageYOffset || document.documentElement.scrollTop;
 
-    // Determinar el placement óptimo
-    const placement = this.calculateOptimalPlacement(triggerRect, popoverRect);
+    // Determinar el placement: priorizar configuración específica del popover
+    let placement;
+
+    // 1. Verificar si el popover tiene configuración específica
+    if (popover.dataset.placement) {
+      placement = popover.dataset.placement;
+      ComponentConfig.log(
+        'PopoverComponent',
+        `Usando placement específico: ${placement}`
+      );
+    }
+    // 2. Verificar si el trigger tiene configuración específica
+    else if (trigger.dataset.popoverPlacement) {
+      placement = trigger.dataset.popoverPlacement;
+      ComponentConfig.log(
+        'PopoverComponent',
+        `Usando placement del trigger: ${placement}`
+      );
+    }
+    // 3. Usar placement forzado global
+    else if (this.options.forcePlacement) {
+      placement = this.options.forcePlacement;
+      ComponentConfig.log(
+        'PopoverComponent',
+        `Usando placement forzado: ${placement}`
+      );
+    }
+    // 4. Calcular placement óptimo automáticamente
+    else {
+      placement = this.calculateOptimalPlacement(triggerRect, popoverRect);
+      ComponentConfig.log(
+        'PopoverComponent',
+        `Usando placement calculado: ${placement}`
+      );
+    }
 
     // Aplicar clases de placement usando configuración
     const placementPrefix = ComponentConfig.getCSSClass(
@@ -161,39 +224,160 @@ class PopoverComponent {
     popover.className = popover.className.replace(/placement-\w+/g, '');
     popover.classList.add(`${placementPrefix}${placement}`);
 
-    // Calcular posición
+    // Obtener offset específico del popover o usar el global
+    const offset = popover.dataset.offset
+      ? parseInt(popover.dataset.offset)
+      : this.options.offset;
+
+    // Calcular posición del popover para que la flecha apunte al centro del trigger
     let top, left;
 
     switch (placement) {
       case ComponentConfig.POPOVER.PLACEMENTS.BOTTOM:
-        top = triggerRect.bottom + scrollTop + this.options.offset;
-        left = triggerRect.left + scrollLeft;
+        // Popover debajo del trigger, flecha apunta al centro del trigger
+        top = triggerRect.bottom + offset;
+        left = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2;
         break;
       case ComponentConfig.POPOVER.PLACEMENTS.TOP:
-        top =
-          triggerRect.top +
-          scrollTop -
-          popoverRect.height -
-          this.options.offset;
-        left = triggerRect.left + scrollLeft;
+        // Popover arriba del trigger, flecha apunta al centro del trigger
+        top = triggerRect.top - popoverRect.height - offset;
+        left = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2;
         break;
       case ComponentConfig.POPOVER.PLACEMENTS.LEFT:
-        top = triggerRect.top + scrollTop;
-        left =
-          triggerRect.left +
-          scrollLeft -
-          popoverRect.width -
-          this.options.offset;
+        // Popover a la izquierda del trigger, flecha apunta al centro del trigger
+        top = triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2;
+        left = triggerRect.left - popoverRect.width - offset;
         break;
       case ComponentConfig.POPOVER.PLACEMENTS.RIGHT:
-        top = triggerRect.top + scrollTop;
-        left = triggerRect.right + scrollLeft + this.options.offset;
+        // Popover a la derecha del trigger, flecha apunta al centro del trigger
+        top = triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2;
+        left = triggerRect.right + offset;
         break;
     }
 
     // Aplicar posición
     popover.style.top = `${top}px`;
     popover.style.left = `${left}px`;
+
+    // Posicionar la flecha para que apunte exactamente al centro del trigger
+    this.positionArrowToTrigger(popover, trigger, placement);
+  }
+
+  /**
+   * Posiciona la flecha para que apunte exactamente al centro del trigger
+   * @param {HTMLElement} popover - Elemento popover
+   * @param {HTMLElement} trigger - Elemento trigger
+   * @param {string} placement - Dirección del popover
+   */
+  positionArrowToTrigger(popover, trigger, placement) {
+    const arrow = popover.querySelector(
+      `.${ComponentConfig.getCSSClass('POPOVER', 'ARROW')}`
+    );
+    if (!arrow) return;
+
+    // Asegurar que el popover esté visible y tenga dimensiones
+    if (
+      !popover.classList.contains(
+        ComponentConfig.getCSSClass('POPOVER', 'VISIBLE')
+      )
+    ) {
+      popover.classList.add(ComponentConfig.getCSSClass('POPOVER', 'VISIBLE'));
+    }
+
+    // Forzar reflow para obtener dimensiones actualizadas
+    popover.offsetHeight;
+
+    const triggerRect = trigger.getBoundingClientRect();
+    const popoverRect = popover.getBoundingClientRect();
+    const popoverLeft = parseFloat(popover.style.left) || 0;
+    const popoverTop = parseFloat(popover.style.top) || 0;
+
+    // Calcular la posición de la flecha para que apunte al centro del trigger
+    let arrowTop, arrowLeft;
+
+    switch (placement) {
+      case ComponentConfig.POPOVER.PLACEMENTS.BOTTOM:
+        // Flecha en borde superior apuntando hacia arriba al centro del trigger
+        arrowTop = -8; // Fuera del popover hacia arriba
+        arrowLeft = triggerRect.left + triggerRect.width / 2 - popoverLeft - 8; // Centrada respecto al trigger
+        break;
+      case ComponentConfig.POPOVER.PLACEMENTS.TOP:
+        // Flecha en borde inferior apuntando hacia abajo al centro del trigger
+        arrowTop = popoverRect.height - 8; // Fuera del popover hacia abajo
+        arrowLeft = triggerRect.left + triggerRect.width / 2 - popoverLeft - 8; // Centrada respecto al trigger
+        break;
+      case ComponentConfig.POPOVER.PLACEMENTS.LEFT:
+        // Flecha en borde derecho apuntando hacia la derecha al centro del trigger
+        arrowTop = triggerRect.top + triggerRect.height / 2 - popoverTop - 8; // Centrada respecto al trigger
+        arrowLeft = popoverRect.width - 8; // Fuera del popover hacia la derecha
+        break;
+      case ComponentConfig.POPOVER.PLACEMENTS.RIGHT:
+        // Flecha en borde izquierdo apuntando hacia la izquierda al centro del trigger
+        arrowTop = triggerRect.top + triggerRect.height / 2 - popoverTop - 8; // Centrada respecto al trigger
+        arrowLeft = -8; // Fuera del popover hacia la izquierda
+        break;
+    }
+
+    // Aplicar posición de la flecha
+    arrow.style.top = `${arrowTop}px`;
+    arrow.style.left = `${arrowLeft}px`;
+
+    // Log para debugging
+    ComponentConfig.log(
+      'PopoverComponent',
+      `Flecha posicionada: top=${arrowTop}px, left=${arrowLeft}px, placement=${placement}`
+    );
+  }
+
+  /**
+   * Establece la dirección forzada del popover
+   * @param {string} placement - Dirección ('top', 'bottom', 'left', 'right')
+   */
+  setForcePlacement(placement) {
+    const validPlacements = ['top', 'bottom', 'left', 'right'];
+    if (validPlacements.includes(placement)) {
+      this.options.forcePlacement = placement;
+      ComponentConfig.log(
+        'PopoverComponent',
+        `Placement forzado establecido: ${placement}`
+      );
+    } else {
+      ComponentConfig.logError(
+        'PopoverComponent',
+        `Placement inválido: ${placement}`
+      );
+    }
+  }
+
+  /**
+   * Limpia el placement forzado (vuelve al cálculo automático)
+   */
+  clearForcePlacement() {
+    this.options.forcePlacement = null;
+    ComponentConfig.log('PopoverComponent', 'Placement forzado limpiado');
+  }
+
+  /**
+   * Actualiza la posición del popover activo durante scroll o resize
+   */
+  updatePopoverPosition() {
+    if (this.activePopover && this.activeTrigger) {
+      this.positionPopover(this.activePopover, this.activeTrigger);
+    }
+  }
+
+  /**
+   * Asegura el posicionamiento correcto después de que el DOM se estabilice
+   * @param {HTMLElement} popover - Elemento popover
+   * @param {HTMLElement} trigger - Elemento trigger
+   */
+  ensureCorrectPositioning(popover, trigger) {
+    // Usar requestAnimationFrame para asegurar que el DOM esté listo
+    requestAnimationFrame(() => {
+      if (this.activePopover === popover) {
+        this.positionPopover(popover, trigger);
+      }
+    });
   }
 
   /**
@@ -306,6 +490,7 @@ class PopoverComponent {
     this.hideActivePopover();
     this.triggers = [];
     this.activePopover = null;
+    this.activeTrigger = null; // Limpiar referencia al trigger
 
     // Log en desarrollo usando configuración centralizada
     ComponentConfig.log('PopoverComponent', 'Destruido');

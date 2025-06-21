@@ -20,6 +20,7 @@ class TooltipComponent {
     this.showTimeout = null;
     this.hideTimeout = null;
     this.isInitialized = false;
+    this.recentClickDetected = false;
   }
 
   /**
@@ -27,6 +28,16 @@ class TooltipComponent {
    */
   initialize() {
     if (this.isInitialized) return;
+
+    // Verificación estricta: solo inicializar en desktop
+    if (!this.isActiveInCurrentBreakpoint()) {
+      if (ComponentConfig.getEnvironmentConfig().isDevelopment) {
+        console.log(
+          'TooltipComponent: No inicializando - no estamos en desktop'
+        );
+      }
+      return;
+    }
 
     this.setupEventListeners();
     this.isInitialized = true;
@@ -41,6 +52,11 @@ class TooltipComponent {
   setupEventListeners() {
     // Event listener para mostrar tooltip
     document.addEventListener('mouseover', e => {
+      // Verificación estricta: solo procesar en desktop
+      if (!this.isActiveInCurrentBreakpoint()) {
+        return;
+      }
+
       const target = e.target.closest(this.options.triggerSelector);
       if (target && target !== this.currentTarget) {
         this.currentTarget = target;
@@ -50,6 +66,11 @@ class TooltipComponent {
 
     // Event listener para ocultar tooltip
     document.addEventListener('mouseout', e => {
+      // Verificación estricta: solo procesar en desktop
+      if (!this.isActiveInCurrentBreakpoint()) {
+        return;
+      }
+
       const target = e.target.closest(this.options.triggerSelector);
       const relatedTarget = e.relatedTarget;
 
@@ -58,12 +79,46 @@ class TooltipComponent {
       }
     });
 
-    // Event listener para click fuera
+    // Event listener para click - ocultar tooltip inmediatamente
     document.addEventListener('click', e => {
-      if (this.tooltip && !this.tooltip.contains(e.target)) {
+      // Ocultar tooltip en cualquier breakpoint al hacer clic
+      this.hideTooltip();
+    });
+
+    // Event listener para mousedown - ocultar tooltip
+    document.addEventListener('mousedown', e => {
+      // Ocultar tooltip en cualquier breakpoint al hacer mousedown
+      this.hideTooltip();
+    });
+
+    // Event listener para ocultar tooltip al cambiar breakpoint
+    window.addEventListener('resize', () => {
+      // Si cambiamos a tablet/móvil, ocultar tooltip y deshabilitar
+      if (!this.isActiveInCurrentBreakpoint()) {
         this.hideTooltip();
+        this.isInitialized = false; // Permitir reinicialización si vuelve a desktop
       }
     });
+  }
+
+  /**
+   * Verifica si el componente está activo en el breakpoint actual
+   * @returns {boolean}
+   */
+  isActiveInCurrentBreakpoint() {
+    const breakpoints = ComponentConfig.TOOLTIP.BREAKPOINTS;
+    const width = window.innerWidth;
+    const isActive = width >= breakpoints.DESKTOP_MIN;
+
+    // Log en desarrollo para debugging
+    if (ComponentConfig.getEnvironmentConfig().isDevelopment) {
+      console.log(
+        `TooltipComponent: Ancho=${width}px, DesktopMin=${breakpoints.DESKTOP_MIN}px, Activo=${isActive}`
+      );
+    }
+
+    // Solo activo en desktop (>1024px)
+    return isActive;
   }
 
   /**
@@ -71,6 +126,11 @@ class TooltipComponent {
    * @param {HTMLElement} target - Elemento target
    */
   scheduleShow(target) {
+    // Verificación adicional antes de programar
+    if (!this.isActiveInCurrentBreakpoint()) {
+      return;
+    }
+
     this.clearTimeouts();
 
     this.showTimeout = setTimeout(() => {
@@ -82,6 +142,11 @@ class TooltipComponent {
    * Programa ocultar el tooltip con delay
    */
   scheduleHide() {
+    // Verificación adicional antes de programar
+    if (!this.isActiveInCurrentBreakpoint()) {
+      return;
+    }
+
     this.clearTimeouts();
 
     // Usar hideDelay desde configuración
@@ -111,6 +176,16 @@ class TooltipComponent {
    * @param {HTMLElement} target - Elemento target
    */
   showTooltip(target) {
+    // Verificación estricta antes de mostrar
+    if (!this.isActiveInCurrentBreakpoint()) {
+      if (ComponentConfig.getEnvironmentConfig().isDevelopment) {
+        console.log(
+          'TooltipComponent: No mostrar tooltip - no estamos en desktop'
+        );
+      }
+      return;
+    }
+
     const texto = target.getAttribute('data-tooltip');
     if (!texto) return;
 

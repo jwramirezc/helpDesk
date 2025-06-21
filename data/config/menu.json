@@ -24,7 +24,7 @@
       },
       {
         "id": "menu_consultas",
-        "label": "Consultas",
+        "label": "hola",
         "icon": "fas fa-search",
         "type": "item",
         "target": "consultas.html"
@@ -50,8 +50,8 @@
         "label": "Configuración",
         "icon": "fas fa-cog",
         "type": "submenu",
-        "openAction": "alert",
-        "message": "Submenú Configuración activado",
+        "popoverPlacement": "right",
+        "popoverOffset": 12,
         "children": [
           {
             "id": "menu_config_usuarios",

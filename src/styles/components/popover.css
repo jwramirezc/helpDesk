@@ -4,7 +4,7 @@
 
 /* Estilos base del popover */
 .rs-popover {
-  position: absolute;
+  position: fixed;
   z-index: var(--z-index-popover);
   display: none;
   padding: 12px;
@@ -30,33 +30,26 @@
   width: 0;
   height: 0;
   border-style: solid;
+  /* Posicionamiento dinámico via JavaScript */
 }
 
-/* Posicionamiento de flecha para diferentes placements */
+/* Estilos de flecha para diferentes placements */
 .placement-bottom .rs-popover-arrow {
-  top: -8px;
-  left: 20px;
   border-width: 0 8px 8px 8px;
   border-color: transparent transparent #fff transparent;
 }
 
 .placement-top .rs-popover-arrow {
-  bottom: -8px;
-  left: 20px;
   border-width: 8px 8px 0 8px;
   border-color: #fff transparent transparent transparent;
 }
 
 .placement-left .rs-popover-arrow {
-  right: -8px;
-  top: 20px;
   border-width: 8px 0 8px 8px;
   border-color: transparent transparent transparent #fff;
 }
 
 .placement-right .rs-popover-arrow {
-  left: -8px;
-  top: 20px;
   border-width: 8px 8px 8px 0;
   border-color: transparent #fff transparent transparent;
 }

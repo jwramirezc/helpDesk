@@ -47,6 +47,9 @@ class MenuItem {
     this.target = config.target || '';
     this.openAction = config.openAction || '';
     this.message = config.message || '';
+    // Propiedades específicas para popover
+    this.popoverPlacement = config.popoverPlacement || '';
+    this.popoverOffset = config.popoverOffset || null;
     this.parent = parent;
     this.children = (config.children || []).map(
       child => new MenuItem(child, this)

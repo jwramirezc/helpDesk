@@ -33,6 +33,9 @@ const ComponentConfig = BaseConfig.extend({
       PLACEMENT_PREFIX: 'tooltip-',
       ARROW_PLACEMENT_PREFIX: 'tooltip-arrow-',
     },
+    BREAKPOINTS: {
+      DESKTOP_MIN: 1025, // Solo activo en desktop (>1024px)
+    },
   },
 
   // Configuración de PopoverComponent
@@ -44,6 +47,21 @@ const ComponentConfig = BaseConfig.extend({
       autoClose: true,
       closeOnClickOutside: true,
       closeOnResize: true,
+      forcePlacement: null,
+    },
+    SUBMENU: {
+      DEFAULT_PLACEMENT: 'bottom',
+      DEFAULT_OFFSET: 8,
+      PLACEMENTS_BY_MENU_POSITION: {
+        top: 'bottom',
+        bottom: 'top',
+        left: 'right',
+        right: 'left',
+      },
+      CUSTOM_PLACEMENTS: {
+        menu_reportes: 'right',
+        menu_consultas: 'left',
+      },
     },
     PLACEMENTS: {
       TOP: 'top',

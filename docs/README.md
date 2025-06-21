@@ -6,40 +6,25 @@ Sistema de portal de ayuda y soporte técnico con interfaz moderna y responsive.
 
 ```
 /
-├── public/                 # Archivos públicos servidos al navegador
-│   ├── index.html         # Página principal
-│   ├── favicon.ico        # Icono del sitio
-│   └── images/            # Imágenes estáticas
-│       ├── logo-saia-dark.png
-│       ├── logo-saia-light.png
-│       ├── logo-saia.png
-│       └── avatar1.png
-├── src/                   # Código fuente
-│   ├── js/               # JavaScript
-│   │   ├── controllers/  # Controladores de la aplicación
-│   │   ├── services/     # Servicios y managers
-│   │   ├── views/        # Vistas y componentes de UI
-│   │   ├── utils/        # Utilidades y helpers
-│   │   ├── models/       # Modelos de datos
-│   │   └── main.js       # Archivo principal de la aplicación
-│   ├── components/       # Componentes HTML
-│   └── styles/           # Estilos CSS
-│       ├── main.css
-│       ├── components.css
-│       ├── app.css
-│       ├── layout.css
-│       └── utilities.css
-├── data/                 # Datos y configuraciones
-│   ├── config/           # Archivos de configuración
-│   │   ├── default-config.json
-│   │   ├── menu.json
-│   │   ├── temas.json
-│   │   └── notificationes.json
-│   └── i18n/             # Internacionalización
-│       ├── en.json
-│       └── es.json
-├── config.js             # Configuración inicial
-└── README.md             # Este archivo
+├── 📁 data/                    # Datos y configuraciones
+│   ├── 📁 config/             # Archivos JSON de configuración
+│   └── 📁 i18n/               # Internacionalización
+├── 📁 docs/                   # Documentación del proyecto
+├── 📁 public/                 # Archivos públicos
+│   └── 📁 images/             # Imágenes estáticas
+├── 📁 src/                    # Código fuente
+│   ├── 📁 js/                 # JavaScript
+│   │   ├── 📁 config/         # Configuración centralizada
+│   │   ├── 📁 components/     # Componentes reutilizables
+│   │   ├── 📁 controllers/    # Controladores de lógica
+│   │   ├── 📁 models/         # Modelos de datos
+│   │   ├── 📁 services/       # Servicios y managers
+│   │   ├── 📁 utils/          # Utilidades y helpers
+│   │   ├── 📁 views/          # Vistas de la aplicación
+│   │   └── main.js            # Punto de entrada
+│   ├── 📁 styles/             # Estilos CSS
+│   └── 📁 views/              # Vistas HTML (duplicado)
+└── index.html                 # Página principal
 ```
 
 ## Características
@@ -113,3 +98,48 @@ Para desarrollar nuevas funcionalidades:
 2. Utiliza los servicios existentes para la lógica de negocio
 3. Mantén la separación entre controladores, vistas y modelos
 4. Documenta los cambios en este README
+
+"Necesito un componente de notificaciones que:
+
+- Categoría: Componente reutilizable
+- Dependencias: ConfigService, I18nService
+- Configuración: Usar componentConfig.js para opciones por defecto
+- Responsabilidades: Mostrar notificaciones, gestionar estado, no debe manejar lógica de negocio
+- Debe seguir el patrón de ThemeComponent.js"
+
+"Necesito una vista de reportes avanzados que:
+
+- Categoría: Vista específica
+- Dependencias: ControladorContenido, MenuService
+- Configuración: Usar viewConfig.js para opciones
+- Responsabilidades: Mostrar reportes, no debe manejar datos directamente
+- Debe seguir el patrón de HelpDeskView.js"
+
+"Necesito un servicio de autenticación que:
+
+- Categoría: Servicio de lógica de negocio
+- Dependencias: ConfigService, LocalStorageHelper
+- Configuración: Usar appConfig.js para opciones
+- Responsabilidades: Gestionar autenticación, no debe manejar UI
+- Debe seguir el patrón de MenuService.js"
+
+"Crear [NombreComponente] que:
+
+1. Extienda la funcionalidad de [ComponenteExistente]
+2. Use [ConfigEspecífica] de componentConfig.js
+3. Siga el patrón de [ComponenteReferencia]
+4. Se integre con [ServiciosNecesarios]"
+
+"Crear [NombreServicio] que:
+
+1. Siga el patrón de [ServicioExistente]
+2. Use [ConfigEspecífica] de appConfig.js
+3. Se integre con [ServiciosExistentes]
+4. Maneje [ResponsabilidadesEspecíficas]"
+
+"Crear [NombreVista] que:
+
+1. Siga el patrón de [VistaExistente]
+2. Use [ConfigEspecífica] de viewConfig.js
+3. Se integre con [ControladoresExistentes]
+4. Renderice [ContenidoEspecífico]"

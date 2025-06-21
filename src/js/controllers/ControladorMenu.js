@@ -62,44 +62,70 @@ class ControladorMenu {
 
   async cargarMenu() {
     try {
-      // Limpiar estado activo al cargar inicialmente
-      this.menuService.limpiarEstadoActivo();
+      console.time('ControladorMenu: Carga completa del menú');
 
-      // Obtener elementos del menú desde MenuService
+      // Cargar datos del menú
+      console.time('ControladorMenu: Carga de datos');
       this.menuItems = await this.menuService.getMenuItems();
+      console.timeEnd('ControladorMenu: Carga de datos');
 
-      // Obtener logos desde el tema actual
-      const logoPath = this.temaHelper.obtenerLogoTemaActual();
-      const logoMovilPath = this.temaHelper.obtenerLogoMovilTemaActual();
+      // Renderizar menú
+      console.time('ControladorMenu: Renderizado');
+      this.menuView.render(
+        this.menuItems,
+        this.temaHelper.obtenerLogoTemaActual(),
+        this.temaHelper.obtenerLogoMovilTemaActual()
+      );
+      console.timeEnd('ControladorMenu: Renderizado');
 
-      // Renderizar vista a través de MenuView
-      this.menuView.render(this.menuItems, logoPath, logoMovilPath);
-
-      // Actualizar ícono del tema según el tema actual
-      this.actualizarIconoTema();
-
-      // Inicializar servicio de popovers para tablets
-      await this.menuPopoverService.initialize();
-
-      // Agregar eventos
+      // Agregar eventos después de renderizar
+      console.time('ControladorMenu: Eventos');
       this.agregarEventos();
+      console.timeEnd('ControladorMenu: Eventos');
 
-      // Inicializar comportamiento del toggle
-      this.manejarCambioTamanio();
+      // Actualizar estado inicial
+      console.time('ControladorMenu: Estado inicial');
+      await this.actualizarEstadoInicial();
+      console.timeEnd('ControladorMenu: Estado inicial');
 
-      // Actualizar la vista para reflejar los estados activos
-      this.actualizarVistaMenu();
-
-      // Log de éxito solo en desarrollo
-      if (
-        window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1'
-      ) {
-        console.log('ControladorMenu: Menú cargado correctamente');
+      // Inicializar servicio de popovers de forma lazy (solo cuando sea necesario)
+      if (this.menuPopoverService && this.isActiveInCurrentBreakpoint()) {
+        console.time('ControladorMenu: Inicialización popovers');
+        console.log('ControladorMenu: Inicializando MenuPopoverService...');
+        await this.menuPopoverService.initialize();
+        console.timeEnd('ControladorMenu: Inicialización popovers');
+      } else {
+        console.log(
+          'ControladorMenu: MenuPopoverService no inicializado - breakpoint no activo o servicio no disponible'
+        );
+        console.log(
+          'ControladorMenu: Breakpoint activo:',
+          this.isActiveInCurrentBreakpoint()
+        );
+        console.log(
+          'ControladorMenu: MenuPopoverService disponible:',
+          !!this.menuPopoverService
+        );
       }
+
+      // Agregar event listener para inicializar popovers cuando cambie el breakpoint
+      this.setupPopoverLazyInitialization();
+
+      console.timeEnd('ControladorMenu: Carga completa del menú');
+      console.log('ControladorMenu: Menú cargado correctamente');
     } catch (error) {
-      console.error('Error al cargar el menú:', error);
+      console.error('ControladorMenu: Error al cargar menú:', error);
     }
+  }
+
+  /**
+   * Verifica si el componente está activo en el breakpoint actual
+   * @returns {boolean}
+   */
+  isActiveInCurrentBreakpoint() {
+    const breakpoints = MenuConfig.BREAKPOINTS;
+    const width = window.innerWidth;
+    return width >= breakpoints.TABLET_MIN && width <= breakpoints.TABLET_MAX;
   }
 
   actualizarIconoTema() {
@@ -200,8 +226,6 @@ class ControladorMenu {
   async handleMenuItemClick(menuItem, isMobile = false) {
     const id = isMobile ? menuItem.id.replace('mobile_', '') : menuItem.id;
     const type = menuItem.dataset.type;
-    const action = menuItem.dataset.action;
-    const message = menuItem.dataset.message;
     const target = menuItem.dataset.target;
 
     if (id === 'menu_theme') {
@@ -209,11 +233,10 @@ class ControladorMenu {
       return;
     }
 
-    // Si es un submenú con acción alert, mostrar el mensaje
-    if (type === 'submenu' && action === 'alert') {
+    // Si es un submenú, simplemente activar el item
+    if (type === 'submenu') {
       // Activar solo Configuración y desactivar los demás
       await this.activarSoloItem(id);
-      alert(message);
       return;
     }
 
@@ -613,5 +636,61 @@ class ControladorMenu {
         domValid: false,
       };
     }
+  }
+
+  /**
+   * Actualiza el estado inicial del menú
+   */
+  async actualizarEstadoInicial() {
+    try {
+      // Limpiar estado activo al cargar inicialmente
+      this.menuService.limpiarEstadoActivo();
+
+      // Actualizar ícono del tema según el tema actual
+      this.actualizarIconoTema();
+
+      // Inicializar comportamiento del toggle
+      this.manejarCambioTamanio();
+
+      // Actualizar la vista para reflejar los estados activos
+      this.actualizarVistaMenu();
+
+      // Log de éxito solo en desarrollo
+      if (MenuConfig.getEnvironmentConfig().isDevelopment) {
+        console.log('ControladorMenu: Estado inicial actualizado');
+      }
+    } catch (error) {
+      console.error(
+        'ControladorMenu: Error al actualizar estado inicial:',
+        error
+      );
+    }
+  }
+
+  /**
+   * Configura la inicialización lazy de popovers cuando se cambie a breakpoint de tablet
+   */
+  setupPopoverLazyInitialization() {
+    if (!this.menuPopoverService) return;
+
+    // Event listener para cambios de tamaño de ventana
+    const handleResize = () => {
+      if (
+        this.isActiveInCurrentBreakpoint() &&
+        !this.menuPopoverService.isInitialized
+      ) {
+        console.log(
+          'ControladorMenu: Inicializando popovers por cambio de breakpoint'
+        );
+        this.menuPopoverService.initializeLazy();
+      }
+    };
+
+    // Usar debounce para evitar múltiples llamadas
+    let resizeTimeout;
+    window.addEventListener('resize', () => {
+      clearTimeout(resizeTimeout);
+      resizeTimeout = setTimeout(handleResize, 250);
+    });
   }
 }

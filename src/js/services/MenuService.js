@@ -15,8 +15,7 @@ class MenuService {
 
   /**
    * Devuelve los items del menú (top & bottom).
-   * El archivo solo se carga la primera vez; las siguientes
-   * llamadas reutilizan el resultado ('caching' en memoria).
+   * El archivo se carga directamente desde el servidor cada vez.
    * @returns {Promise<{top: Array<MenuItem>, bottom: Array<MenuItem>}>}
    */
   async getMenuItems() {
@@ -25,81 +24,84 @@ class MenuService {
     // Usar AppConfig para obtener la ruta del menú
     const menuPath = AppConfig.PATHS.MENU_JSON;
 
-    this._menuPromise = fetch(menuPath)
-      .then(resp => {
-        if (!resp.ok) {
-          throw new Error(
-            `Error al cargar ${menuPath}: ${resp.status} ${resp.statusText}`
-          );
-        }
-        return resp.json();
-      })
-      .then(json => {
-        // Validar estructura del menú usando MenuValidator
-        if (typeof MenuValidator !== 'undefined') {
-          const validation = MenuValidator.validateMenuStructure(json);
-          if (!validation.isValid) {
-            console.warn(
-              'MenuService: Errores en estructura del menú:',
-              validation.errors
-            );
-            if (validation.warnings.length > 0) {
-              console.warn(
-                'MenuService: Advertencias en estructura del menú:',
-                validation.warnings
-              );
-            }
-          }
-
-          // Verificar duplicados
-          const duplicates = MenuValidator.findDuplicateIds(json);
-          if (duplicates.length > 0) {
-            console.warn(
-              'MenuService: IDs duplicados encontrados:',
-              duplicates
-            );
-          }
-
-          // Verificar targets rotos
-          const brokenTargets = MenuValidator.findBrokenTargets(json);
-          if (brokenTargets.length > 0) {
-            console.warn(
-              'MenuService: Targets potencialmente rotos:',
-              brokenTargets
-            );
-          }
-        }
-
-        const menuItems = json.menuItems || { top: [], bottom: [] };
-
-        const result = {
-          top: menuItems.top.map(item => new MenuItem(item)),
-          bottom: menuItems.bottom.map(item => new MenuItem(item)),
-        };
-
-        // Restaurar estado activo
-        this.restoreActiveState(result);
-
-        return result;
-      })
-      .catch(err => {
-        console.error('MenuService: Error al cargar menú:', err);
-        // Valor por defecto minimalista para no romper la UI
-        return {
-          top: [
-            new MenuItem({
-              id: 'menu_home',
-              label: 'Home',
-              icon: 'fas fa-home',
-              type: 'item',
-              target: AppConfig.getViewPath('home'),
-            }),
-          ],
-          bottom: [],
-        };
-      });
-
+    this._menuPromise = this.loadMenuFromServer(menuPath);
     return this._menuPromise;
+  }
+
+  /**
+   * Carga el menú directamente desde el servidor sin cache
+   * @param {string} menuPath - Ruta del archivo menu.json
+   * @returns {Promise<{top: Array<MenuItem>, bottom: Array<MenuItem>}>}
+   */
+  async loadMenuFromServer(menuPath) {
+    try {
+      // Cargar directamente desde servidor
+      console.log('MenuService: Cargando desde servidor (sin cache)');
+      const response = await fetch(menuPath);
+      if (!response.ok) {
+        throw new Error(
+          `Error al cargar ${menuPath}: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const json = await response.json();
+      return this.processMenuData(json);
+    } catch (error) {
+      console.error('MenuService: Error al cargar menú:', error);
+
+      // Valor por defecto minimalista para no romper la UI
+      return {
+        top: [
+          new MenuItem({
+            id: 'menu_home',
+            label: 'Home',
+            icon: 'fas fa-home',
+            type: 'item',
+            target: AppConfig.getViewPath('home'),
+          }),
+        ],
+        bottom: [],
+      };
+    }
+  }
+
+  /**
+   * Procesa los datos del menú y crea los MenuItems
+   * @param {Object} json - Datos del menú
+   * @returns {{top: Array<MenuItem>, bottom: Array<MenuItem>}}
+   */
+  processMenuData(json) {
+    // Validación simplificada para mejorar rendimiento
+    if (!json.menuItems) {
+      console.warn('MenuService: Estructura de menú inválida');
+      return { top: [], bottom: [] };
+    }
+
+    // Validar estructura solo en desarrollo
+    if (
+      typeof MenuValidator !== 'undefined' &&
+      AppConfig.getEnvironmentConfig().isDevelopment
+    ) {
+      const validation = MenuValidator.validateMenuStructure(json);
+      if (!validation.isValid) {
+        console.warn(
+          'MenuService: Errores en estructura del menú:',
+          validation.errors
+        );
+      }
+    }
+
+    const menuItems = json.menuItems || { top: [], bottom: [] };
+
+    const result = {
+      top: menuItems.top.map(item => new MenuItem(item)),
+      bottom: menuItems.bottom.map(item => new MenuItem(item)),
+    };
+
+    // Restaurar estado activo
+    this.restoreActiveState(result);
+
+    return result;
   }
 
   /**
@@ -405,11 +407,12 @@ class MenuService {
   }
 
   /**
-   * Limpia el caché del menú (útil para forzar recarga)
+   * Limpia el cache en memoria y fuerza una nueva carga
    */
   clearCache() {
+    // Limpiar promesa en memoria para forzar nueva carga
     this._menuPromise = null;
-    console.log('MenuService: Caché limpiado');
+    console.log('MenuService: Cache en memoria limpiado');
   }
 
   /**
@@ -467,5 +470,16 @@ class MenuService {
   async itemExists(itemId) {
     const item = await this.findItemById(itemId);
     return item !== null;
+  }
+
+  /**
+   * Obtiene los items del menú de forma síncrona (si están en caché)
+   * @returns {Object|null} Items del menú o null si no están disponibles
+   */
+  getMenuItemsSync() {
+    if (this._menuPromise && this._menuPromise._value) {
+      return this._menuPromise._value;
+    }
+    return null;
   }
 }
