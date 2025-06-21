@@ -2,6 +2,8 @@
 @import 'utilities/utilities.css';
 @import 'components/components.css';
 @import 'components/app.css';
+@import 'components/menu.css';
+@import 'components/popover.css';
 @import 'layout/layout.css';
 
 /* Global styles */

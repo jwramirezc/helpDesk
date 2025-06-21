@@ -1,49 +1,17 @@
 /**
- * Configuración centralizada del sistema de menús
+ * Configuración específica del sistema de menús
  *
- * Este archivo contiene todas las constantes y configuraciones
- * relacionadas con el sistema de menús para facilitar el mantenimiento.
+ * Este archivo extiende la configuración base con configuraciones
+ * específicas del sistema de menús.
  */
-const MenuConfig = {
-  // Configuración de breakpoints
-  BREAKPOINTS: {
-    MOBILE: 768,
-    TABLET: 1024,
-    DESKTOP: 1200,
-    SMALL: 576,
-    MEDIUM: 992,
-  },
-
-  // Configuración de animaciones
-  ANIMATIONS: {
-    DURATION: 300,
-    EASING: 'ease-in-out',
-  },
-
-  // Configuración de storage
-  STORAGE: {
-    ACTIVE_ITEM_KEY: 'activeMenuItem',
-    ACTIVE_PARENT_KEY: 'activeParentMenuItem',
-    NAVIGATION_FLAG: 'hasNavigated',
-  },
-
-  // Configuración de validación
+const MenuConfig = BaseConfig.extend({
+  // Configuración específica de validación del menú
   VALIDATION: {
     REQUIRED_FIELDS: ['id', 'label', 'type'],
     VALID_TYPES: ['item', 'submenu'],
-    MAX_DEPTH: 3, // Máximo nivel de anidación
-    MAX_ITEMS_PER_SECTION: 20,
   },
 
-  // Configuración de eventos
-  EVENTS: {
-    CLICK: 'click',
-    RESIZE: 'resize',
-    TOUCHSTART: 'touchstart',
-    TOUCHEND: 'touchend',
-  },
-
-  // Configuración de clases CSS
+  // Configuración específica de clases CSS del menú
   CSS_CLASSES: {
     MENU_ITEM: 'menu-item',
     MOBILE_MENU_ITEM: 'mobile-menu-item',
@@ -53,7 +21,7 @@ const MenuConfig = {
     MOBILE_BACK_BUTTON: 'mobile-back-button',
   },
 
-  // Configuración de selectores DOM
+  // Configuración específica de selectores DOM del menú
   SELECTORS: {
     SIDEBAR: '#sidebar',
     MOBILE_MENU: '.mobile-menu',
@@ -62,7 +30,15 @@ const MenuConfig = {
     MOBILE_MENU_CLOSE: '.mobile-menu-close',
   },
 
-  // Configuración de mensajes
+  // Configuración específica de dimensiones del menú
+  DIMENSIONS: {
+    MENU_ITEM_SIZE: 50, // px
+    MENU_ITEM_ICON_SIZE: 1.5, // rem
+    TOOLTIP_OFFSET: 10, // px
+    TOOLTIP_ARROW_OFFSET: 4, // px
+  },
+
+  // Configuración específica de mensajes del menú
   MESSAGES: {
     ERRORS: {
       MENU_LOAD_FAILED: 'Error al cargar el menú',
@@ -76,85 +52,40 @@ const MenuConfig = {
     },
   },
 
-  // Configuración de desarrollo
-  DEVELOPMENT: {
-    DEBUG_MODE:
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1',
-    LOG_LEVEL: 'warn', // 'debug', 'info', 'warn', 'error'
-    VALIDATE_ON_LOAD: true,
-  },
-
-  // Configuración de dimensiones específicas del menú
-  DIMENSIONS: {
-    MENU_ITEM_SIZE: 50, // px
-    MENU_ITEM_ICON_SIZE: 1.5, // rem
-    TOOLTIP_OFFSET: 10, // px
-    TOOLTIP_ARROW_OFFSET: 4, // px
-  },
-
-  // Configuración de límites específicos del menú
-  LIMITS: {
-    MAX_SUBMENU_ITEMS: 10,
-    MAX_LOGS_TO_KEEP: 10,
-    FAST_OPERATION_THRESHOLD: 10, // ms
-  },
-
-  // Configuración de rutas específicas del menú
-  PATHS: {
-    DEFAULT_AVATAR: 'public/images/avatar1.png',
-  },
-
-  /**
-   * Obtiene la configuración según el entorno
-   * @returns {Object}
-   */
-  getEnvironmentConfig() {
-    return {
-      isDevelopment: this.DEVELOPMENT.DEBUG_MODE,
-      isProduction: !this.DEVELOPMENT.DEBUG_MODE,
-      logLevel: this.DEVELOPMENT.LOG_LEVEL,
-    };
-  },
-
-  /**
-   * Verifica si estamos en modo móvil
-   * @returns {boolean}
-   */
-  isMobile() {
-    return window.innerWidth <= this.BREAKPOINTS.MOBILE;
-  },
-
-  /**
-   * Obtiene el breakpoint actual
-   * @returns {string}
-   */
-  getCurrentBreakpoint() {
-    const width = window.innerWidth;
-    if (width <= this.BREAKPOINTS.MOBILE) return 'mobile';
-    if (width <= this.BREAKPOINTS.TABLET) return 'tablet';
-    if (width <= this.BREAKPOINTS.DESKTOP) return 'desktop';
-    return 'large';
-  },
-
   /**
    * Obtiene una dimensión específica del menú
    * @param {string} dimensionName - Nombre de la dimensión
    * @returns {number}
    */
-  getDimension(dimensionName) {
+  getMenuDimension(dimensionName) {
     return this.DIMENSIONS[dimensionName.toUpperCase()] || 0;
   },
 
   /**
-   * Obtiene un límite específico del menú
-   * @param {string} limitName - Nombre del límite
-   * @returns {number}
+   * Verifica si un ítem del menú es válido
+   * @param {Object} item - Ítem del menú
+   * @returns {boolean}
    */
-  getLimit(limitName) {
-    return this.LIMITS[limitName.toUpperCase()] || 0;
+  isValidMenuItem(item) {
+    if (!item) return false;
+
+    return this.VALIDATION.REQUIRED_FIELDS.every(
+      field =>
+        item.hasOwnProperty(field) &&
+        item[field] !== null &&
+        item[field] !== undefined
+    );
   },
-};
+
+  /**
+   * Verifica si un tipo de menú es válido
+   * @param {string} type - Tipo de menú
+   * @returns {boolean}
+   */
+  isValidMenuType(type) {
+    return this.VALIDATION.VALID_TYPES.includes(type);
+  },
+});
 
 // Exportar para uso global
 window.MenuConfig = MenuConfig;

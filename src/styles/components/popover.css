@@ -1,0 +1,176 @@
+/* ========================================
+   COMPONENTE POPOVER REUTILIZABLE
+   ======================================== */
+
+/* Estilos base del popover */
+.rs-popover {
+  position: absolute;
+  z-index: var(--z-index-popover);
+  display: none;
+  padding: 12px;
+  background-color: #fff;
+  border-radius: 6px;
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.2);
+  font-size: 14px;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+  opacity: 0;
+  min-width: 200px;
+  max-width: 300px;
+  border: 1px solid var(--border-color, #e0e0e0);
+}
+
+.rs-popover.visible {
+  display: block;
+  opacity: 1;
+}
+
+/* Flecha del popover */
+.rs-popover-arrow {
+  position: absolute;
+  width: 0;
+  height: 0;
+  border-style: solid;
+}
+
+/* Posicionamiento de flecha para diferentes placements */
+.placement-bottom .rs-popover-arrow {
+  top: -8px;
+  left: 20px;
+  border-width: 0 8px 8px 8px;
+  border-color: transparent transparent #fff transparent;
+}
+
+.placement-top .rs-popover-arrow {
+  bottom: -8px;
+  left: 20px;
+  border-width: 8px 8px 0 8px;
+  border-color: #fff transparent transparent transparent;
+}
+
+.placement-left .rs-popover-arrow {
+  right: -8px;
+  top: 20px;
+  border-width: 8px 0 8px 8px;
+  border-color: transparent transparent transparent #fff;
+}
+
+.placement-right .rs-popover-arrow {
+  left: -8px;
+  top: 20px;
+  border-width: 8px 8px 8px 0;
+  border-color: transparent #fff transparent transparent;
+}
+
+/* Contenido del popover */
+.rs-popover-content {
+  padding: 8px 0;
+}
+
+.rs-popover-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 12px;
+  cursor: pointer;
+  border-radius: 4px;
+  transition: background-color 0.2s ease;
+  color: var(--text-color, #333);
+  text-decoration: none;
+}
+
+.rs-popover-item:hover {
+  background-color: var(--hover-color, #e9ecef);
+}
+
+.rs-popover-item.active {
+  background-color: var(--primary-color, #007bff);
+  color: white;
+}
+
+.rs-popover-item i {
+  font-size: 1rem;
+  width: 16px;
+  text-align: center;
+}
+
+.rs-popover-item span {
+  flex: 1;
+  font-size: 14px;
+  font-weight: 500;
+}
+
+/* Separador entre elementos */
+.rs-popover-separator {
+  height: 1px;
+  background-color: var(--border-color, #e0e0e0);
+  margin: 4px 0;
+}
+
+/* Responsive para tablets */
+@media (min-width: 769px) and (max-width: 1024px) {
+  .rs-popover {
+    min-width: 180px;
+    max-width: 250px;
+    font-size: 13px;
+  }
+
+  .rs-popover-item {
+    padding: 6px 10px;
+  }
+
+  .rs-popover-item i {
+    font-size: 0.9rem;
+  }
+
+  .rs-popover-item span {
+    font-size: 13px;
+  }
+}
+
+/* Animaciones */
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.rs-popover.visible {
+  animation: popoverFadeIn 0.15s ease-out;
+}
+
+/* Estados especiales */
+.rs-popover.disabled {
+  opacity: 0.6;
+  pointer-events: none;
+}
+
+.rs-popover.loading {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  min-height: 60px;
+}
+
+.rs-popover.loading::after {
+  content: '';
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--border-color, #e0e0e0);
+  border-top: 2px solid var(--primary-color, #007bff);
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}

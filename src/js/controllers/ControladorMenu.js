@@ -24,6 +24,9 @@ class ControladorMenu {
     // Flag para controlar si estamos en un submenú
     this.isInSubmenu = false;
 
+    // Servicio de popovers para tablets
+    this.menuPopoverService = new MenuPopoverService(this.menuService);
+
     // Inicializar debugging en modo desarrollo
     if (typeof MenuDebugger !== 'undefined' && AppConfig.isDevelopment()) {
       this.debugger = new MenuDebugger(this);
@@ -74,6 +77,9 @@ class ControladorMenu {
 
       // Actualizar ícono del tema según el tema actual
       this.actualizarIconoTema();
+
+      // Inicializar servicio de popovers para tablets
+      await this.menuPopoverService.initialize();
 
       // Agregar eventos
       this.agregarEventos();
@@ -500,6 +506,11 @@ class ControladorMenu {
       if (this.mobileMenu) {
         this.mobileMenu.classList.remove('active');
       }
+    }
+
+    // Actualizar servicio de popovers para tablets
+    if (this.menuPopoverService) {
+      this.menuPopoverService.updatePopovers();
     }
   }
 

@@ -130,7 +130,7 @@
 @media (max-width: 767px) {
   .mobile-menu-item {
     padding: 1rem;
-    border-bottom: 1px solid var(--border-color, #e0e0e0);
+    border-bottom: none;
   }
 
   .mobile-menu-item:last-child {
