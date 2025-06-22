@@ -49,7 +49,6 @@ class App {
     // Inicializar PopoverComponent primero
     if (typeof PopoverComponent !== 'undefined') {
       window.popoverComponent = new PopoverComponent();
-      console.log('PopoverComponent inicializado');
     } else {
       console.error('PopoverComponent no está disponible');
     }

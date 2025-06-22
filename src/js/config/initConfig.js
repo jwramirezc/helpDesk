@@ -44,7 +44,6 @@ class InitConfig {
 
     // Si ya existe una configuración previa, no la sobre-escribimos
     if (localStorage.getItem('config')) {
-      console.log('Configuración existente detectada; se mantiene.');
       this.isInitialized = true;
       return;
     }

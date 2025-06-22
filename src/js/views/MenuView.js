@@ -45,13 +45,6 @@ class MenuView {
 
     // Mobile menu
     this._renderMobileMenu(menuItems, logoMovilPath);
-
-    // Log para debugging
-    console.log('MenuView: Menús renderizados correctamente', {
-      desktopItems: menuItems.top.length + menuItems.bottom.length,
-      mobileView: this.currentMobileView,
-      isMobile: this.isMobile,
-    });
   }
 
   /**

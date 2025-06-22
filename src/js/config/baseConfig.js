@@ -36,7 +36,7 @@ const BaseConfig = {
     DEBUG_MODE:
       window.location.hostname === 'localhost' ||
       window.location.hostname === '127.0.0.1',
-    LOG_LEVEL: 'warn', // 'debug', 'info', 'warn', 'error'
+    LOG_LEVEL: 'error', // 'debug', 'info', 'warn', 'error'
     VALIDATE_ON_LOAD: true,
   },
 
@@ -179,7 +179,7 @@ const BaseConfig = {
    * @param {any} data - Datos adicionales
    */
   log(componentName, message, data = null) {
-    if (this.isDevelopment()) {
+    if (this.isDevelopment() && this.DEVELOPMENT.LOG_LEVEL === 'debug') {
       if (data) {
         console.log(`${componentName}: ${message}`, data);
       } else {

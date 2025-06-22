@@ -31,7 +31,6 @@ class HeaderPopoverService {
       }
 
       this.isInitialized = true;
-      console.log('HeaderPopoverService: Inicializado correctamente');
     } catch (error) {
       console.error('HeaderPopoverService: Error al inicializar:', error);
     }
@@ -48,10 +47,6 @@ class HeaderPopoverService {
 
     const buttonsWithSubmenus =
       this.headerConfigService.getButtonsWithSubmenus();
-
-    console.log(
-      `HeaderPopoverService: Creando popovers para ${buttonsWithSubmenus.length} botones`
-    );
 
     for (const button of buttonsWithSubmenus) {
       await this.createPopoverForButton(button);
@@ -112,17 +107,6 @@ class HeaderPopoverService {
         trigger.classList.add('popover-trigger');
         trigger.dataset.popoverId = popoverId;
         trigger.dataset.popoverPlacement = placement;
-
-        console.log(
-          `HeaderPopoverService: Trigger configurado para ${button.id}:`,
-          {
-            id: trigger.id,
-            classes: trigger.className,
-            popoverId: trigger.dataset.popoverId,
-            placement: trigger.dataset.popoverPlacement,
-            offset: offset,
-          }
-        );
       } else {
         console.warn(
           `HeaderPopoverService: Trigger no encontrado para ${button.id}`
@@ -137,10 +121,6 @@ class HeaderPopoverService {
         placement: placement,
         offset: offset,
       });
-
-      console.log(
-        `HeaderPopoverService: Popover creado para ${button.id} con placement: ${placement}`
-      );
     } catch (error) {
       console.error(
         `HeaderPopoverService: Error al crear popover para ${button.id}:`,
@@ -157,9 +137,6 @@ class HeaderPopoverService {
   determineButtonPlacement(button) {
     // 1. Verificar configuración específica del botón
     if (button.popover?.placement) {
-      console.log(
-        `HeaderPopoverService: Usando placement del botón ${button.id}: ${button.popover.placement}`
-      );
       return button.popover.placement;
     }
 
@@ -173,9 +150,6 @@ class HeaderPopoverService {
     };
 
     const placement = defaultPlacements[button.id] || 'bottom';
-    console.log(
-      `HeaderPopoverService: Usando placement por defecto para ${button.id}: ${placement}`
-    );
     return placement;
   }
 
@@ -206,10 +180,6 @@ class HeaderPopoverService {
       'PLACEMENT_PREFIX'
     );
     popover.classList.add(`${placementPrefix}${placement}`);
-
-    console.log(
-      `HeaderPopoverService: Popover configurado con placement: ${placement}, offset: ${offset}`
-    );
   }
 
   /**

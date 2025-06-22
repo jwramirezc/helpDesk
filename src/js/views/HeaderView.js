@@ -31,8 +31,6 @@ class HeaderView {
       await this.headerPopoverService.initialize();
 
       this.isInitialized = true;
-
-      ComponentConfig.log('HeaderView', 'Vista inicializada correctamente');
     } catch (error) {
       ComponentConfig.logError(
         'HeaderView',
@@ -110,15 +108,6 @@ class HeaderView {
     if (this.headerPopoverService) {
       await this.headerPopoverService.createPopoversForHeaderButtons();
     }
-
-    ComponentConfig.log('HeaderView', 'Header renderizado', {
-      user: usuario.nombre,
-      role: userRole,
-      elements: elements.length,
-      buttons: this.headerConfigService.getEnabledButtons(userRole).length,
-      buttonsWithSubmenus:
-        this.headerConfigService.getButtonsWithSubmenus().length,
-    });
   }
 
   /**

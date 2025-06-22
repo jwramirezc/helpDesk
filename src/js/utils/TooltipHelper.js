@@ -14,28 +14,12 @@ class TooltipHelper {
     const width = window.innerWidth;
     const isActive = width >= 1025; // Desktop mínimo
 
-    // Log en desarrollo para debugging
-    if (
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1'
-    ) {
-      console.log(
-        `TooltipHelper: Ancho=${width}px, DesktopMin=1025px, Activo=${isActive}`
-      );
-    }
-
     return isActive;
   }
 
   inicializarTooltips() {
     // Solo inicializar en desktop
     if (!this.isActiveInCurrentBreakpoint()) {
-      if (
-        window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1'
-      ) {
-        console.log('TooltipHelper: No inicializando - no estamos en desktop');
-      }
       return;
     }
 
@@ -83,26 +67,11 @@ class TooltipHelper {
     });
 
     this.isInitialized = true;
-
-    if (
-      window.location.hostname === 'localhost' ||
-      window.location.hostname === '127.0.0.1'
-    ) {
-      console.log('TooltipHelper: Inicializado en desktop');
-    }
   }
 
   mostrarTooltip(elemento) {
     // Verificación estricta antes de mostrar
     if (!this.isActiveInCurrentBreakpoint()) {
-      if (
-        window.location.hostname === 'localhost' ||
-        window.location.hostname === '127.0.0.1'
-      ) {
-        console.log(
-          'TooltipHelper: No mostrar tooltip - no estamos en desktop'
-        );
-      }
       return;
     }
 

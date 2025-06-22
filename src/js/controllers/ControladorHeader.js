@@ -37,11 +37,6 @@ class ControladorHeader {
       this.headerPopoverService = this.headerView.headerPopoverService;
 
       this.isInitialized = true;
-
-      ComponentConfig.log(
-        'ControladorHeader',
-        'Controlador inicializado correctamente'
-      );
     } catch (error) {
       ComponentConfig.logError(
         'ControladorHeader',
@@ -64,19 +59,6 @@ class ControladorHeader {
 
     try {
       await this.headerView.render(usuario, tieneNotificaciones, t);
-
-      ComponentConfig.log(
-        'ControladorHeader',
-        'Header renderizado correctamente',
-        {
-          usuario: usuario.nombre,
-          tieneNotificaciones,
-          botonesHabilitados:
-            this.headerConfigService.getEnabledButtons().length,
-          botonesConSubmenus:
-            this.headerConfigService.getButtonsWithSubmenus().length,
-        }
-      );
     } catch (error) {
       ComponentConfig.logError(
         'ControladorHeader',
@@ -100,14 +82,6 @@ class ControladorHeader {
     }
 
     this.headerView.updateNotificationsState(tieneNotificaciones);
-
-    ComponentConfig.log(
-      'ControladorHeader',
-      'Estado de notificaciones actualizado',
-      {
-        tieneNotificaciones,
-      }
-    );
   }
 
   /**
@@ -218,17 +192,9 @@ class ControladorHeader {
     document.addEventListener('header:submenu-action', event => {
       const { action, itemId, buttonId } = event.detail;
 
-      ComponentConfig.log('ControladorHeader', 'Acción de submenú recibida', {
-        action,
-        itemId,
-        buttonId,
-      });
-
       // Aquí puedes implementar lógica específica del controlador
       // para manejar las acciones de submenús
     });
-
-    ComponentConfig.log('ControladorHeader', 'Event listeners configurados');
   }
 
   /**

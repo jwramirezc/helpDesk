@@ -27,16 +27,6 @@ class HeaderConfigService {
       this.config = await response.json();
       this.isLoaded = true;
 
-      ComponentConfig.log(
-        'HeaderConfigService',
-        'Configuración del header cargada',
-        {
-          version: this.config.version,
-          buttonsCount: this.config.buttons?.length || 0,
-          userFieldsCount: this.config.userInfo?.fields?.length || 0,
-        }
-      );
-
       return true;
     } catch (error) {
       ComponentConfig.logError(
@@ -54,9 +44,6 @@ class HeaderConfigService {
    */
   setUserRole(role) {
     this.userRole = role;
-    ComponentConfig.log('HeaderConfigService', 'Rol de usuario establecido', {
-      role,
-    });
   }
 
   /**

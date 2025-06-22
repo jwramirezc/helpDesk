@@ -14,8 +14,6 @@ class HomeView {
   init() {
     if (this.isInitialized) return;
 
-    console.log('HomeView: Inicializando vista home');
-
     // Cargar datos del usuario
     this.cargarDatosUsuario();
 
@@ -95,8 +93,6 @@ class HomeView {
     this.agregarEventoNavegacion('navigateToPQRS', 'menu_pqrs');
     this.agregarEventoNavegacion('navigateToConsultas', 'menu_consultas');
     this.agregarEventoNavegacion('navigateToReportes', 'menu_reportes');
-
-    console.log('HomeView: Eventos inicializados');
   }
 
   /**
@@ -120,7 +116,6 @@ class HomeView {
       const menuItem = document.getElementById(menuId);
       if (menuItem) {
         menuItem.click();
-        console.log(`HomeView: Navegando a ${menuId}`);
       } else {
         console.warn(`HomeView: No se encontró el ítem del menú: ${menuId}`);
       }

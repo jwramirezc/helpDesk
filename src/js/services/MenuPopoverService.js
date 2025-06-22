@@ -19,63 +19,47 @@ class MenuPopoverService {
     try {
       // Verificar si ya está inicializado
       if (this.isInitialized) {
-        console.log('MenuPopoverService: Ya inicializado');
         return;
       }
 
       // Verificar si estamos en el breakpoint correcto
       if (!this.isActiveInCurrentBreakpoint()) {
-        console.log('MenuPopoverService: No activo en este breakpoint');
         return;
       }
 
-      console.time('MenuPopoverService: Inicialización');
-
       // Inicializar componente popover si no existe
       if (!this.popoverComponent) {
-        console.time('MenuPopoverService: Creación componente');
-        this.popoverComponent = new PopoverComponent({
-          triggerSelector: ComponentConfig.getDefaultOption(
-            'POPOVER',
-            'triggerSelector'
-          ),
-          placement: ComponentConfig.getDefaultOption('POPOVER', 'placement'),
-          offset: ComponentConfig.getDefaultOption('POPOVER', 'offset'),
-          autoClose: ComponentConfig.getDefaultOption('POPOVER', 'autoClose'),
-          closeOnClickOutside: ComponentConfig.getDefaultOption(
-            'POPOVER',
-            'closeOnClickOutside'
-          ),
-          closeOnResize: ComponentConfig.getDefaultOption(
-            'POPOVER',
-            'closeOnResize'
-          ),
-        });
-        console.timeEnd('MenuPopoverService: Creación componente');
+        // Intentar usar la instancia global primero
+        if (window.popoverComponent) {
+          this.popoverComponent = window.popoverComponent;
+        } else if (typeof PopoverComponent !== 'undefined') {
+          // Crear nueva instancia si no hay global
+          this.popoverComponent = new PopoverComponent({
+            triggerSelector: ComponentConfig.getDefaultOption(
+              'POPOVER',
+              'triggerSelector'
+            ),
+            placement: ComponentConfig.getDefaultOption('POPOVER', 'placement'),
+            offset: ComponentConfig.getDefaultOption('POPOVER', 'offset'),
+            autoClose: ComponentConfig.getDefaultOption('POPOVER', 'autoClose'),
+            closeOnClickOutside: ComponentConfig.getDefaultOption(
+              'POPOVER',
+              'closeOnClickOutside'
+            ),
+            closeOnResize: ComponentConfig.getDefaultOption(
+              'POPOVER',
+              'closeOnResize'
+            ),
+          });
+        } else {
+          throw new Error('PopoverComponent no está disponible');
+        }
       }
 
       // Crear popovers para items con submenús
-      console.time('MenuPopoverService: Creación popovers');
       await this.createPopoversForSubmenus();
-      console.timeEnd('MenuPopoverService: Creación popovers');
 
       this.isInitialized = true;
-
-      console.timeEnd('MenuPopoverService: Inicialización');
-
-      // Log en desarrollo
-      if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-        console.log('MenuPopoverService: Inicializado');
-        console.log(
-          'MenuPopoverService: Breakpoint actual:',
-          MenuConfig.getCurrentBreakpoint()
-        );
-        console.log('MenuPopoverService: Ancho de ventana:', window.innerWidth);
-        console.log(
-          'MenuPopoverService: ¿Activo en breakpoint?',
-          this.isActiveInCurrentBreakpoint()
-        );
-      }
     } catch (error) {
       console.error('MenuPopoverService: Error al inicializar:', error);
     }
@@ -115,29 +99,9 @@ class MenuPopoverService {
       const menuItems = await this.menuService.getMenuItems();
       const submenuItems = await this.menuService.getSubmenuItems();
 
-      // Log en desarrollo
-      if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-        console.log(
-          'MenuPopoverService: Items con submenús encontrados:',
-          submenuItems.length
-        );
-        submenuItems.forEach(item => {
-          console.log(
-            `- ${item.id}: ${item.label} (${item.children.length} hijos)`
-          );
-        });
-      }
-
       // Crear popovers para items con submenús
       for (const item of submenuItems) {
         await this.createPopoverForMenuItem(item);
-      }
-
-      // Log en desarrollo
-      if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-        console.log(
-          `MenuPopoverService: Creados ${submenuItems.length} popovers`
-        );
       }
     } catch (error) {
       console.error('MenuPopoverService: Error al crear popovers:', error);
@@ -151,6 +115,19 @@ class MenuPopoverService {
   async createPopoverForMenuItem(menuItem) {
     if (!menuItem.hasChildren()) {
       return;
+    }
+
+    // Verificar que el popoverComponent esté disponible
+    if (!this.popoverComponent) {
+      // Esperar a que PopoverComponent esté disponible
+      await this.waitForPopoverComponent();
+
+      if (!this.popoverComponent) {
+        console.error(
+          'MenuPopoverService: PopoverComponent no disponible después de esperar'
+        );
+        return;
+      }
     }
 
     const popoverId = `popover_${menuItem.id}`;
@@ -185,20 +162,6 @@ class MenuPopoverService {
         trigger.classList.add('popover-trigger');
         trigger.dataset.popoverId = popoverId;
         trigger.dataset.popoverPlacement = placement;
-
-        // Log en desarrollo
-        if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-          console.log(
-            `MenuPopoverService: Trigger configurado para ${menuItem.id}:`,
-            {
-              id: trigger.id,
-              classes: trigger.className,
-              popoverId: trigger.dataset.popoverId,
-              placement: trigger.dataset.popoverPlacement,
-              offset: offset,
-            }
-          );
-        }
       } else {
         console.warn(
           `MenuPopoverService: Trigger no encontrado para ${menuItem.id}`
@@ -213,18 +176,40 @@ class MenuPopoverService {
         placement: placement,
         offset: offset,
       });
-
-      // Log en desarrollo
-      if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-        console.log(
-          `MenuPopoverService: Popover creado para ${menuItem.id} con placement: ${placement}`
-        );
-      }
     } catch (error) {
       console.error(
         `MenuPopoverService: Error al crear popover para ${menuItem.id}:`,
         error
       );
+    }
+  }
+
+  /**
+   * Espera a que PopoverComponent esté disponible
+   */
+  async waitForPopoverComponent() {
+    let attempts = 0;
+    const maxAttempts = 20; // 2 segundos máximo
+
+    while (!this.popoverComponent && attempts < maxAttempts) {
+      await new Promise(resolve => setTimeout(resolve, 100));
+      attempts++;
+
+      // Intentar usar la instancia global
+      if (window.popoverComponent) {
+        this.popoverComponent = window.popoverComponent;
+        break;
+      }
+
+      // Intentar crear nueva instancia
+      if (typeof PopoverComponent !== 'undefined') {
+        try {
+          this.popoverComponent = new PopoverComponent();
+          break;
+        } catch (error) {
+          // Continuar intentando
+        }
+      }
     }
   }
 
@@ -236,31 +221,14 @@ class MenuPopoverService {
   determineSubmenuPlacement(menuItem) {
     const submenuConfig = ComponentConfig.POPOVER.SUBMENU;
 
-    // Log de debugging para verificar las propiedades
-    console.log(
-      `MenuPopoverService: Verificando placement para ${menuItem.id}:`,
-      {
-        popoverPlacement: menuItem.popoverPlacement,
-        popoverOffset: menuItem.popoverOffset,
-        hasCustomPlacement: !!submenuConfig.CUSTOM_PLACEMENTS[menuItem.id],
-        customPlacement: submenuConfig.CUSTOM_PLACEMENTS[menuItem.id],
-      }
-    );
-
     // 1. Verificar configuración personalizada por ID
     if (submenuConfig.CUSTOM_PLACEMENTS[menuItem.id]) {
       const placement = submenuConfig.CUSTOM_PLACEMENTS[menuItem.id];
-      console.log(
-        `MenuPopoverService: Usando placement personalizado para ${menuItem.id}: ${placement}`
-      );
       return placement;
     }
 
     // 2. Verificar configuración en el item del menú
     if (menuItem.popoverPlacement) {
-      console.log(
-        `MenuPopoverService: Usando placement del item ${menuItem.id}: ${menuItem.popoverPlacement}`
-      );
       return menuItem.popoverPlacement;
     }
 
@@ -270,24 +238,15 @@ class MenuPopoverService {
       // Buscar en qué sección está el item
       if (menuItems.top.some(item => item.id === menuItem.id)) {
         const placement = submenuConfig.PLACEMENTS_BY_MENU_POSITION.top;
-        console.log(
-          `MenuPopoverService: Usando placement por posición (top) para ${menuItem.id}: ${placement}`
-        );
         return placement;
       } else if (menuItems.bottom.some(item => item.id === menuItem.id)) {
         const placement = submenuConfig.PLACEMENTS_BY_MENU_POSITION.bottom;
-        console.log(
-          `MenuPopoverService: Usando placement por posición (bottom) para ${menuItem.id}: ${placement}`
-        );
         return placement;
       }
     }
 
     // 4. Usar placement por defecto
     const placement = submenuConfig.DEFAULT_PLACEMENT;
-    console.log(
-      `MenuPopoverService: Usando placement por defecto para ${menuItem.id}: ${placement}`
-    );
     return placement;
   }
 
@@ -325,13 +284,6 @@ class MenuPopoverService {
       'PLACEMENT_PREFIX'
     );
     popover.classList.add(`${placementPrefix}${placement}`);
-
-    // Log en desarrollo
-    if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-      console.log(
-        `MenuPopoverService: Popover configurado con placement: ${placement}, offset: ${offset}`
-      );
-    }
   }
 
   /**
@@ -348,12 +300,6 @@ class MenuPopoverService {
       } else if (item.type === 'submenu') {
         // Para submenús, simplemente cerrar el popover
         // El comportamiento específico se maneja en el trigger principal
-        console.log(`MenuPopoverService: Submenú clickeado: ${item.id}`);
-      }
-
-      // Log en desarrollo
-      if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-        console.log(`MenuPopoverService: Item clickeado: ${item.id}`);
       }
     } catch (error) {
       console.error('MenuPopoverService: Error al manejar click:', error);
@@ -388,11 +334,6 @@ class MenuPopoverService {
 
       // Recrear popovers
       await this.createPopoversForSubmenus();
-
-      // Log en desarrollo
-      if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-        console.log('MenuPopoverService: Popovers actualizados');
-      }
     } catch (error) {
       console.error('MenuPopoverService: Error al actualizar popovers:', error);
     }
@@ -438,11 +379,6 @@ class MenuPopoverService {
     }
 
     this.isInitialized = false;
-
-    // Log en desarrollo
-    if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-      console.log('MenuPopoverService: Destruido');
-    }
   }
 }
 

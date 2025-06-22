@@ -52,8 +52,6 @@ class ControladorContenido {
    */
   async cargarVista(vista) {
     try {
-      console.log('Cargando vista:', vista);
-
       // 1. Cargar el HTML usando AppConfig
       const viewPath = AppConfig.getViewPath(vista);
       const response = await fetch(viewPath);
@@ -89,8 +87,6 @@ class ControladorContenido {
    * @param {string} vista - Nombre de la vista
    */
   async cargarCSSVista(vista) {
-    console.log(`ControladorContenido: Cargando CSS para vista: ${vista}`);
-
     // Remover CSS anterior si existe
     if (this.cssCargado) {
       const linkAnterior = document.querySelector(
@@ -98,15 +94,11 @@ class ControladorContenido {
       );
       if (linkAnterior) {
         linkAnterior.remove();
-        console.log(
-          `ControladorContenido: CSS anterior removido: ${this.cssCargado}`
-        );
       }
     }
 
     // Cargar nuevo CSS usando AppConfig
     const stylePath = AppConfig.getStylePath(vista);
-    console.log(`ControladorContenido: Ruta CSS: ${stylePath}`);
 
     const link = document.createElement('link');
     link.rel = 'stylesheet';
@@ -119,21 +111,16 @@ class ControladorContenido {
       if (response.ok) {
         document.head.appendChild(link);
         this.cssCargado = vista;
-        console.log(
-          `ControladorContenido: CSS cargado exitosamente para vista: ${vista}`
-        );
       } else {
         console.warn(
           `ControladorContenido: CSS no encontrado para vista ${vista}, usando estilos por defecto`
         );
-        console.warn(`ControladorContenido: Ruta intentada: ${stylePath}`);
       }
     } catch (error) {
       console.error(
         `ControladorContenido: Error al cargar CSS para vista ${vista}:`,
         error
       );
-      console.error(`ControladorContenido: Ruta intentada: ${stylePath}`);
     }
   }
 
@@ -145,22 +132,14 @@ class ControladorContenido {
     // Usar configuración centralizada de ViewConfig
     const nombreClase = ViewConfig.VIEW_CLASSES[vista];
 
-    console.log(
-      `ControladorContenido: Cargando vista JS: ${vista} -> ${nombreClase}`
-    );
-
     if (nombreClase && window[nombreClase]) {
       try {
         // Limpiar vista anterior si existe
         if (this.vistaActual && this.vistaActual.destruir) {
-          console.log(
-            `ControladorContenido: Destruyendo vista anterior: ${this.vistaActual.constructor.name}`
-          );
           this.vistaActual.destruir();
         }
 
         // Crear nueva instancia
-        console.log(`ControladorContenido: Instanciando ${nombreClase}`);
         this.vistaActual = new window[nombreClase]();
 
         // Inicializar la vista si tiene método init
@@ -168,15 +147,7 @@ class ControladorContenido {
           this.vistaActual.init &&
           typeof this.vistaActual.init === 'function'
         ) {
-          console.log(`ControladorContenido: Inicializando ${nombreClase}`);
           await this.vistaActual.init();
-          console.log(
-            `ControladorContenido: Vista ${nombreClase} inicializada correctamente`
-          );
-        } else {
-          console.log(
-            `ControladorContenido: Vista ${nombreClase} no tiene método init`
-          );
         }
       } catch (error) {
         console.error(

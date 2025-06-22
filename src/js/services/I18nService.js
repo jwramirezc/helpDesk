@@ -42,9 +42,6 @@ class I18nService {
       this.translations = await resp.json();
       this.isLoaded = true;
 
-      console.log(
-        `I18nService: Traducciones cargadas para idioma: ${this.currentLang}`
-      );
       return true;
     } catch (err) {
       console.error('I18nService: Error al cargar traducciones:', err);

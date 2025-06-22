@@ -36,7 +36,6 @@ class MenuService {
   async loadMenuFromServer(menuPath) {
     try {
       // Cargar directamente desde servidor
-      console.log('MenuService: Cargando desde servidor (sin cache)');
       const response = await fetch(menuPath);
       if (!response.ok) {
         throw new Error(

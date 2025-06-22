@@ -62,57 +62,29 @@ class ControladorMenu {
 
   async cargarMenu() {
     try {
-      console.time('ControladorMenu: Carga completa del menú');
-
       // Cargar datos del menú
-      console.time('ControladorMenu: Carga de datos');
       this.menuItems = await this.menuService.getMenuItems();
-      console.timeEnd('ControladorMenu: Carga de datos');
 
       // Renderizar menú
-      console.time('ControladorMenu: Renderizado');
       this.menuView.render(
         this.menuItems,
         this.temaHelper.obtenerLogoTemaActual(),
         this.temaHelper.obtenerLogoMovilTemaActual()
       );
-      console.timeEnd('ControladorMenu: Renderizado');
 
       // Agregar eventos después de renderizar
-      console.time('ControladorMenu: Eventos');
       this.agregarEventos();
-      console.timeEnd('ControladorMenu: Eventos');
 
       // Actualizar estado inicial
-      console.time('ControladorMenu: Estado inicial');
       await this.actualizarEstadoInicial();
-      console.timeEnd('ControladorMenu: Estado inicial');
 
       // Inicializar servicio de popovers de forma lazy (solo cuando sea necesario)
       if (this.menuPopoverService && this.isActiveInCurrentBreakpoint()) {
-        console.time('ControladorMenu: Inicialización popovers');
-        console.log('ControladorMenu: Inicializando MenuPopoverService...');
         await this.menuPopoverService.initialize();
-        console.timeEnd('ControladorMenu: Inicialización popovers');
-      } else {
-        console.log(
-          'ControladorMenu: MenuPopoverService no inicializado - breakpoint no activo o servicio no disponible'
-        );
-        console.log(
-          'ControladorMenu: Breakpoint activo:',
-          this.isActiveInCurrentBreakpoint()
-        );
-        console.log(
-          'ControladorMenu: MenuPopoverService disponible:',
-          !!this.menuPopoverService
-        );
       }
 
       // Agregar event listener para inicializar popovers cuando cambie el breakpoint
       this.setupPopoverLazyInitialization();
-
-      console.timeEnd('ControladorMenu: Carga completa del menú');
-      console.log('ControladorMenu: Menú cargado correctamente');
     } catch (error) {
       console.error('ControladorMenu: Error al cargar menú:', error);
     }
@@ -214,7 +186,9 @@ class ControladorMenu {
 
     // Manejar cambios de tamaño de ventana
     window.addEventListener('resize', () => {
-      this.manejarCambioTamanio();
+      this.manejarCambioTamanio().catch(error => {
+        console.error('Error al manejar cambio de tamaño:', error);
+      });
     });
   }
 
@@ -510,7 +484,7 @@ class ControladorMenu {
   }
 
   // Método para manejar cambios de tamaño de ventana
-  manejarCambioTamanio() {
+  async manejarCambioTamanio() {
     const isMobile = window.innerWidth <= MenuConfig.BREAKPOINTS.MOBILE;
 
     if (isMobile) {
@@ -533,7 +507,17 @@ class ControladorMenu {
 
     // Actualizar servicio de popovers para tablets
     if (this.menuPopoverService) {
-      this.menuPopoverService.updatePopovers();
+      // Verificar que PopoverComponent esté disponible antes de actualizar
+      if (window.popoverComponent || typeof PopoverComponent !== 'undefined') {
+        await this.menuPopoverService.updatePopovers();
+      } else {
+        // Si no está disponible, programar la actualización para más tarde
+        setTimeout(async () => {
+          if (this.menuPopoverService) {
+            await this.menuPopoverService.updatePopovers();
+          }
+        }, 500);
+      }
     }
   }
 
@@ -571,9 +555,6 @@ class ControladorMenu {
           vistaName = id.replace('menu_', '');
         }
 
-        console.log(
-          `Cargando vista: ${vistaName} para el ítem: ${id} (target: ${menuItem.target})`
-        );
         await this.controladorContenido.cargarVista(vistaName);
         return;
       }
@@ -654,11 +635,6 @@ class ControladorMenu {
 
       // Actualizar la vista para reflejar los estados activos
       this.actualizarVistaMenu();
-
-      // Log de éxito solo en desarrollo
-      if (MenuConfig.getEnvironmentConfig().isDevelopment) {
-        console.log('ControladorMenu: Estado inicial actualizado');
-      }
     } catch (error) {
       console.error(
         'ControladorMenu: Error al actualizar estado inicial:',
@@ -679,9 +655,6 @@ class ControladorMenu {
         this.isActiveInCurrentBreakpoint() &&
         !this.menuPopoverService.isInitialized
       ) {
-        console.log(
-          'ControladorMenu: Inicializando popovers por cambio de breakpoint'
-        );
         this.menuPopoverService.initializeLazy();
       }
     };

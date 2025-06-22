@@ -25,9 +25,6 @@ class PopoverComponent {
    */
   init() {
     this.setupEventListeners();
-
-    // Log de inicialización usando configuración centralizada
-    ComponentConfig.log('PopoverComponent', 'Inicializado');
   }
 
   /**
@@ -116,7 +113,7 @@ class PopoverComponent {
   }
 
   /**
-   * Muestra un popover
+   * Muestra un popover específico
    * @param {HTMLElement} popover - Elemento popover
    * @param {HTMLElement} trigger - Elemento trigger
    */
@@ -124,25 +121,19 @@ class PopoverComponent {
     // Ocultar popover activo si existe
     this.hideActivePopover();
 
-    // Guardar referencias
-    this.activePopover = popover;
-    this.activeTrigger = trigger;
-
-    // Mostrar el popover primero para que tenga dimensiones
+    // Mostrar el nuevo popover
     const visibleClass = ComponentConfig.getCSSClass('POPOVER', 'VISIBLE');
     popover.classList.add(visibleClass);
 
-    // Forzar reflow para asegurar que las dimensiones estén disponibles
-    popover.offsetHeight;
+    // Actualizar referencias
+    this.activePopover = popover;
+    this.activeTrigger = trigger;
 
     // Posicionar el popover después de que tenga dimensiones
     this.positionPopover(popover, trigger);
 
     // Asegurar posicionamiento correcto después de que el DOM se estabilice
     this.ensureCorrectPositioning(popover, trigger);
-
-    // Log en desarrollo usando configuración centralizada
-    ComponentConfig.log('PopoverComponent', 'Popover mostrado', popover.id);
   }
 
   /**
@@ -157,9 +148,6 @@ class PopoverComponent {
       this.activePopover = null;
       this.activeTrigger = null; // Limpiar referencia al trigger
     }
-
-    // Log en desarrollo usando configuración centralizada
-    ComponentConfig.log('PopoverComponent', 'Popover ocultado', popover.id);
   }
 
   /**
@@ -186,34 +174,18 @@ class PopoverComponent {
     // 1. Verificar si el popover tiene configuración específica
     if (popover.dataset.placement) {
       placement = popover.dataset.placement;
-      ComponentConfig.log(
-        'PopoverComponent',
-        `Usando placement específico: ${placement}`
-      );
     }
     // 2. Verificar si el trigger tiene configuración específica
     else if (trigger.dataset.popoverPlacement) {
       placement = trigger.dataset.popoverPlacement;
-      ComponentConfig.log(
-        'PopoverComponent',
-        `Usando placement del trigger: ${placement}`
-      );
     }
     // 3. Usar placement forzado global
     else if (this.options.forcePlacement) {
       placement = this.options.forcePlacement;
-      ComponentConfig.log(
-        'PopoverComponent',
-        `Usando placement forzado: ${placement}`
-      );
     }
     // 4. Calcular placement óptimo automáticamente
     else {
       placement = this.calculateOptimalPlacement(triggerRect, popoverRect);
-      ComponentConfig.log(
-        'PopoverComponent',
-        `Usando placement calculado: ${placement}`
-      );
     }
 
     // Aplicar clases de placement usando configuración
@@ -321,12 +293,6 @@ class PopoverComponent {
     // Aplicar posición de la flecha
     arrow.style.top = `${arrowTop}px`;
     arrow.style.left = `${arrowLeft}px`;
-
-    // Log para debugging
-    ComponentConfig.log(
-      'PopoverComponent',
-      `Flecha posicionada: top=${arrowTop}px, left=${arrowLeft}px, placement=${placement}`
-    );
   }
 
   /**
@@ -337,15 +303,6 @@ class PopoverComponent {
     const validPlacements = ['top', 'bottom', 'left', 'right'];
     if (validPlacements.includes(placement)) {
       this.options.forcePlacement = placement;
-      ComponentConfig.log(
-        'PopoverComponent',
-        `Placement forzado establecido: ${placement}`
-      );
-    } else {
-      ComponentConfig.logError(
-        'PopoverComponent',
-        `Placement inválido: ${placement}`
-      );
     }
   }
 
@@ -354,7 +311,6 @@ class PopoverComponent {
    */
   clearForcePlacement() {
     this.options.forcePlacement = null;
-    ComponentConfig.log('PopoverComponent', 'Placement forzado limpiado');
   }
 
   /**
@@ -491,9 +447,6 @@ class PopoverComponent {
     this.triggers = [];
     this.activePopover = null;
     this.activeTrigger = null; // Limpiar referencia al trigger
-
-    // Log en desarrollo usando configuración centralizada
-    ComponentConfig.log('PopoverComponent', 'Destruido');
   }
 }
 
