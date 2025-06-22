@@ -32,8 +32,8 @@ class HeaderConfigService {
         'Configuración del header cargada',
         {
           version: this.config.version,
-          buttonsCount: this.config.structure?.buttons?.items?.length || 0,
-          userFieldsCount: this.config.structure?.userInfo?.fields?.length || 0,
+          buttonsCount: this.config.buttons?.length || 0,
+          userFieldsCount: this.config.userInfo?.fields?.length || 0,
         }
       );
 
@@ -72,7 +72,7 @@ class HeaderConfigService {
    * @returns {Array} Array de botones
    */
   getButtons() {
-    return this.config?.structure?.buttons?.items || [];
+    return this.config?.buttons || [];
   }
 
   /**
@@ -80,7 +80,7 @@ class HeaderConfigService {
    * @returns {Array} Array de campos
    */
   getUserInfoFields() {
-    return this.config?.structure?.userInfo?.fields || [];
+    return this.config?.userInfo?.fields || [];
   }
 
   /**
@@ -88,7 +88,7 @@ class HeaderConfigService {
    * @returns {Object} Configuración del avatar
    */
   getUserAvatarConfig() {
-    return this.config?.structure?.userAvatar || {};
+    return this.config?.userAvatar || {};
   }
 
   /**
@@ -96,7 +96,7 @@ class HeaderConfigService {
    * @returns {Object} Configuración de información del usuario
    */
   getUserInfoConfig() {
-    return this.config?.structure?.userInfo || {};
+    return this.config?.userInfo || {};
   }
 
   /**
@@ -107,8 +107,14 @@ class HeaderConfigService {
    */
   hasPermission(buttonId, userRole = null) {
     const role = userRole || this.userRole;
-    const rolePermissions = this.config?.permissions?.roles[role] || [];
-    return rolePermissions.includes(buttonId);
+    const button = this.getButton(buttonId);
+
+    if (!button || !button.permissions) {
+      return true; // Sin restricciones si no hay configuración
+    }
+
+    const allowedRoles = button.permissions.roles || [];
+    return allowedRoles.includes(role);
   }
 
   /**
@@ -122,6 +128,64 @@ class HeaderConfigService {
     return this.getButtons()
       .filter(button => button.enabled && this.hasPermission(button.id, role))
       .sort((a, b) => a.order - b.order);
+  }
+
+  /**
+   * Obtiene los botones habilitados para móvil
+   * @param {string} userRole - Rol del usuario (opcional)
+   * @returns {Array} Array de botones habilitados para móvil
+   */
+  getEnabledButtonsForMobile(userRole = null) {
+    const role = userRole || this.userRole;
+
+    return this.getButtons()
+      .filter(
+        button =>
+          button.enabled &&
+          this.hasPermission(button.id, role) &&
+          button.movil !== false // Mostrar si movil es true o undefined
+      )
+      .sort((a, b) => a.order - b.order);
+  }
+
+  /**
+   * Obtiene los botones habilitados para desktop
+   * @param {string} userRole - Rol del usuario (opcional)
+   * @returns {Array} Array de botones habilitados para desktop
+   */
+  getEnabledButtonsForDesktop(userRole = null) {
+    const role = userRole || this.userRole;
+
+    return this.getButtons()
+      .filter(button => button.enabled && this.hasPermission(button.id, role))
+      .sort((a, b) => a.order - b.order);
+  }
+
+  /**
+   * Verifica si un botón debe mostrarse en móvil
+   * @param {string} buttonId - ID del botón
+   * @returns {boolean} True si debe mostrarse en móvil
+   */
+  isButtonVisibleOnMobile(buttonId) {
+    const button = this.getButton(buttonId);
+    return button ? button.movil !== false : false;
+  }
+
+  /**
+   * Obtiene los breakpoints del header
+   * @returns {Object} Breakpoints del header
+   */
+  getHeaderBreakpoints() {
+    return ComponentConfig.HEADER.BREAKPOINTS;
+  }
+
+  /**
+   * Verifica si el dispositivo actual es móvil
+   * @returns {boolean} True si es móvil
+   */
+  isMobileDevice() {
+    const breakpoints = this.getHeaderBreakpoints();
+    return window.innerWidth <= breakpoints.MOBILE_MAX;
   }
 
   /**
@@ -158,7 +222,225 @@ class HeaderConfigService {
   }
 
   /**
-   * Obtiene información del servicio para debugging
+   * Obtiene la configuración de submenú por defecto
+   * @returns {Object} Configuración de submenú
+   */
+  getSubmenuDefaults() {
+    return this.config?.submenu?.defaults || {};
+  }
+
+  /**
+   * Obtiene los estilos de submenú
+   * @returns {Object} Estilos de submenú
+   */
+  getSubmenuStyles() {
+    return this.config?.submenu?.styles || {};
+  }
+
+  /**
+   * Obtiene el submenú de un botón específico
+   * @param {string} buttonId - ID del botón
+   * @returns {Object|null} Configuración del submenú o null si no existe
+   */
+  getButtonSubmenu(buttonId) {
+    const button = this.getButton(buttonId);
+    if (!button || !button.popover) {
+      return null;
+    }
+
+    const submenu = button.popover.submenu;
+    if (!submenu || !submenu.enabled) {
+      return null;
+    }
+
+    return {
+      ...submenu,
+      items: (submenu.items || [])
+        .filter(item => item.enabled)
+        .sort((a, b) => a.order - b.order),
+    };
+  }
+
+  /**
+   * Obtiene todos los botones que tienen submenús habilitados
+   * @returns {Array} Array de botones con submenús
+   */
+  getButtonsWithSubmenus() {
+    return this.getEnabledButtons().filter(button => {
+      const submenu = this.getButtonSubmenu(button.id);
+      return submenu !== null;
+    });
+  }
+
+  /**
+   * Verifica si un botón tiene submenú habilitado
+   * @param {string} buttonId - ID del botón
+   * @returns {boolean} True si tiene submenú
+   */
+  hasSubmenu(buttonId) {
+    return this.getButtonSubmenu(buttonId) !== null;
+  }
+
+  /**
+   * Convierte los items del submenú al formato esperado por PopoverComponent
+   * @param {string} buttonId - ID del botón
+   * @returns {Array} Array de items en formato del menú
+   */
+  getSubmenuItemsForPopover(buttonId) {
+    const submenu = this.getButtonSubmenu(buttonId);
+    if (!submenu) {
+      return [];
+    }
+
+    return submenu.items.map(item => {
+      // Convertir al formato esperado por PopoverComponent
+      return {
+        id: item.id,
+        label: item.label,
+        icon: item.icon,
+        type: item.type === 'divider' ? 'separator' : 'item',
+        target: item.action, // Usar action como target
+        enabled: item.enabled,
+        order: item.order,
+        // Datos adicionales para el header
+        headerAction: item.action,
+        headerClass: item.class,
+      };
+    });
+  }
+
+  /**
+   * Obtiene las acciones disponibles en submenús
+   * @returns {Array} Array de acciones únicas
+   */
+  getAvailableSubmenuActions() {
+    const actions = new Set();
+
+    this.getButtonsWithSubmenus().forEach(button => {
+      const submenu = this.getButtonSubmenu(button.id);
+      if (submenu) {
+        submenu.items.forEach(item => {
+          if (item.action) {
+            actions.add(item.action);
+          }
+        });
+      }
+    });
+
+    return Array.from(actions);
+  }
+
+  /**
+   * Obtiene un item específico de submenú
+   * @param {string} buttonId - ID del botón
+   * @param {string} itemId - ID del item
+   * @returns {Object|null} Item del submenú o null si no existe
+   */
+  getSubmenuItem(buttonId, itemId) {
+    const submenu = this.getButtonSubmenu(buttonId);
+    if (!submenu) {
+      return null;
+    }
+
+    return submenu.items.find(item => item.id === itemId) || null;
+  }
+
+  /**
+   * Valida la configuración de submenús
+   * @returns {Object} Resultado de la validación
+   */
+  validateSubmenuConfig() {
+    const errors = [];
+    const warnings = [];
+
+    if (!this.config) {
+      errors.push('Configuración no cargada');
+      return { isValid: false, errors, warnings };
+    }
+
+    // Validar configuración de submenú
+    const submenuConfig = this.config.submenu;
+    if (!submenuConfig) {
+      warnings.push('Configuración de submenú no definida');
+      return { isValid: true, errors, warnings };
+    }
+
+    // Validar defaults
+    if (submenuConfig.defaults) {
+      if (
+        submenuConfig.defaults.maxItems &&
+        submenuConfig.defaults.maxItems < 1
+      ) {
+        errors.push('maxItems debe ser mayor a 0');
+      }
+    }
+
+    // Validar submenús de botones
+    this.getButtonsWithSubmenus().forEach(button => {
+      const submenu = this.getButtonSubmenu(button.id);
+      if (submenu) {
+        submenu.items.forEach((item, index) => {
+          if (!item.id) {
+            errors.push(`Submenú de ${button.id}: Item ${index} sin ID`);
+          }
+          if (!item.label && item.type !== 'divider') {
+            errors.push(`Submenú de ${button.id}: Item ${item.id} sin label`);
+          }
+          if (!item.action && item.type !== 'divider') {
+            warnings.push(
+              `Submenú de ${button.id}: Item ${item.id} sin action`
+            );
+          }
+        });
+      }
+    });
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  }
+
+  /**
+   * Valida la configuración de botones móviles
+   * @returns {Object} Resultado de la validación
+   */
+  validateMobileConfig() {
+    const errors = [];
+    const warnings = [];
+
+    if (!this.config) {
+      errors.push('Configuración no cargada');
+      return { isValid: false, errors, warnings };
+    }
+
+    // Validar botones
+    this.getButtons().forEach(button => {
+      // Verificar que la propiedad móvil sea booleana si está definida
+      if (button.movil !== undefined && typeof button.movil !== 'boolean') {
+        errors.push(
+          `Botón ${button.id}: La propiedad 'movil' debe ser true o false`
+        );
+      }
+
+      // Advertencia si no tiene configuración móvil
+      if (button.movil === undefined) {
+        warnings.push(
+          `Botón ${button.id}: No tiene configuración 'movil', se mostrará en todos los dispositivos`
+        );
+      }
+    });
+
+    return {
+      isValid: errors.length === 0,
+      errors,
+      warnings,
+    };
+  }
+
+  /**
+   * Obtiene información del servicio para debugging (actualizada)
    * @returns {Object} Información del servicio
    */
   getServiceInfo() {
@@ -168,10 +450,18 @@ class HeaderConfigService {
       configVersion: this.config?.version,
       totalButtons: this.getButtons().length,
       enabledButtons: this.getEnabledButtons().length,
+      mobileButtons: this.getEnabledButtonsForMobile().length,
+      desktopButtons: this.getEnabledButtonsForDesktop().length,
+      buttonsWithSubmenus: this.getButtonsWithSubmenus().length,
       userFields: this.getUserInfoFields().length,
       enabledUserFields: this.getEnabledUserFields().length,
       hasUserInfo: this.getUserInfoConfig().enabled,
       hasUserAvatar: this.getUserAvatarConfig().enabled,
+      availableSubmenuActions: this.getAvailableSubmenuActions(),
+      submenuDefaults: this.getSubmenuDefaults(),
+      submenuStyles: this.getSubmenuStyles(),
+      isMobileDevice: this.isMobileDevice(),
+      headerBreakpoints: this.getHeaderBreakpoints(),
     };
   }
 

@@ -15,7 +15,7 @@ const AppConfig = {
     MENU_JSON: 'data/config/menu.json',
     DEFAULT_CONFIG: 'data/config/default-config.json',
     TEMAS_JSON: 'data/config/temas.json',
-    NOTIFICACIONES_JSON: 'data/config/notificationes.json',
+    NOTIFICACIONES_JSON: 'data/notificaciones.json',
     STANDARD_BUTTONS_JSON: 'data/config/standard-buttons.json',
     HEADER_CONFIG_JSON: 'data/config/header-config.json',
   },

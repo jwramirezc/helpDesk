@@ -114,6 +114,7 @@
   border: none;
   cursor: pointer;
   transition: transform 0.3s ease;
+  position: relative;
 }
 
 .user-avatar:hover {
@@ -124,6 +125,35 @@
   width: 100%;
   height: 100%;
   object-fit: cover;
+}
+
+/* Icono por defecto del avatar */
+.user-avatar-icon {
+  width: 100%;
+  height: 100%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background-color: #e9ecef;
+  color: #6c757d;
+  font-size: 1.2rem;
+  transition: all 0.3s ease;
+}
+
+.user-avatar:hover .user-avatar-icon {
+  background-color: #dee2e6;
+  color: #495057;
+}
+
+/* Tema oscuro para icono del avatar */
+[data-theme='dark'] .user-avatar-icon {
+  background-color: #495057;
+  color: #adb5bd;
+}
+
+[data-theme='dark'] .user-avatar:hover .user-avatar-icon {
+  background-color: #6c757d;
+  color: #ced4da;
 }
 
 /* Estados especiales */
@@ -177,6 +207,11 @@
   .user-details {
     display: none; /* Ocultar en móvil para ahorrar espacio */
   }
+
+  /* Ocultar botones marcados como no móviles */
+  .header-button-mobile-hidden {
+    display: none !important;
+  }
 }
 
 @media (max-width: 480px) {
@@ -193,6 +228,10 @@
   .user-avatar {
     width: 32px;
     height: 32px;
+  }
+
+  .user-avatar-icon {
+    font-size: 1rem;
   }
 }
 

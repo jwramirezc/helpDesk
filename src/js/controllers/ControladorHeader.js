@@ -1,239 +1,113 @@
 /**
- * Controlador del Header con configuración dinámica
+ * Controlador del Header
  *
- * Este controlador maneja la lógica del header usando la nueva
- * HeaderView con configuración JSON en lugar de datos hardcodeados.
+ * Maneja la lógica de negocio del header y coordina
+ * entre la vista y los servicios.
  */
 class ControladorHeader {
-  constructor(controladorUsuario, i18nService) {
-    this.controladorUsuario = controladorUsuario;
-    this.i18nService = i18nService;
-    this.header = document.getElementById('header');
-
-    // Validar que HeaderView esté disponible
-    if (typeof HeaderView === 'undefined') {
-      console.error('ControladorHeader: HeaderView no está disponible');
-      this.headerView = null;
-    } else {
-      this.headerView = new HeaderView(this.header);
-    }
-
+  constructor() {
+    this.headerView = null;
+    this.headerConfigService = null;
+    this.headerPopoverService = null;
     this.isInitialized = false;
   }
 
   /**
-   * Inicializa el controlador del header
+   * Inicializa el controlador
    */
-  async inicializar() {
+  async initialize() {
+    if (this.isInitialized) return;
+
     try {
-      if (!this.headerView) {
-        console.error(
-          'ControladorHeader: No se puede inicializar sin HeaderView'
-        );
-        return;
+      // Obtener contenedor del header
+      const headerContainer = document.getElementById('header');
+      if (!headerContainer) {
+        throw new Error('Contenedor del header no encontrado (ID: header)');
       }
 
-      // Inicializar la vista del header
+      // Inicializar servicios
+      this.headerConfigService = new HeaderConfigService();
+      await this.headerConfigService.initialize();
+
+      // Inicializar vista
+      this.headerView = new HeaderView(headerContainer);
       await this.headerView.initialize();
 
-      // Cargar el header
-      await this.cargarHeader();
-
-      // Inicializar eventos
-      this.inicializarEventos();
+      // Obtener referencia al servicio de popovers de la vista
+      this.headerPopoverService = this.headerView.headerPopoverService;
 
       this.isInitialized = true;
 
-      console.log('ControladorHeader: Inicializado correctamente');
-    } catch (error) {
-      console.error('ControladorHeader: Error al inicializar:', error);
-    }
-  }
-
-  /**
-   * Carga el header con datos del usuario
-   */
-  async cargarHeader() {
-    if (!this.headerView) {
-      console.error(
-        'ControladorHeader: No se puede cargar header sin HeaderView'
+      ComponentConfig.log(
+        'ControladorHeader',
+        'Controlador inicializado correctamente'
       );
-      return;
-    }
-
-    const usuario = this.controladorUsuario.obtenerUsuarioActual();
-    const tieneNotificaciones = await this.verificarNotificaciones();
-
-    // Pasar función traductora
-    const t = this.i18nService.t.bind(this.i18nService);
-
-    // Renderizar usando la nueva vista con configuración dinámica
-    await this.headerView.render(usuario, tieneNotificaciones, t);
-  }
-
-  /**
-   * Verifica si hay notificaciones pendientes
-   * @returns {Promise<boolean>} True si hay notificaciones
-   */
-  async verificarNotificaciones() {
-    try {
-      // Usar AppConfig para obtener la ruta de notificaciones
-      const response = await fetch(AppConfig.PATHS.NOTIFICACIONES_JSON);
-      const data = await response.json();
-      return data.tieneNotificaciones;
     } catch (error) {
-      console.error('Error al cargar las notificaciones:', error);
-      return false;
+      ComponentConfig.logError(
+        'ControladorHeader',
+        'Error al inicializar controlador',
+        error
+      );
     }
   }
 
   /**
-   * Inicializa los eventos del header
+   * Renderiza el header con datos del usuario
+   * @param {Object} usuario - Datos del usuario
+   * @param {boolean} tieneNotificaciones - Estado de notificaciones
+   * @param {Function} t - Función de traducción
    */
-  inicializarEventos() {
-    if (!this.header) return;
-
-    // Los botones de popover ya son manejados automáticamente por PopoverComponent
-    // Solo necesitamos agregar eventos específicos si es necesario
-
-    // Evento para botón de notificaciones (si existe)
-    const notificationsElement =
-      this.header.querySelector('#btn-notifications');
-    if (notificationsElement) {
-      notificationsElement.addEventListener('click', e => {
-        e.preventDefault();
-        this.mostrarNotificaciones();
-      });
+  async renderHeader(usuario, tieneNotificaciones, t = key => key) {
+    if (!this.isInitialized) {
+      await this.initialize();
     }
 
-    // Evento para botón de tema (si existe)
-    const themeButton = this.header.querySelector('#btn-theme-toggle');
-    if (themeButton) {
-      themeButton.addEventListener('click', e => {
-        e.preventDefault();
-        this.toggleTheme();
-      });
+    try {
+      await this.headerView.render(usuario, tieneNotificaciones, t);
+
+      ComponentConfig.log(
+        'ControladorHeader',
+        'Header renderizado correctamente',
+        {
+          usuario: usuario.nombre,
+          tieneNotificaciones,
+          botonesHabilitados:
+            this.headerConfigService.getEnabledButtons().length,
+          botonesConSubmenus:
+            this.headerConfigService.getButtonsWithSubmenus().length,
+        }
+      );
+    } catch (error) {
+      ComponentConfig.logError(
+        'ControladorHeader',
+        'Error al renderizar header',
+        error
+      );
     }
-
-    // Evento para avatar del usuario (si existe)
-    const userAvatar = this.header.querySelector('.user-avatar');
-    if (userAvatar) {
-      userAvatar.addEventListener('click', e => {
-        e.preventDefault();
-        this.handleUserAvatarClick();
-      });
-    }
-
-    // Evento para información del usuario (si existe)
-    const userDetails = this.header.querySelector('.user-details');
-    if (userDetails) {
-      userDetails.addEventListener('click', e => {
-        e.preventDefault();
-        this.handleUserDetailsClick();
-      });
-    }
-
-    console.log('ControladorHeader: Eventos inicializados');
-  }
-
-  /**
-   * Muestra las notificaciones
-   */
-  mostrarNotificaciones() {
-    console.log('Mostrando notificaciones...');
-
-    // Aquí implementarías la lógica para mostrar notificaciones
-    // Por ejemplo, abrir un modal o navegar a una vista de notificaciones
-
-    // Disparar evento personalizado
-    const event = new CustomEvent('header:notifications-click', {
-      detail: {
-        user: this.controladorUsuario.obtenerUsuarioActual(),
-        hasNotifications: true,
-      },
-    });
-    document.dispatchEvent(event);
-  }
-
-  /**
-   * Cambia el tema de la aplicación
-   */
-  toggleTheme() {
-    console.log('Cambiando tema...');
-
-    // Obtener el tema actual
-    const currentTheme = document.documentElement.getAttribute('data-theme');
-    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
-
-    // Aplicar nuevo tema
-    document.documentElement.setAttribute('data-theme', newTheme);
-
-    // Actualizar icono del botón de tema
-    const themeButton = this.header.querySelector('#btn-theme-toggle');
-    if (themeButton) {
-      const icon = themeButton.querySelector('i');
-      if (icon) {
-        icon.className = newTheme === 'dark' ? 'fas fa-sun' : 'fas fa-moon';
-      }
-    }
-
-    // Disparar evento personalizado
-    const event = new CustomEvent('header:theme-toggle', {
-      detail: { theme: newTheme },
-    });
-    document.dispatchEvent(event);
-  }
-
-  /**
-   * Maneja el click en el avatar del usuario
-   */
-  handleUserAvatarClick() {
-    console.log('Click en avatar del usuario');
-
-    // Disparar evento personalizado
-    const event = new CustomEvent('header:user-avatar-click', {
-      detail: {
-        user: this.controladorUsuario.obtenerUsuarioActual(),
-      },
-    });
-    document.dispatchEvent(event);
-  }
-
-  /**
-   * Maneja el click en la información del usuario
-   */
-  handleUserDetailsClick() {
-    console.log('Click en información del usuario');
-
-    // Disparar evento personalizado
-    const event = new CustomEvent('header:user-details-click', {
-      detail: {
-        user: this.controladorUsuario.obtenerUsuarioActual(),
-      },
-    });
-    document.dispatchEvent(event);
   }
 
   /**
    * Actualiza el estado de notificaciones
    * @param {boolean} tieneNotificaciones - Nuevo estado
    */
-  async actualizarNotificaciones(tieneNotificaciones) {
-    if (this.headerView) {
-      this.headerView.updateNotificationsState(tieneNotificaciones);
+  updateNotificationsState(tieneNotificaciones) {
+    if (!this.isInitialized || !this.headerView) {
+      ComponentConfig.logError(
+        'ControladorHeader',
+        'Controlador no inicializado para actualizar notificaciones'
+      );
+      return;
     }
-  }
 
-  /**
-   * Actualiza la información del usuario
-   * @param {Object} usuario - Nuevos datos del usuario
-   */
-  async actualizarUsuario(usuario) {
-    if (this.headerView) {
-      const tieneNotificaciones = await this.verificarNotificaciones();
-      const t = this.i18nService.t.bind(this.i18nService);
-      await this.headerView.render(usuario, tieneNotificaciones, t);
-    }
+    this.headerView.updateNotificationsState(tieneNotificaciones);
+
+    ComponentConfig.log(
+      'ControladorHeader',
+      'Estado de notificaciones actualizado',
+      {
+        tieneNotificaciones,
+      }
+    );
   }
 
   /**
@@ -243,10 +117,134 @@ class ControladorHeader {
   getControllerState() {
     return {
       isInitialized: this.isInitialized,
-      hasHeader: !!this.header,
-      hasHeaderView: !!this.headerView,
-      headerViewState: this.headerView?.getViewState() || null,
+      hasView: !!this.headerView,
+      hasConfigService: !!this.headerConfigService,
+      hasPopoverService: !!this.headerPopoverService,
+      viewState: this.headerView?.getViewState(),
+      configServiceInfo: this.headerConfigService?.getServiceInfo(),
+      popoverServiceInfo: this.headerPopoverService?.getServiceInfo(),
     };
+  }
+
+  /**
+   * Valida la configuración del header
+   * @returns {Object} Resultado de la validación
+   */
+  validateConfiguration() {
+    if (!this.headerConfigService) {
+      return {
+        isValid: false,
+        errors: ['HeaderConfigService no inicializado'],
+        warnings: [],
+      };
+    }
+
+    return this.headerConfigService.validateConfig();
+  }
+
+  /**
+   * Obtiene botones habilitados para un rol específico
+   * @param {string} userRole - Rol del usuario
+   * @returns {Array} Botones habilitados
+   */
+  getEnabledButtons(userRole) {
+    if (!this.headerConfigService) {
+      return [];
+    }
+
+    return this.headerConfigService.getEnabledButtons(userRole);
+  }
+
+  /**
+   * Obtiene botones con submenús
+   * @returns {Array} Botones con submenús
+   */
+  getButtonsWithSubmenus() {
+    if (!this.headerConfigService) {
+      return [];
+    }
+
+    return this.headerConfigService.getButtonsWithSubmenus();
+  }
+
+  /**
+   * Actualiza la configuración del header
+   * @param {Object} newConfig - Nueva configuración
+   */
+  async updateConfiguration(newConfig) {
+    if (!this.headerConfigService) {
+      ComponentConfig.logError(
+        'ControladorHeader',
+        'HeaderConfigService no inicializado para actualizar configuración'
+      );
+      return;
+    }
+
+    try {
+      // Actualizar configuración
+      this.headerConfigService.updateConfig(newConfig);
+
+      // Actualizar popovers si es necesario
+      if (this.headerPopoverService) {
+        await this.headerPopoverService.updatePopovers();
+      }
+
+      ComponentConfig.log(
+        'ControladorHeader',
+        'Configuración actualizada correctamente'
+      );
+    } catch (error) {
+      ComponentConfig.logError(
+        'ControladorHeader',
+        'Error al actualizar configuración',
+        error
+      );
+    }
+  }
+
+  /**
+   * Escucha eventos de acciones de submenús
+   */
+  setupEventListeners() {
+    if (!this.isInitialized) {
+      ComponentConfig.logError(
+        'ControladorHeader',
+        'Controlador no inicializado para configurar event listeners'
+      );
+      return;
+    }
+
+    // Escuchar eventos de acciones de submenús
+    document.addEventListener('header:submenu-action', event => {
+      const { action, itemId, buttonId } = event.detail;
+
+      ComponentConfig.log('ControladorHeader', 'Acción de submenú recibida', {
+        action,
+        itemId,
+        buttonId,
+      });
+
+      // Aquí puedes implementar lógica específica del controlador
+      // para manejar las acciones de submenús
+    });
+
+    ComponentConfig.log('ControladorHeader', 'Event listeners configurados');
+  }
+
+  /**
+   * Destruye el controlador y limpia recursos
+   */
+  destroy() {
+    if (this.headerPopoverService) {
+      this.headerPopoverService.destroy();
+    }
+
+    this.isInitialized = false;
+    this.headerView = null;
+    this.headerConfigService = null;
+    this.headerPopoverService = null;
+
+    ComponentConfig.log('ControladorHeader', 'Controlador destruido');
   }
 }
 

@@ -1,0 +1,21 @@
+{
+  "tieneNotificaciones": true,
+  "notificaciones": [
+    {
+      "id": 1,
+      "titulo": "Nueva solicitud de soporte",
+      "mensaje": "Se ha creado una nueva solicitud de soporte técnico",
+      "tipo": "info",
+      "fecha": "2024-01-15T10:30:00Z",
+      "leida": false
+    },
+    {
+      "id": 2,
+      "titulo": "Actualización del sistema",
+      "mensaje": "El sistema se actualizará el próximo lunes",
+      "tipo": "warning",
+      "fecha": "2024-01-14T15:45:00Z",
+      "leida": true
+    }
+  ]
+}

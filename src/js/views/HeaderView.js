@@ -11,6 +11,7 @@ class HeaderView {
   constructor(header) {
     this.header = header;
     this.headerConfigService = new HeaderConfigService();
+    this.headerPopoverService = null;
     this.isInitialized = false;
   }
 
@@ -22,6 +23,13 @@ class HeaderView {
 
     try {
       await this.headerConfigService.initialize();
+
+      // Inicializar el servicio de popovers del header
+      this.headerPopoverService = new HeaderPopoverService(
+        this.headerConfigService
+      );
+      await this.headerPopoverService.initialize();
+
       this.isInitialized = true;
 
       ComponentConfig.log('HeaderView', 'Vista inicializada correctamente');
@@ -98,11 +106,18 @@ class HeaderView {
         ${elements.map(el => el.html).join('')}
       </div>`;
 
+    // Crear popovers usando el servicio unificado
+    if (this.headerPopoverService) {
+      await this.headerPopoverService.createPopoversForHeaderButtons();
+    }
+
     ComponentConfig.log('HeaderView', 'Header renderizado', {
       user: usuario.nombre,
       role: userRole,
       elements: elements.length,
       buttons: this.headerConfigService.getEnabledButtons(userRole).length,
+      buttonsWithSubmenus:
+        this.headerConfigService.getButtonsWithSubmenus().length,
     });
   }
 
@@ -191,6 +206,15 @@ class HeaderView {
       classes.push('popover-trigger');
     }
 
+    // Agregar clase para ocultar en móvil si es necesario
+    if (button.movil === false) {
+      const mobileHiddenClass = ComponentConfig.getCSSClass(
+        'HEADER',
+        'MOBILE_HIDDEN'
+      );
+      classes.push(mobileHiddenClass);
+    }
+
     return classes.join(' ');
   }
 
@@ -198,7 +222,7 @@ class HeaderView {
    * Genera el HTML de la información del usuario
    * @param {Object} usuario - Datos del usuario
    * @param {Object} userInfoConfig - Configuración de información del usuario
-   * @returns {string} HTML de información del usuario
+   * @returns {string} HTML de la información del usuario
    */
   generateUserInfoHTML(usuario, userInfoConfig) {
     if (!userInfoConfig?.enabled) {
@@ -206,7 +230,6 @@ class HeaderView {
     }
 
     const fields = this.headerConfigService.getEnabledUserFields();
-
     if (fields.length === 0) {
       return '';
     }
@@ -214,7 +237,7 @@ class HeaderView {
     const fieldsHTML = fields
       .map(field => {
         const value = this.evaluateFieldSource(field.source, usuario);
-        return `<span class="${field.class}">${value}</span>`;
+        return `<div id="${field.id}" class="${field.class}">${value}</div>`;
       })
       .join('');
 
@@ -232,17 +255,34 @@ class HeaderView {
       return '';
     }
 
-    const fallbackImage =
-      avatarConfig.fallbackImage || 'public/images/default-avatar.png';
-    const altText = avatarConfig.altText || 'Avatar';
+    const altText = avatarConfig.altText || 'Avatar del usuario';
+    const defaultIcon = avatarConfig.defaultIcon || 'fas fa-user';
 
-    return `
-      <div class="user-avatar">
-        <img src="${usuario.avatar}" 
-             alt="${altText}"
-             onerror="this.src='${fallbackImage}'">
-      </div>
-    `;
+    // Usar avatar del usuario si existe, sino usar icono por defecto
+    const userAvatar = usuario.avatar;
+
+    if (userAvatar) {
+      // Si hay avatar del usuario, usar imagen
+      return `
+        <div class="user-avatar">
+          <img src="${userAvatar}" 
+               alt="${altText}"
+               onerror="this.onerror=null; this.style.display='none'; this.nextElementSibling.style.display='flex'; console.warn('Avatar no encontrado, usando icono por defecto');">
+          <div class="user-avatar-icon" style="display: none;">
+            <i class="${defaultIcon}"></i>
+          </div>
+        </div>
+      `;
+    } else {
+      // Si no hay avatar, usar icono por defecto
+      return `
+        <div class="user-avatar">
+          <div class="user-avatar-icon">
+            <i class="${defaultIcon}"></i>
+          </div>
+        </div>
+      `;
+    }
   }
 
   /**
@@ -314,6 +354,7 @@ class HeaderView {
       isInitialized: this.isInitialized,
       hasContainer: !!this.header,
       serviceInfo: this.headerConfigService.getServiceInfo(),
+      popoverServiceInfo: this.headerPopoverService?.getServiceInfo(),
       validation: this.headerConfigService.validateConfig(),
     };
   }

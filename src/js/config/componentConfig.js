@@ -130,6 +130,7 @@ const ComponentConfig = BaseConfig.extend({
       USER_AVATAR: 'user-avatar',
       NOTIFICATION_BADGE: 'notification-badge',
       TOOLTIP_BOTTOM: 'tooltip-bottom',
+      MOBILE_HIDDEN: 'header-button-mobile-hidden',
     },
     PATHS: {
       DEFAULT_AVATAR: 'public/images/default-avatar.png',
@@ -138,6 +139,12 @@ const ComponentConfig = BaseConfig.extend({
       NOTIFICATIONS_CLICK: 'header:notifications-click',
       USER_AVATAR_CLICK: 'header:user-avatar-click',
       USER_DETAILS_CLICK: 'header:user-details-click',
+    },
+    BREAKPOINTS: {
+      MOBILE_MAX: 768,
+      TABLET_MIN: 769,
+      TABLET_MAX: 1024,
+      DESKTOP_MIN: 1025,
     },
   },
 

@@ -1,132 +1,325 @@
 {
   "version": "1.0.0",
+  "description": "Configuración dinámica del header",
   "structure": {
+    "buttons": {
+      "enabled": true,
+      "order": 0
+    },
     "userInfo": {
       "enabled": true,
-      "order": 1,
-      "fields": [
-        {
-          "id": "user-name",
-          "type": "text",
-          "source": "user.nombre + ' ' + user.apellidos",
-          "class": "user-name",
-          "enabled": true
-        },
-        {
-          "id": "user-company",
-          "type": "text",
-          "source": "user.empresa",
-          "class": "user-company",
-          "enabled": true
-        },
-        {
-          "id": "user-role",
-          "type": "text",
-          "source": "user.rol || 'Usuario'",
-          "class": "user-role",
-          "enabled": false
-        }
-      ]
+      "order": 1
     },
     "userAvatar": {
       "enabled": true,
-      "order": 2,
-      "fallbackImage": "public/images/default-avatar.png",
-      "altText": "Avatar"
-    },
-    "buttons": {
+      "order": 2
+    }
+  },
+  "buttons": [
+    {
+      "id": "btn-notifications",
+      "name": "Notificaciones",
+      "icon": "fas fa-bell",
+      "tooltip": "Ver notificaciones",
+      "type": "popover",
       "enabled": true,
-      "order": 0,
-      "items": [
-        {
-          "id": "btn-notifications",
-          "type": "popover",
-          "icon": "far fa-bell",
-          "tooltip": "notifications",
-          "badge": {
-            "enabled": true,
-            "class": "notification-badge",
-            "condition": "hasNotifications"
-          },
-          "popover": {
-            "content": "notifications-panel",
-            "placement": "bottom"
-          },
+      "movil": true,
+      "order": 1,
+      "permissions": {
+        "roles": ["user", "admin", "moderator"],
+        "required": false
+      },
+      "badge": {
+        "enabled": true,
+        "class": "notification-badge",
+        "condition": "hasNotifications"
+      },
+      "popover": {
+        "content": "popover-notifications",
+        "placement": "bottom",
+        "offset": 8,
+        "submenu": {
           "enabled": true,
-          "order": 1
-        },
-        {
-          "id": "btn-user-menu",
-          "type": "popover",
-          "icon": "fas fa-user-circle",
-          "tooltip": "user_menu",
-          "popover": {
-            "content": "user-menu-panel",
-            "placement": "bottom-right"
-          },
-          "enabled": false,
-          "order": 2
-        },
-        {
-          "id": "btn-theme-toggle",
-          "type": "button",
-          "icon": "fas fa-moon",
-          "tooltip": "toggle_theme",
-          "enabled": false,
-          "order": 3
-        },
-        {
-          "id": "btn-language-selector",
-          "type": "popover",
-          "icon": "fas fa-globe",
-          "tooltip": "change_language",
-          "popover": {
-            "content": "language-selector-panel",
-            "placement": "bottom"
-          },
-          "enabled": false,
-          "order": 4
-        },
-        {
-          "id": "btn-help",
-          "type": "popover",
-          "icon": "fas fa-question-circle",
-          "tooltip": "help",
-          "popover": {
-            "content": "help-panel",
-            "placement": "bottom"
-          },
-          "enabled": false,
-          "order": 5
+          "items": [
+            {
+              "id": "view-all-notifications",
+              "label": "Ver todas las notificaciones",
+              "icon": "fas fa-list",
+              "action": "view-all-notifications",
+              "type": "item",
+              "enabled": true,
+              "order": 1,
+              "class": "submenu-item"
+            },
+            {
+              "id": "view-unread-notifications",
+              "label": "Ver no leídas",
+              "icon": "fas fa-envelope",
+              "action": "view-unread-notifications",
+              "type": "item",
+              "enabled": true,
+              "order": 2,
+              "class": "submenu-item"
+            },
+            {
+              "id": "notification-divider-1",
+              "type": "divider",
+              "enabled": true,
+              "order": 3
+            },
+            {
+              "id": "notification-settings",
+              "label": "Configurar notificaciones",
+              "icon": "fas fa-cog",
+              "action": "notification-settings",
+              "type": "item",
+              "enabled": true,
+              "order": 4,
+              "class": "submenu-item"
+            },
+            {
+              "id": "mark-all-read",
+              "label": "Marcar todas como leídas",
+              "icon": "fas fa-check-double",
+              "action": "mark-all-read",
+              "type": "item",
+              "enabled": true,
+              "order": 5,
+              "class": "submenu-item"
+            }
+          ]
         }
-      ]
+      }
+    },
+    {
+      "id": "btn-theme-toggle",
+      "name": "Cambiar tema",
+      "icon": "fas fa-moon",
+      "tooltip": "Cambiar tema",
+      "type": "popover",
+      "enabled": true,
+      "movil": false,
+      "order": 2,
+      "permissions": {
+        "roles": ["user", "admin", "moderator"],
+        "required": false
+      },
+      "popover": {
+        "content": "popover-theme",
+        "placement": "bottom",
+        "offset": 8,
+        "submenu": {
+          "enabled": true,
+          "items": [
+            {
+              "id": "set-theme-light",
+              "label": "Tema claro",
+              "icon": "fas fa-sun",
+              "action": "set-theme-light",
+              "type": "item",
+              "enabled": true,
+              "order": 1,
+              "class": "submenu-item"
+            },
+            {
+              "id": "set-theme-dark",
+              "label": "Tema oscuro",
+              "icon": "fas fa-moon",
+              "action": "set-theme-dark",
+              "type": "item",
+              "enabled": true,
+              "order": 2,
+              "class": "submenu-item"
+            },
+            {
+              "id": "set-theme-auto",
+              "label": "Automático",
+              "icon": "fas fa-magic",
+              "action": "set-theme-auto",
+              "type": "item",
+              "enabled": true,
+              "order": 3,
+              "class": "submenu-item"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "btn-language-selector",
+      "name": "Idioma",
+      "icon": "fas fa-globe",
+      "tooltip": "Cambiar idioma",
+      "type": "popover",
+      "enabled": true,
+      "movil": false,
+      "order": 3,
+      "permissions": {
+        "roles": ["user", "admin", "moderator"],
+        "required": false
+      },
+      "popover": {
+        "content": "popover-language",
+        "placement": "bottom",
+        "offset": 8,
+        "submenu": {
+          "enabled": true,
+          "items": [
+            {
+              "id": "set-language-es",
+              "label": "Español",
+              "icon": "🇪🇸",
+              "action": "set-language-es",
+              "type": "item",
+              "enabled": true,
+              "order": 1,
+              "class": "submenu-item"
+            },
+            {
+              "id": "set-language-en",
+              "label": "English",
+              "icon": "🇺🇸",
+              "action": "set-language-en",
+              "type": "item",
+              "enabled": true,
+              "order": 2,
+              "class": "submenu-item"
+            },
+            {
+              "id": "set-language-fr",
+              "label": "Français",
+              "icon": "🇫🇷",
+              "action": "set-language-fr",
+              "type": "item",
+              "enabled": true,
+              "order": 3,
+              "class": "submenu-item"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "id": "btn-help",
+      "name": "Ayuda",
+      "icon": "fas fa-question-circle",
+      "tooltip": "Ayuda y soporte",
+      "type": "popover",
+      "enabled": true,
+      "movil": false,
+      "order": 4,
+      "permissions": {
+        "roles": ["user", "admin", "moderator"],
+        "required": false
+      },
+      "popover": {
+        "content": "popover-help",
+        "placement": "bottom",
+        "offset": 8,
+        "submenu": {
+          "enabled": true,
+          "items": [
+            {
+              "id": "open-documentation",
+              "label": "Documentación",
+              "icon": "fas fa-book",
+              "action": "open-documentation",
+              "type": "item",
+              "enabled": true,
+              "order": 1,
+              "class": "submenu-item"
+            },
+            {
+              "id": "open-tutorials",
+              "label": "Tutoriales",
+              "icon": "fas fa-graduation-cap",
+              "action": "open-tutorials",
+              "type": "item",
+              "enabled": true,
+              "order": 2,
+              "class": "submenu-item"
+            },
+            {
+              "id": "open-faq",
+              "label": "Preguntas frecuentes",
+              "icon": "fas fa-question",
+              "action": "open-faq",
+              "type": "item",
+              "enabled": true,
+              "order": 3,
+              "class": "submenu-item"
+            },
+            {
+              "id": "help-divider-1",
+              "type": "divider",
+              "enabled": true,
+              "order": 4
+            },
+            {
+              "id": "contact-support",
+              "label": "Contactar soporte",
+              "icon": "fas fa-headset",
+              "action": "contact-support",
+              "type": "item",
+              "enabled": true,
+              "order": 5,
+              "class": "submenu-item"
+            },
+            {
+              "id": "send-feedback",
+              "label": "Enviar feedback",
+              "icon": "fas fa-comment",
+              "action": "send-feedback",
+              "type": "item",
+              "enabled": true,
+              "order": 6,
+              "class": "submenu-item"
+            }
+          ]
+        }
+      }
     }
+  ],
+  "userInfo": {
+    "enabled": true,
+    "fields": [
+      {
+        "id": "user-name",
+        "name": "Nombre del usuario",
+        "source": "user.nombre",
+        "class": "user-name",
+        "enabled": true,
+        "order": 1,
+        "permissions": {
+          "roles": ["user", "admin", "moderator"],
+          "required": false
+        }
+      },
+      {
+        "id": "user-role",
+        "name": "Rol del usuario",
+        "source": "user.rol",
+        "class": "user-role",
+        "enabled": true,
+        "order": 2,
+        "permissions": {
+          "roles": ["user", "admin", "moderator"],
+          "required": false
+        }
+      }
+    ]
   },
-  "permissions": {
-    "roles": {
-      "admin": [
-        "btn-notifications",
-        "btn-user-menu",
-        "btn-theme-toggle",
-        "btn-language-selector",
-        "btn-help"
-      ],
-      "user": [
-        "btn-notifications",
-        "btn-user-menu",
-        "btn-theme-toggle",
-        "btn-help"
-      ],
-      "guest": ["btn-theme-toggle", "btn-help"]
-    }
+  "userAvatar": {
+    "enabled": true,
+    "defaultIcon": "fas fa-user",
+    "altText": "Avatar del usuario",
+    "class": "user-avatar"
   },
-  "popover": {
+  "submenu": {
     "defaults": {
-      "animation": true,
-      "backdrop": true,
-      "closeOnClickOutside": true,
-      "closeOnEscape": true,
-      "zIndex": 1000
+      "maxItems": 10,
+      "showIcons": true,
+      "showDividers": true
     }
   }
 }

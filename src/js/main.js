@@ -15,10 +15,7 @@ class App {
     this.controladorContenido = new ControladorContenido(
       this.controladorUsuario
     );
-    this.controladorHeader = new ControladorHeader(
-      this.controladorUsuario,
-      this.i18nService
-    );
+    this.controladorHeader = new ControladorHeader();
     this.controladorMenu = new ControladorMenu(
       this.configService,
       this.menuService,
@@ -49,14 +46,53 @@ class App {
   }
 
   async inicializarComponentes() {
+    // Inicializar PopoverComponent primero
+    if (typeof PopoverComponent !== 'undefined') {
+      window.popoverComponent = new PopoverComponent();
+      console.log('PopoverComponent inicializado');
+    } else {
+      console.error('PopoverComponent no está disponible');
+    }
+
     // Inicializar menú
     await this.controladorMenu.cargarMenu();
 
-    // Inicializar header
-    await this.controladorHeader.inicializar();
+    // Inicializar header con datos del usuario
+    await this.cargarHeader();
 
     // Inicializar contenido
     this.controladorContenido.inicializar();
+  }
+
+  async cargarHeader() {
+    try {
+      const usuario = this.controladorUsuario.obtenerUsuarioActual();
+      const tieneNotificaciones = await this.verificarNotificaciones();
+      const t = this.i18nService.t.bind(this.i18nService);
+
+      await this.controladorHeader.renderHeader(
+        usuario,
+        tieneNotificaciones,
+        t
+      );
+
+      // Configurar event listeners del header
+      this.controladorHeader.setupEventListeners();
+    } catch (error) {
+      console.error('Error al cargar el header:', error);
+    }
+  }
+
+  async verificarNotificaciones() {
+    try {
+      // Usar AppConfig para obtener la ruta de notificaciones
+      const response = await fetch(AppConfig.PATHS.NOTIFICACIONES_JSON);
+      const data = await response.json();
+      return data.tieneNotificaciones;
+    } catch (error) {
+      console.error('Error al cargar las notificaciones:', error);
+      return false;
+    }
   }
 }
 
