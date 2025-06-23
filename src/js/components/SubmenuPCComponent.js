@@ -31,6 +31,10 @@ class SubmenuPCComponent {
       const subMenuItem = e.target.closest('.submenu-pc-item');
       if (subMenuItem && subMenuItem.dataset.target) {
         e.preventDefault();
+
+        // Activar el subitem en el MenuService para mantener el estado
+        this.activateSubmenuItemInService(subMenuItem.dataset.id);
+
         // Extraer el nombre del archivo sin extensión del target
         const target = subMenuItem.dataset.target;
         const fileName = target.split('/').pop(); // Obtener el último segmento
@@ -86,7 +90,10 @@ class SubmenuPCComponent {
     } else if (menuItem.children && menuItem.children.length > 0) {
       // Si no hay subitem activo, usar el primero como fallback
       const firstChild = menuItem.children[0];
+
+      // Activar el primer subitem tanto visualmente como en el MenuService
       this.setActiveSubmenuItem(firstChild.id);
+      this.activateSubmenuItemInService(firstChild.id);
 
       // Cargar la página del primer ítem si tiene target
       if (firstChild.target) {
@@ -179,6 +186,57 @@ class SubmenuPCComponent {
     );
     if (newActive) {
       newActive.classList.add('active');
+    }
+  }
+
+  /**
+   * Activa el subitem en el MenuService para mantener el estado
+   * @param {string} subMenuItemId
+   */
+  activateSubmenuItemInService(subMenuItemId) {
+    if (!this.menuService) return;
+
+    try {
+      // Buscar el subitem en el menú activo
+      if (this.activeParentItem && this.activeParentItem.children) {
+        const subItem = this.activeParentItem.children.find(
+          child => child.id === subMenuItemId
+        );
+
+        if (subItem) {
+          // Desactivar todos los subitems primero
+          this.deactivateAllSubmenuItems();
+
+          // Activar el subitem seleccionado
+          subItem.setActive(true);
+
+          // También activar el padre si no está activo
+          if (!this.activeParentItem.isActive()) {
+            this.activeParentItem.setActive(true);
+          }
+        }
+      }
+    } catch (error) {
+      console.error(
+        'SubmenuPCComponent: Error al activar subitem en servicio:',
+        error
+      );
+    }
+  }
+
+  /**
+   * Desactiva todos los subitems del menú activo
+   */
+  deactivateAllSubmenuItems() {
+    if (!this.menuService || !this.activeParentItem) return;
+
+    try {
+      // Desactivar todos los subitems del padre activo
+      for (const child of this.activeParentItem.children) {
+        child.setActive(false);
+      }
+    } catch (error) {
+      console.error('SubmenuPCComponent: Error al desactivar subitems:', error);
     }
   }
 }
