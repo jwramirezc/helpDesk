@@ -156,6 +156,9 @@ class MenuPopoverService {
       // Agregar popover al DOM
       document.body.appendChild(popover);
 
+      // Agregar clase específica para el submenú
+      popover.classList.add('popover-submenu');
+
       // Configurar trigger
       const trigger = document.getElementById(triggerId);
       if (trigger) {

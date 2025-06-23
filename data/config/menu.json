@@ -24,7 +24,7 @@
       },
       {
         "id": "menu_consultas",
-        "label": "hola",
+        "label": "Consultas",
         "icon": "fas fa-search",
         "type": "item",
         "target": "consultas.html"

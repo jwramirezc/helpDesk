@@ -60,8 +60,8 @@
   position: absolute;
   top: 2px;
   right: 2px;
-  width: 8px;
-  height: 8px;
+  width: 10px;
+  height: 10px;
   background-color: #dc3545;
   border-radius: 50%;
   border: 2px solid #ffffff;
@@ -233,32 +233,6 @@
   .user-avatar-icon {
     font-size: 1rem;
   }
-}
-
-/* Tema oscuro */
-[data-theme='dark'] .header-button {
-  color: #e9ecef;
-}
-
-[data-theme='dark'] .header-button:hover {
-  background-color: rgba(255, 255, 255, 0.1);
-}
-
-[data-theme='dark'] .header-button:hover i {
-  color: #4dabf7;
-}
-
-[data-theme='dark'] .user-name,
-[data-theme='dark'] .user-company {
-  color: #e9ecef;
-}
-
-[data-theme='dark'] .user-role {
-  color: #adb5bd;
-}
-
-[data-theme='dark'] .notification-badge {
-  border-color: #343a40;
 }
 
 /* Accesibilidad */

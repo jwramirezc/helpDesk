@@ -167,3 +167,48 @@
     transform: rotate(360deg);
   }
 }
+
+/* Estilos fijos para el popover del submenú de tablet y otros submenús */
+.rs-popover.popover-submenu,
+.rs-popover.visible.placement-bottom {
+  background-color: #ffffff;
+  border-color: #e0e0e0;
+}
+
+.rs-popover.popover-submenu .rs-popover-item,
+.rs-popover.visible.placement-bottom .rs-popover-item {
+  color: #333333;
+}
+
+.rs-popover.popover-submenu .rs-popover-item:hover,
+.rs-popover.visible.placement-bottom .rs-popover-item:hover {
+  background-color: #f5f5f5;
+}
+
+.rs-popover.popover-submenu .rs-popover-item.active,
+.rs-popover.visible.placement-bottom .rs-popover-item.active {
+  background-color: #007bff;
+  color: #ffffff;
+}
+
+.rs-popover.popover-submenu .rs-popover-separator,
+.rs-popover.visible.placement-bottom .rs-popover-separator {
+  background-color: #e0e0e0;
+}
+
+.rs-popover.popover-submenu .placement-bottom .rs-popover-arrow,
+.rs-popover.visible.placement-bottom .rs-popover-arrow {
+  border-color: transparent transparent #ffffff transparent;
+}
+
+.rs-popover.popover-submenu .placement-top .rs-popover-arrow {
+  border-color: #ffffff transparent transparent transparent;
+}
+
+.rs-popover.popover-submenu .placement-left .rs-popover-arrow {
+  border-color: transparent transparent transparent #ffffff;
+}
+
+.rs-popover.popover-submenu .placement-right .rs-popover-arrow {
+  border-color: transparent #ffffff transparent transparent;
+}
