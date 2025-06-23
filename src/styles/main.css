@@ -4,6 +4,7 @@
 @import 'components/app.css';
 @import 'components/menu.css';
 @import 'components/popover.css';
+@import 'components/submenu-pc.css';
 @import 'layout/layout.css';
 
 /* Global styles */

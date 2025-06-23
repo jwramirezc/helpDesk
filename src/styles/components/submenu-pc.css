@@ -1,0 +1,148 @@
+/* src/styles/components/submenu-pc.css */
+
+/* Contenedor principal del submenú para PC */
+.submenu-pc {
+  position: fixed;
+  top: 0;
+  left: var(--sidebar-width); /* Usar la variable CSS del sidebar */
+  width: var(--submenu-width);
+  height: 100vh;
+  background-color: var(--background-color-light);
+  border-right: 1px solid var(--border-main-content);
+  z-index: 999; /* Menor que el sidebar pero mayor que el contenido */
+  display: none; /* Oculto por defecto */
+  flex-direction: column;
+  transition: var(--transition-base);
+  transform: translateX(-100%);
+  opacity: 0;
+  overflow: hidden;
+}
+
+/* Estado visible del submenú */
+.submenu-pc.active {
+  display: flex;
+  transform: translateX(0);
+  opacity: 1;
+}
+
+/* --- Ajustes del layout cuando el submenú está activo --- */
+/* Ajustar el contenido principal para dar espacio al submenú */
+body.submenu-active .col {
+  margin-left: var(--submenu-width);
+  transition: margin-left var(--transition-base);
+}
+
+/* Ajustar el header cuando el submenú está activo */
+body.submenu-active #header {
+  left: calc(var(--sidebar-width) + var(--submenu-width));
+  transition: left var(--transition-base);
+}
+
+/* Ajustar el contenido principal cuando el submenú está activo */
+body.submenu-active #main-content {
+  margin-left: calc(var(--sidebar-width) + var(--submenu-width));
+  transition: margin-left var(--transition-base);
+}
+
+/* --- Cabecera del submenú --- */
+.submenu-pc-header {
+  padding: var(--spacing-md) var(--spacing-lg);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid var(--border-color);
+  flex-shrink: 0; /* No permitir que se encoja */
+  margin-top: var(--header-height); /* Espacio para el header */
+}
+
+.submenu-pc-title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-color);
+}
+
+.submenu-pc-close {
+  cursor: pointer;
+  color: var(--text-color-secondary);
+  font-size: var(--font-size-xl);
+}
+
+.submenu-pc-close:hover {
+  color: var(--primary-color);
+}
+
+/* --- Contenedor de los items --- */
+.submenu-pc-items {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  overflow-y: auto;
+  flex-grow: 1;
+  padding: var(--spacing-sm) 0;
+}
+
+/* --- Items del submenú --- */
+.submenu-pc-item {
+  display: flex;
+  align-items: center;
+  padding: var(--spacing-sm) var(--spacing-lg);
+  color: var(--text-color-secondary);
+  text-decoration: none;
+  transition: background-color var(--transition-fast),
+    color var(--transition-fast);
+}
+
+.submenu-pc-item:hover {
+  background-color: var(--background-color-hover);
+  color: var(--text-color);
+}
+
+.submenu-pc-item.active {
+  background-color: var(--primary-color-light);
+  color: var(--primary-color);
+  font-weight: var(--font-weight-semibold);
+}
+
+.submenu-pc-item-icon {
+  width: 20px;
+  text-align: center;
+  margin-right: var(--spacing-md);
+  font-size: var(--font-size-base);
+}
+
+.submenu-pc-item-label {
+  flex-grow: 1;
+}
+
+/* --- Media query para mostrar solo en PC --- */
+@media (max-width: 1024px) {
+  .submenu-pc {
+    display: none !important;
+  }
+
+  /* Resetear solo los ajustes del submenu, mantener el sidebar */
+  body.submenu-active .col {
+    margin-left: 0 !important; /* Resetear el margen del submenu */
+  }
+
+  body.submenu-active #header {
+    left: var(--sidebar-width) !important; /* Mantener el sidebar visible */
+  }
+
+  body.submenu-active #main-content {
+    margin-left: var(
+      --sidebar-width
+    ) !important; /* Mantener el sidebar visible */
+  }
+}
+
+/* Media query específica para móvil donde el sidebar se oculta */
+@media (max-width: 768px) {
+  body.submenu-active #header {
+    left: 0 !important; /* Solo en móvil ocultar el sidebar */
+  }
+
+  body.submenu-active #main-content {
+    margin-left: 0 !important; /* Solo en móvil ocultar el sidebar */
+  }
+}

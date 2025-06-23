@@ -27,6 +27,12 @@ class ControladorMenu {
     // Servicio de popovers para tablets
     this.menuPopoverService = new MenuPopoverService(this.menuService);
 
+    // Componente de submenú para PC
+    this.submenuPCComponent = new SubmenuPCComponent(
+      this.menuService,
+      this.controladorContenido
+    );
+
     // Inicializar debugging en modo desarrollo
     if (typeof MenuDebugger !== 'undefined' && AppConfig.isDevelopment()) {
       this.debugger = new MenuDebugger(this);
@@ -211,11 +217,24 @@ class ControladorMenu {
     if (type === 'submenu') {
       // Activar solo Configuración y desactivar los demás
       await this.activarSoloItem(id);
+
+      // En desktop, mostrar el submenú PC
+      if (window.innerWidth > 1024) {
+        const menuItem = await this.menuService.findItemById(id);
+        if (menuItem && this.submenuPCComponent) {
+          this.submenuPCComponent.show(menuItem);
+        }
+      }
       return;
     }
 
     // Si es un ítem normal, cargar la vista en el contenedor principal
     if (type === 'item' && target) {
+      // Ocultar submenú PC si está activo
+      if (this.submenuPCComponent) {
+        this.submenuPCComponent.hide();
+      }
+
       // Activar solo este ítem y desactivar los demás
       await this.activarSoloItem(id);
       // Cerrar el menú móvil antes de cargar la vista
@@ -485,7 +504,31 @@ class ControladorMenu {
 
   // Método para manejar cambios de tamaño de ventana
   async manejarCambioTamanio() {
-    const isMobile = window.innerWidth <= MenuConfig.BREAKPOINTS.MOBILE;
+    const width = window.innerWidth;
+    const isMobile = width <= MenuConfig.BREAKPOINTS.MOBILE;
+    const isTablet = width > MenuConfig.BREAKPOINTS.MOBILE && width <= 1024;
+    const isDesktop = width > 1024;
+
+    // Ocultar submenú PC en móvil y tablet
+    if (!isDesktop && this.submenuPCComponent) {
+      this.submenuPCComponent.hide();
+    }
+
+    // Cerrar popovers cuando se cambia a desktop
+    if (isDesktop && this.menuPopoverService) {
+      // Cerrar el popover activo si existe
+      if (
+        window.popoverComponent &&
+        typeof window.popoverComponent.hideActivePopover === 'function'
+      ) {
+        window.popoverComponent.hideActivePopover();
+      }
+
+      // Limpiar popovers del MenuPopoverService
+      if (typeof this.menuPopoverService.clearPopovers === 'function') {
+        this.menuPopoverService.clearPopovers();
+      }
+    }
 
     if (isMobile) {
       // En móvil, asegurar que el toggle esté visible si el menú está cerrado
@@ -496,7 +539,7 @@ class ControladorMenu {
         this.mobileMenuToggle.classList.remove('hidden');
       }
     } else {
-      // En desktop, ocultar el toggle y cerrar el menú móvil
+      // En desktop y tablet, ocultar el toggle y cerrar el menú móvil
       if (this.mobileMenuToggle) {
         this.mobileMenuToggle.classList.add('hidden');
       }
@@ -665,5 +708,31 @@ class ControladorMenu {
       clearTimeout(resizeTimeout);
       resizeTimeout = setTimeout(handleResize, 250);
     });
+  }
+
+  /**
+   * Limpia recursos del controlador
+   */
+  destruir() {
+    // Ocultar submenú PC
+    if (this.submenuPCComponent) {
+      this.submenuPCComponent.hide();
+    }
+
+    // Remover event listeners
+    if (this.mobileMenuItems) {
+      this.mobileMenuItems.removeEventListener(
+        'click',
+        this.handleMobileMenuClick
+      );
+    }
+
+    const backButton = document.getElementById('mobile_back_button');
+    if (backButton) {
+      backButton.removeEventListener('click', this.handleBackButtonClick);
+    }
+
+    // Remover event listener de resize
+    window.removeEventListener('resize', this.handleResize);
   }
 }
