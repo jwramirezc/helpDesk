@@ -70,20 +70,51 @@ class SubmenuPCComponent {
     // Añadir clase al body para ajustar el layout
     document.body.classList.add('submenu-active');
 
-    // Automáticamente activar el primer ítem del submenú y cargar su página
-    if (menuItem.children && menuItem.children.length > 0) {
+    // Buscar si hay un subitem activo en este submenú
+    const activeSubItem = this.findActiveSubmenuItem(menuItem);
+
+    if (activeSubItem) {
+      // Si hay un subitem activo, usarlo
+      this.setActiveSubmenuItem(activeSubItem.id);
+
+      // Cargar la página del subitem activo si tiene target
+      if (activeSubItem.target) {
+        const fileName = activeSubItem.target.split('/').pop();
+        const vistaName = fileName.replace('.html', '');
+        this.contentController.cargarVista(vistaName);
+      }
+    } else if (menuItem.children && menuItem.children.length > 0) {
+      // Si no hay subitem activo, usar el primero como fallback
       const firstChild = menuItem.children[0];
       this.setActiveSubmenuItem(firstChild.id);
 
       // Cargar la página del primer ítem si tiene target
       if (firstChild.target) {
-        // Extraer el nombre del archivo sin extensión del target
-        const fileName = firstChild.target.split('/').pop(); // Obtener el último segmento
-        const vistaName = fileName.replace('.html', ''); // Remover la extensión
-
+        const fileName = firstChild.target.split('/').pop();
+        const vistaName = fileName.replace('.html', '');
         this.contentController.cargarVista(vistaName);
       }
     }
+  }
+
+  /**
+   * Busca un subitem activo dentro del menú padre
+   * @param {MenuItem} parentItem - El ítem padre del submenú
+   * @returns {MenuItem|null} El subitem activo o null si no hay ninguno
+   */
+  findActiveSubmenuItem(parentItem) {
+    if (!parentItem || !parentItem.children) {
+      return null;
+    }
+
+    // Buscar un subitem que esté activo
+    for (const child of parentItem.children) {
+      if (child.isActive()) {
+        return child;
+      }
+    }
+
+    return null;
   }
 
   /**

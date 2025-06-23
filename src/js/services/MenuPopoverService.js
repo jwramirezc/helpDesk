@@ -298,6 +298,20 @@ class MenuPopoverService {
     try {
       // Simular el comportamiento del menú normal
       if (item.type === 'item' && item.target) {
+        // Activar el subitem en el MenuService para mantener el estado
+        if (this.menuService) {
+          // Desactivar todos los subitems primero
+          this.deactivateAllSubmenuItems();
+
+          // Activar el subitem clickeado
+          item.setActive(true);
+
+          // También activar el padre si existe
+          if (item.parent) {
+            item.parent.setActive(true);
+          }
+        }
+
         // Navegar a la vista
         this.navigateToView(item.target);
       } else if (item.type === 'submenu') {
@@ -306,6 +320,34 @@ class MenuPopoverService {
       }
     } catch (error) {
       console.error('MenuPopoverService: Error al manejar click:', error);
+    }
+  }
+
+  /**
+   * Desactiva todos los subitems del menú
+   */
+  deactivateAllSubmenuItems() {
+    if (!this.menuService) return;
+
+    try {
+      const menuItems = this.menuService.getMenuItemsSync();
+      if (!menuItems) return;
+
+      // Desactivar subitems en items top
+      for (const item of menuItems.top) {
+        for (const child of item.children) {
+          child.setActive(false);
+        }
+      }
+
+      // Desactivar subitems en items bottom
+      for (const item of menuItems.bottom) {
+        for (const child of item.children) {
+          child.setActive(false);
+        }
+      }
+    } catch (error) {
+      console.error('MenuPopoverService: Error al desactivar subitems:', error);
     }
   }
 

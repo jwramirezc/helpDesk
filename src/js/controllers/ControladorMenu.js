@@ -40,6 +40,11 @@ class ControladorMenu {
       this.debugger.log('ControladorMenu inicializado');
     }
 
+    // Tracking del estado anterior para resize
+    this.previousBreakpoint = null;
+    this.resizeTimeout = null;
+    this.lastResizeTime = 0;
+
     // Validar elementos críticos del DOM
     this._validateCriticalElements();
   }
@@ -509,25 +514,47 @@ class ControladorMenu {
     const isTablet = width > MenuConfig.BREAKPOINTS.MOBILE && width <= 1024;
     const isDesktop = width > 1024;
 
+    // Determinar el breakpoint actual
+    let currentBreakpoint;
+    if (isMobile) currentBreakpoint = 'mobile';
+    else if (isTablet) currentBreakpoint = 'tablet';
+    else currentBreakpoint = 'desktop';
+
+    // Si el breakpoint no cambió, no hacer nada
+    if (this.previousBreakpoint === currentBreakpoint) {
+      return;
+    }
+
+    // Implementar debounce para evitar múltiples ejecuciones durante resize
+    const now = Date.now();
+    if (now - this.lastResizeTime < 150) {
+      // 150ms debounce
+      if (this.resizeTimeout) {
+        clearTimeout(this.resizeTimeout);
+      }
+
+      this.resizeTimeout = setTimeout(() => {
+        this.manejarCambioTamanio();
+      }, 150);
+
+      return;
+    }
+
+    this.lastResizeTime = now;
+
     // Ocultar submenú PC en móvil y tablet
     if (!isDesktop && this.submenuPCComponent) {
       this.submenuPCComponent.hide();
     }
 
-    // Cerrar popovers cuando se cambia a desktop
-    if (isDesktop && this.menuPopoverService) {
-      // Cerrar el popover activo si existe
-      if (
-        window.popoverComponent &&
-        typeof window.popoverComponent.hideActivePopover === 'function'
-      ) {
-        window.popoverComponent.hideActivePopover();
-      }
+    // Manejar transición a desktop
+    if (isDesktop && this.previousBreakpoint !== 'desktop') {
+      await this.handleTransitionToDesktop();
+    }
 
-      // Limpiar popovers del MenuPopoverService
-      if (typeof this.menuPopoverService.clearPopovers === 'function') {
-        this.menuPopoverService.clearPopovers();
-      }
+    // Manejar transición desde desktop
+    if (this.previousBreakpoint === 'desktop' && !isDesktop) {
+      await this.handleTransitionFromDesktop();
     }
 
     if (isMobile) {
@@ -561,6 +588,83 @@ class ControladorMenu {
           }
         }, 500);
       }
+    }
+
+    // Actualizar el breakpoint anterior
+    this.previousBreakpoint = currentBreakpoint;
+  }
+
+  /**
+   * Maneja la transición a desktop
+   */
+  async handleTransitionToDesktop() {
+    if (!this.menuPopoverService) return;
+
+    // Cerrar el popover activo si existe
+    if (
+      window.popoverComponent &&
+      typeof window.popoverComponent.hideActivePopover === 'function'
+    ) {
+      window.popoverComponent.hideActivePopover();
+    }
+
+    // Limpiar popovers del MenuPopoverService
+    if (typeof this.menuPopoverService.clearPopovers === 'function') {
+      this.menuPopoverService.clearPopovers();
+    }
+
+    // Mostrar submenu PC si hay un subitem activo (solo una vez)
+    await this.showSubmenuPCIfActive();
+  }
+
+  /**
+   * Maneja la transición desde desktop
+   */
+  async handleTransitionFromDesktop() {
+    // Ocultar submenu PC al salir de desktop
+    if (this.submenuPCComponent) {
+      this.submenuPCComponent.hide();
+    }
+  }
+
+  /**
+   * Muestra el submenu PC si hay un subitem activo
+   */
+  async showSubmenuPCIfActive() {
+    if (!this.submenuPCComponent || !this.menuService) {
+      return;
+    }
+
+    try {
+      // Verificar que estemos realmente en desktop
+      const width = window.innerWidth;
+      if (width <= 1024) {
+        return; // No mostrar en tablet o móvil
+      }
+
+      // Verificar que el submenu PC no esté ya visible
+      if (
+        this.submenuPCComponent.submenuContainer &&
+        this.submenuPCComponent.submenuContainer.classList.contains('active')
+      ) {
+        return; // Ya está visible, no hacer nada
+      }
+
+      // Buscar si hay algún subitem activo
+      const activeItems = await this.menuService.getActiveItems();
+      const activeSubItem = activeItems.find(
+        item => item.parent && item.isActive()
+      );
+
+      if (activeSubItem && activeSubItem.parent) {
+        // Verificar que el padre tenga children
+        if (activeSubItem.parent.hasChildren()) {
+          // Mostrar el submenu PC con el item padre del subitem activo
+          this.submenuPCComponent.show(activeSubItem.parent);
+        }
+      }
+    } catch (error) {
+      console.error('ControladorMenu: Error al mostrar submenu PC:', error);
     }
   }
 
@@ -714,6 +818,12 @@ class ControladorMenu {
    * Limpia recursos del controlador
    */
   destruir() {
+    // Limpiar timeout de resize
+    if (this.resizeTimeout) {
+      clearTimeout(this.resizeTimeout);
+      this.resizeTimeout = null;
+    }
+
     // Ocultar submenú PC
     if (this.submenuPCComponent) {
       this.submenuPCComponent.hide();
