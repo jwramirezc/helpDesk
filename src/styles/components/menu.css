@@ -53,6 +53,7 @@
 
 .menu-item.has-submenu:hover::after {
   opacity: 1;
+  background-color: var(--icon-color-hover);
 }
 
 /* Indicador de submenú en móvil */
@@ -79,7 +80,7 @@
   align-items: center;
   padding: 1rem;
   border-bottom: 1px solid var(--border-color);
-  background-color: var(--background-color);
+  background-color: var(--background-color-light);
 }
 
 .mobile-back-button {

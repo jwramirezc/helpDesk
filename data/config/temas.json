@@ -8,25 +8,18 @@
       "logo-movil": "public/images/logo-movil-light.png",
       "colores": {
         "primario": "#ecf4fd",
-        "secundario": "#0D85E8",
-        "fondo": "#ffffff",
-        "texto": "#4b5258",
+        "secundario": "#6c757d",
         "sidebar-bg": "#ffffff",
         "icon-color": "#3B4752",
-        "icon-color-active": "3B4752",
+        "icon-color-active": "white",
+        "icon-color-hover": "#007bff",
+        "icon-color-background": "white",
+        "background-color-hover": "#ecf4fd",
         "text-color": "#4b5258",
         "text-color-active": "#4b5258",
-        "background-color": "#ecf4fd",
-        "background-icon": "white",
-        "hover-color": "#ecf4fd"
-      },
-      "comportamientos": {
-        "mobile-menu-hover-text-change": false,
-        "mobile-menu-active-text-change": false,
-        "mobile-menu-focus-text-change": false,
-        "mobile-menu-hover-bg": true,
-        "mobile-menu-active-bg": true,
-        "mobile-menu-focus-bg": true
+        "icon-color-submenu": "#6c757d",
+        "text-color-submenu": "#1a1a1a",
+        "background-color-item-submenu": "#ecf4fd"
       }
     },
     {
@@ -38,24 +31,17 @@
       "colores": {
         "primario": "#0d6efd",
         "secundario": "#6c757d",
-        "fondo": "#ffffff",
-        "texto": "#4b5258",
         "sidebar-bg": "#2b303b",
         "icon-color": "white",
         "icon-color-active": "white",
-        "text-color": "#4b5258",
+        "icon-color-hover": "white",
+        "icon-color-background": "#21252c",
+        "background-color-hover": "rgba(255, 255, 255, 0.1)",
+        "text-color": "white",
         "text-color-active": "white",
-        "background-color": "rgba(255, 255, 255, 0.1)",
-        "background-icon": "#21252c",
-        "hover-color": "rgba(255, 255, 255, 0.1)"
-      },
-      "comportamientos": {
-        "mobile-menu-hover-text-change": true,
-        "mobile-menu-active-text-change": true,
-        "mobile-menu-focus-text-change": true,
-        "mobile-menu-hover-bg": true,
-        "mobile-menu-active-bg": true,
-        "mobile-menu-focus-bg": true
+        "icon-color-submenu": "#6c757d",
+        "text-color-submenu": "#1a1a1a",
+        "background-color-item-submenu": "#ecf4fd"
       }
     }
   ],

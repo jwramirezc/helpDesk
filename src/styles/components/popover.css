@@ -177,12 +177,12 @@
 
 .rs-popover.popover-submenu .rs-popover-item,
 .rs-popover.visible.placement-bottom .rs-popover-item {
-  color: var(--text-color);
+  color: var(--text-color-submenu);
 }
 
 .rs-popover.popover-submenu .rs-popover-item:hover,
 .rs-popover.visible.placement-bottom .rs-popover-item:hover {
-  background-color: var(--background-color-hover);
+  background-color: var(--background-color-item-submenu);
 }
 
 .rs-popover.popover-submenu .rs-popover-item.active,

@@ -24,7 +24,7 @@
    ======================================== */
 .pqrs-container {
   padding: 1.5rem;
-  background-color: var(--background-color);
+  background-color: var(--main-background-color);
   min-height: calc(100vh - var(--header-height));
 }
 
@@ -34,11 +34,11 @@
 .pqrs-header {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid var(--pqrs-light);
+  border-bottom: 2px solid var(--main-light-color);
 }
 
 .pqrs-title {
-  color: var(--pqrs-primary);
+  color: var(--main-primary-color);
   font-weight: 700;
   margin-bottom: 0.5rem;
   font-size: 2rem;
@@ -60,7 +60,7 @@
   background: white;
   border-radius: var(--pqrs-border-radius);
   padding: 1.5rem;
-  box-shadow: var(--pqrs-shadow);
+  box-shadow: var(--main-shadow);
   transition: var(--pqrs-transition);
   border: 1px solid #e9ecef;
   display: flex;
@@ -70,7 +70,7 @@
 }
 
 .pqrs-stat-card:hover {
-  box-shadow: var(--pqrs-shadow-hover);
+  box-shadow: var(--main-shadow-hover);
   transform: translateY(-2px);
 }
 
@@ -98,12 +98,12 @@
   font-weight: 700;
   margin: 0;
   line-height: 1;
-  color: var(--pqrs-dark);
+  color: var(--main-dark-color);
 }
 
 .stat-label {
   margin: 0;
-  color: var(--pqrs-secondary);
+  color: var(--main-text-color-secondary);
   font-size: 0.9rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -119,7 +119,7 @@
 
 .pqrs-filtros .card {
   border: none;
-  box-shadow: var(--pqrs-shadow);
+  box-shadow: var(--main-shadow);
   border-radius: var(--pqrs-border-radius);
 }
 
@@ -129,7 +129,7 @@
 
 .pqrs-filtros .form-label {
   font-weight: 600;
-  color: var(--pqrs-dark);
+  color: var(--main-text-color);
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -145,7 +145,7 @@
 
 .pqrs-filtros .form-select:focus,
 .pqrs-filtros .form-control:focus {
-  border-color: var(--pqrs-primary);
+  border-color: var(--main-primary-color);
   box-shadow: 0 0 0 0.2rem rgba(111, 66, 193, 0.25);
 }
 
@@ -162,13 +162,13 @@
 
 .pqrs-tabla .card {
   border: none;
-  box-shadow: var(--pqrs-shadow);
+  box-shadow: var(--main-shadow);
   border-radius: var(--pqrs-border-radius);
   overflow: hidden;
 }
 
 .pqrs-tabla .card-header {
-  background: linear-gradient(135deg, var(--pqrs-primary), #5a32a3);
+  background: linear-gradient(135deg, var(--main-primary-color), #5a32a3);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -195,11 +195,11 @@
 }
 
 .pqrs-tabla .table thead th {
-  background-color: var(--pqrs-light);
+  background-color: var(--main-light-color);
   border: none;
   padding: 1rem;
   font-weight: 600;
-  color: var(--pqrs-dark);
+  color: var(--main-text-color);
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 0.5px;
@@ -222,7 +222,7 @@
 }
 
 .pqrs-asunto strong {
-  color: var(--pqrs-dark);
+  color: var(--main-text-color);
   font-weight: 600;
 }
 
@@ -252,7 +252,7 @@
 
 .pqrs-paginacion .page-link {
   border: none;
-  color: var(--pqrs-primary);
+  color: var(--main-primary-color);
   padding: 0.75rem 1rem;
   margin: 0 0.25rem;
   border-radius: var(--pqrs-border-radius);
@@ -260,18 +260,18 @@
 }
 
 .pqrs-paginacion .page-link:hover {
-  background-color: var(--pqrs-primary);
+  background-color: var(--main-primary-color);
   color: white;
   transform: translateY(-1px);
 }
 
 .pqrs-paginacion .page-item.active .page-link {
-  background-color: var(--pqrs-primary);
-  border-color: var(--pqrs-primary);
+  background-color: var(--main-primary-color);
+  border-color: var(--main-primary-color);
 }
 
 .pqrs-paginacion .page-item.disabled .page-link {
-  color: var(--pqrs-secondary);
+  color: var(--main-text-color-secondary);
   background-color: transparent;
 }
 

@@ -10,11 +10,11 @@
 .home-header {
   margin-bottom: 30px;
   padding: 20px 0;
-  border-bottom: 2px solid var(--border-color, #e0e0e0);
+  border-bottom: 2px solid var(--main-border-color);
 }
 
 .home-title {
-  color: var(--primary-color, #007bff);
+  color: var(--main-primary-color);
   margin-bottom: 10px;
   font-weight: 600;
 }
@@ -27,7 +27,7 @@
 .home-time {
   font-size: 1.2rem;
   font-weight: 500;
-  color: var(--text-color);
+  color: var(--main-text-color);
 }
 
 /* Dashboard principal */
@@ -39,7 +39,7 @@
   background: white;
   border-radius: 10px;
   padding: 25px;
-  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  box-shadow: var(--main-shadow);
   transition: transform 0.3s ease, box-shadow 0.3s ease;
   height: 100%;
   display: flex;
@@ -48,7 +48,7 @@
 
 .home-card:hover {
   transform: translateY(-5px);
-  box-shadow: 0 8px 15px rgba(0, 0, 0, 0.15);
+  box-shadow: var(--main-shadow-hover);
 }
 
 .card-icon {
@@ -65,12 +65,12 @@
 
 .card-content h4 {
   margin-bottom: 10px;
-  color: var(--text-color);
+  color: var(--main-text-color);
   font-weight: 600;
 }
 
 .card-content p {
-  color: var(--text-muted, #6c757d);
+  color: var(--main-text-color-secondary);
   margin-bottom: 20px;
   flex-grow: 1;
 }
@@ -87,7 +87,7 @@
 .user-info-item {
   margin-bottom: 15px;
   padding: 10px 0;
-  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  border-bottom: 1px solid var(--main-border-color);
 }
 
 .user-info-item:last-child {
@@ -96,7 +96,7 @@
 }
 
 .user-info-item strong {
-  color: var(--primary-color, #007bff);
+  color: var(--main-primary-color);
   margin-right: 10px;
 }
 
@@ -115,11 +115,11 @@
 }
 
 .activity-item span {
-  color: var(--text-color);
+  color: var(--main-text-color);
 }
 
 .activity-item strong {
-  color: var(--primary-color, #007bff);
+  color: var(--main-primary-color);
 }
 
 /* Noticias y anuncios */
@@ -131,7 +131,7 @@
   display: flex;
   margin-bottom: 20px;
   padding-bottom: 20px;
-  border-bottom: 1px solid var(--border-color, #e0e0e0);
+  border-bottom: 1px solid var(--main-border-color);
 }
 
 .news-item:last-child {
@@ -141,7 +141,7 @@
 }
 
 .news-date {
-  background: var(--primary-color, #007bff);
+  background: var(--main-primary-color);
   color: white;
   padding: 8px 12px;
   border-radius: 5px;
@@ -154,13 +154,13 @@
 }
 
 .news-content h6 {
-  color: var(--text-color);
+  color: var(--main-text-color);
   margin-bottom: 8px;
   font-weight: 600;
 }
 
 .news-content p {
-  color: var(--text-muted, #6c757d);
+  color: var(--main-text-color-secondary);
   margin-bottom: 0;
   line-height: 1.5;
 }

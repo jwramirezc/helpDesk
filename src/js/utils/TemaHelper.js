@@ -127,9 +127,6 @@ class TemaHelper {
 
     // Aplicar colores del tema
     this.aplicarColoresTema(tema.colores);
-
-    // Aplicar comportamientos dinámicos del tema
-    this.aplicarComportamientosTema(tema);
   }
 
   aplicarColoresTema(colores) {
@@ -139,16 +136,17 @@ class TemaHelper {
     const mapeoVariables = {
       primario: '--primary-color',
       secundario: '--secondary-color',
-      fondo: '--background-color',
-      texto: '--text-color',
       'sidebar-bg': '--sidebar-bg-color',
       'icon-color': '--icon-color',
       'icon-color-active': '--icon-color-active',
+      'icon-color-hover': '--icon-color-hover',
+      'icon-color-background': '--background-icon-color',
+      'background-color-hover': '--background-color-hover',
       'text-color': '--text-color',
       'text-color-active': '--text-color-active',
-      'background-color': '--background-color',
-      'background-icon': '--background-icon-color',
-      'hover-color': '--hover-color',
+      'icon-color-submenu': '--icon-color-submenu',
+      'text-color-submenu': '--text-color-submenu',
+      'background-color-item-submenu': '--background-color-item-submenu',
     };
 
     // Aplicar variables con mapeo específico
@@ -158,110 +156,6 @@ class TemaHelper {
         `--${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
       root.style.setProperty(cssVariable, value);
     });
-  }
-
-  aplicarComportamientosTema(tema) {
-    if (!tema.comportamientos) return;
-
-    const comportamientos = tema.comportamientos;
-    const root = document.documentElement;
-
-    // Aplicar comportamientos como variables CSS para que el CSS pueda usarlas
-    Object.entries(comportamientos).forEach(([key, value]) => {
-      const cssVariable = `--${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-      root.style.setProperty(cssVariable, value ? '1' : '0');
-    });
-
-    // Aplicar estilos dinámicos específicos
-    this.aplicarEstilosDinamicos(tema);
-  }
-
-  aplicarEstilosDinamicos(tema) {
-    if (!tema.comportamientos) return;
-
-    const comportamientos = tema.comportamientos;
-    const colores = tema.colores;
-
-    // Crear o actualizar estilos dinámicos
-    let styleElement = document.getElementById('dynamic-theme-styles');
-    if (!styleElement) {
-      styleElement = document.createElement('style');
-      styleElement.id = 'dynamic-theme-styles';
-      document.head.appendChild(styleElement);
-    }
-
-    // Generar CSS dinámico basado en comportamientos
-    let cssRules = '';
-
-    // Reglas para mobile menu items
-    if (comportamientos['mobile-menu-hover-text-change']) {
-      cssRules += `
-        .mobile-menu-item:hover {
-          color: var(--icon-color-active) !important;
-        }
-      `;
-    } else {
-      cssRules += `
-        .mobile-menu-item:hover {
-          color: var(--text-color) !important;
-        }
-      `;
-    }
-
-    if (comportamientos['mobile-menu-active-text-change']) {
-      cssRules += `
-        .mobile-menu-item:active {
-          color: var(--icon-color-active) !important;
-        }
-      `;
-    } else {
-      cssRules += `
-        .mobile-menu-item:active {
-          color: var(--text-color) !important;
-        }
-      `;
-    }
-
-    if (comportamientos['mobile-menu-focus-text-change']) {
-      cssRules += `
-        .mobile-menu-item:focus {
-          color: var(--icon-color-active) !important;
-        }
-      `;
-    } else {
-      cssRules += `
-        .mobile-menu-item:focus {
-          color: var(--text-color) !important;
-        }
-      `;
-    }
-
-    // Aplicar estilos de fondo según comportamientos
-    if (!comportamientos['mobile-menu-hover-bg']) {
-      cssRules += `
-        .mobile-menu-item:hover {
-          background-color: transparent !important;
-        }
-      `;
-    }
-
-    if (!comportamientos['mobile-menu-active-bg']) {
-      cssRules += `
-        .mobile-menu-item:active {
-          background-color: transparent !important;
-        }
-      `;
-    }
-
-    if (!comportamientos['mobile-menu-focus-bg']) {
-      cssRules += `
-        .mobile-menu-item:focus {
-          background-color: transparent !important;
-        }
-      `;
-    }
-
-    styleElement.textContent = cssRules;
   }
 
   aplicarColoresPorDefecto() {
@@ -317,11 +211,6 @@ class TemaHelper {
   obtenerLogoMovilTemaActual() {
     const tema = this.obtenerTemaActualCompleto();
     return tema ? tema['logo-movil'] : 'public/images/logo-movil-dark.png';
-  }
-
-  // Método para obtener comportamientos del tema actual
-  obtenerComportamientosActuales() {
-    return this.config.tema.comportamientos || {};
   }
 
   /**

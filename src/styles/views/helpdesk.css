@@ -24,7 +24,7 @@
    ======================================== */
 .helpdesk-container {
   padding: 1.5rem;
-  background-color: var(--background-color);
+  background-color: var(--main-background-color);
   min-height: calc(100vh - var(--header-height));
 }
 
@@ -34,11 +34,11 @@
 .helpdesk-header {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid var(--helpdesk-light);
+  border-bottom: 2px solid var(--main-light-color);
 }
 
 .helpdesk-title {
-  color: var(--helpdesk-primary);
+  color: var(--main-primary-color);
   font-weight: 700;
   margin-bottom: 0.5rem;
   font-size: 2rem;
@@ -60,7 +60,7 @@
   background: white;
   border-radius: var(--helpdesk-border-radius);
   padding: 1.5rem;
-  box-shadow: var(--helpdesk-shadow);
+  box-shadow: var(--main-shadow);
   transition: var(--helpdesk-transition);
   border: 1px solid #e9ecef;
   display: flex;
@@ -70,7 +70,7 @@
 }
 
 .helpdesk-stat-card:hover {
-  box-shadow: var(--helpdesk-shadow-hover);
+  box-shadow: var(--main-shadow-hover);
   transform: translateY(-2px);
 }
 
@@ -98,12 +98,12 @@
   font-weight: 700;
   margin: 0;
   line-height: 1;
-  color: var(--helpdesk-dark);
+  color: var(--main-dark-color);
 }
 
 .stat-label {
   margin: 0;
-  color: var(--helpdesk-secondary);
+  color: var(--main-text-color-secondary);
   font-size: 0.9rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -119,7 +119,7 @@
 
 .helpdesk-filtros .card {
   border: none;
-  box-shadow: var(--helpdesk-shadow);
+  box-shadow: var(--main-shadow);
   border-radius: var(--helpdesk-border-radius);
 }
 
@@ -129,7 +129,7 @@
 
 .helpdesk-filtros .form-label {
   font-weight: 600;
-  color: var(--helpdesk-dark);
+  color: var(--main-text-color);
   margin-bottom: 0.5rem;
   font-size: 0.9rem;
   text-transform: uppercase;
@@ -145,7 +145,7 @@
 
 .helpdesk-filtros .form-select:focus,
 .helpdesk-filtros .form-control:focus {
-  border-color: var(--helpdesk-primary);
+  border-color: var(--main-primary-color);
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
@@ -162,13 +162,13 @@
 
 .helpdesk-tabla .card {
   border: none;
-  box-shadow: var(--helpdesk-shadow);
+  box-shadow: var(--main-shadow);
   border-radius: var(--helpdesk-border-radius);
   overflow: hidden;
 }
 
 .helpdesk-tabla .card-header {
-  background: linear-gradient(135deg, var(--helpdesk-primary), #0056b3);
+  background: linear-gradient(135deg, var(--main-primary-color), #0056b3);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -195,11 +195,11 @@
 }
 
 .helpdesk-tabla .table thead th {
-  background-color: var(--helpdesk-light);
+  background-color: var(--main-light-color);
   border: none;
   padding: 1rem;
   font-weight: 600;
-  color: var(--helpdesk-dark);
+  color: var(--main-text-color);
   text-transform: uppercase;
   font-size: 0.8rem;
   letter-spacing: 0.5px;
@@ -222,7 +222,7 @@
 }
 
 .ticket-asunto strong {
-  color: var(--helpdesk-dark);
+  color: var(--main-text-color);
   font-weight: 600;
 }
 
@@ -252,7 +252,7 @@
 
 .helpdesk-paginacion .page-link {
   border: none;
-  color: var(--helpdesk-primary);
+  color: var(--main-primary-color);
   padding: 0.75rem 1rem;
   margin: 0 0.25rem;
   border-radius: var(--helpdesk-border-radius);
@@ -260,18 +260,18 @@
 }
 
 .helpdesk-paginacion .page-link:hover {
-  background-color: var(--helpdesk-primary);
+  background-color: var(--main-primary-color);
   color: white;
   transform: translateY(-1px);
 }
 
 .helpdesk-paginacion .page-item.active .page-link {
-  background-color: var(--helpdesk-primary);
-  border-color: var(--helpdesk-primary);
+  background-color: var(--main-primary-color);
+  border-color: var(--main-primary-color);
 }
 
 .helpdesk-paginacion .page-item.disabled .page-link {
-  color: var(--helpdesk-secondary);
+  color: var(--main-text-color-secondary);
   background-color: transparent;
 }
 

@@ -91,17 +91,17 @@
 .user-name {
   font-weight: 500;
   white-space: nowrap;
-  color: var(--text-color);
+  color: #4b5258;
 }
 
 .user-company {
   font-size: 0.875rem;
-  color: var(--text-color);
+  color: #4b5258;
 }
 
 .user-role {
   font-size: 0.75rem;
-  color: var(--text-color);
+  color: #4b5258;
   font-style: italic;
 }
 

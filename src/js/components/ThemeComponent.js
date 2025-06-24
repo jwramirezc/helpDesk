@@ -182,9 +182,6 @@ class ThemeComponent {
     // Aplicar colores del tema
     this.applyThemeColors(tema.colores);
 
-    // Aplicar comportamientos dinámicos del tema
-    this.applyThemeBehaviors(tema);
-
     // Guardar configuración
     this.config.tema.modo = tema.id;
     this.saveConfig();
@@ -208,64 +205,6 @@ class ThemeComponent {
         `--${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
       root.style.setProperty(cssVariable, value);
     });
-  }
-
-  /**
-   * Aplica los comportamientos del tema
-   * @param {Object} tema - Objeto del tema
-   */
-  applyThemeBehaviors(tema) {
-    if (!tema.comportamientos) return;
-
-    const comportamientos = tema.comportamientos;
-    const root = document.documentElement;
-
-    // Aplicar comportamientos como variables CSS
-    Object.entries(comportamientos).forEach(([key, value]) => {
-      const cssVariable = `--${key.replace(/([A-Z])/g, '-$1').toLowerCase()}`;
-      root.style.setProperty(cssVariable, value ? '1' : '0');
-    });
-
-    // Aplicar estilos dinámicos específicos
-    this.applyDynamicStyles(tema);
-  }
-
-  /**
-   * Aplica estilos dinámicos específicos
-   * @param {Object} tema - Objeto del tema
-   */
-  applyDynamicStyles(tema) {
-    if (!tema.comportamientos) return;
-
-    const comportamientos = tema.comportamientos;
-
-    // Crear o actualizar estilos dinámicos
-    let styleElement = document.getElementById('dynamic-theme-styles');
-    if (!styleElement) {
-      styleElement = document.createElement('style');
-      styleElement.id = 'dynamic-theme-styles';
-      document.head.appendChild(styleElement);
-    }
-
-    // Generar CSS dinámico basado en comportamientos
-    let cssRules = '';
-
-    // Reglas para mobile menu items
-    if (comportamientos['mobile-menu-hover-text-change']) {
-      cssRules += `
-        .mobile-menu-item:hover {
-          color: var(--icon-color-active) !important;
-        }
-      `;
-    } else {
-      cssRules += `
-        .mobile-menu-item:hover {
-          color: var(--text-color) !important;
-        }
-      `;
-    }
-
-    styleElement.textContent = cssRules;
   }
 
   /**
@@ -357,15 +296,6 @@ class ThemeComponent {
       tema.logoMovil ||
       `${paths.MOBILE_LOGO_PREFIX}${tema.modo}${paths.MOBILE_LOGO_SUFFIX}`
     );
-  }
-
-  /**
-   * Obtiene los comportamientos actuales
-   * @returns {Object} Objeto de comportamientos
-   */
-  getCurrentBehaviors() {
-    const tema = this.getCurrentThemeComplete();
-    return tema?.comportamientos || {};
   }
 
   /**
