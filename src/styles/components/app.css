@@ -170,7 +170,7 @@
   transform: translateX(-100%);
   transition: transform 0.3s ease;
   box-shadow: var(--shadow-lg);
-  padding-top: 1rem; /* Agregar padding superior para el botón de cerrar */
+  padding-top: 0; /* Remover padding superior */
 }
 
 .mobile-menu.active {
@@ -179,8 +179,8 @@
 
 .mobile-menu-close {
   position: absolute;
-  top: 0.5rem;
-  right: 0.5rem;
+  top: 1rem;
+  right: 1rem;
   background: none;
   border: none;
   color: var(--icon-color);
@@ -194,6 +194,7 @@
   justify-content: center;
   width: 32px;
   height: 32px;
+  z-index: 1001; /* Asegurar que esté por encima del contenido */
 }
 
 .mobile-menu-close:hover {
@@ -219,7 +220,7 @@
 
 .mobile-menu-items {
   flex: 1;
-  padding: 2rem 1rem;
+  padding: 1rem 1rem; /* Reducir padding superior */
   display: flex;
   flex-direction: column;
   height: calc(100vh - 2rem); /* Ajustar altura sin el header */

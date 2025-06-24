@@ -256,6 +256,13 @@ class ControladorMenu {
    * Agrega eventos específicos para el menú móvil principal
    */
   agregarEventosMenuMovil() {
+    // Mostrar el botón de cerrar original del menú móvil
+    const originalCloseButton =
+      this.mobileMenu.querySelector('.mobile-menu-close');
+    if (originalCloseButton) {
+      originalCloseButton.style.display = 'flex';
+    }
+
     if (this.mobileMenuItems) {
       // Remover eventos previos para evitar duplicados
       this.mobileMenuItems.removeEventListener(
@@ -313,6 +320,13 @@ class ControladorMenu {
    * Agrega eventos para el botón de volver en submenús móviles
    */
   agregarEventosSubmenuMovil() {
+    // Ocultar el botón de cerrar original del menú móvil
+    const originalCloseButton =
+      this.mobileMenu.querySelector('.mobile-menu-close');
+    if (originalCloseButton) {
+      originalCloseButton.style.display = 'none';
+    }
+
     const backButton = document.getElementById('mobile_back_button');
     if (backButton) {
       // Remover eventos previos para evitar duplicados
@@ -330,6 +344,29 @@ class ControladorMenu {
       };
 
       backButton.addEventListener('click', this.handleBackButtonClick);
+    }
+
+    // Agregar evento para el botón de cerrar del submenú
+    const submenuCloseButton = document.getElementById('mobile_submenu_close');
+    if (submenuCloseButton) {
+      // Remover eventos previos para evitar duplicados
+      submenuCloseButton.removeEventListener(
+        'click',
+        this.handleSubmenuCloseClick
+      );
+
+      // Agregar el nuevo evento
+      this.handleSubmenuCloseClick = e => {
+        e.preventDefault();
+        e.stopPropagation(); // Evitar que el clic se propague
+        this.isInSubmenu = false; // Indicar que salimos del submenú
+        this.cerrarMenuMovil();
+      };
+
+      submenuCloseButton.addEventListener(
+        'click',
+        this.handleSubmenuCloseClick
+      );
     }
 
     // Agregar eventos para los subítems

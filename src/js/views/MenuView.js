@@ -111,6 +111,11 @@ class MenuView {
             <i class="fas fa-arrow-left"></i>
             <span>Volver</span>
           </button>
+          <button class="mobile-menu-close" id="mobile_submenu_close">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+        <div class="mobile-submenu-title-container">
           <div class="mobile-submenu-title">
             <i class="${this.currentSubmenuParent.icon}"></i>
             <span>${this.currentSubmenuParent.label}</span>
