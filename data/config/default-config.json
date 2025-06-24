@@ -16,10 +16,5 @@
       "fondo": "#ffffff",
       "texto": "#212529"
     }
-  },
-  "notificaciones": {
-    "activas": false,
-    "sonido": true,
-    "intervalo": 300000
   }
 }

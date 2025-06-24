@@ -5,6 +5,7 @@ class HomeView {
   constructor() {
     this.isInitialized = false;
     this.updateInterval = null;
+    this.configService = new ConfigService();
     // No auto-inicializar en el constructor
   }
 
@@ -172,13 +173,22 @@ class HomeView {
    */
   obtenerUsuarioActual() {
     try {
-      // Intentar obtener del localStorage
-      const usuarioData = localStorage.getItem('usuario');
-      if (usuarioData) {
-        return JSON.parse(usuarioData);
+      console.log('HomeView: Obteniendo usuario actual...');
+
+      // Usar ConfigService para obtener el usuario
+      const usuario = this.configService.getUser();
+      console.log('HomeView: Usuario obtenido del ConfigService:', usuario);
+
+      if (usuario && usuario.esValido()) {
+        console.log(
+          'HomeView: Usuario válido encontrado:',
+          usuario.nombreCompleto
+        );
+        return usuario;
       }
 
-      // Si no hay en localStorage, usar datos por defecto
+      console.log('HomeView: Usuario no válido, usando datos por defecto');
+      // Si no hay usuario válido en ConfigService, usar datos por defecto
       return {
         nombre: 'Usuario',
         apellidos: 'Demo',

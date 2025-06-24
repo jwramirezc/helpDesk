@@ -286,7 +286,7 @@
       {
         "id": "user-name",
         "name": "Nombre del usuario",
-        "source": "user.nombre",
+        "source": "user.nombre + ' ' + user.apellidos",
         "class": "user-name",
         "enabled": true,
         "order": 1,
