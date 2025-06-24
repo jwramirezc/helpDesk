@@ -1,14 +1,14 @@
 /* Variables CSS por defecto */
 :root {
   --sidebar-width: 60px;
-  --header-height: 60px;
+  --header-height: 72px;
   --submenu-width: 240px;
   --sidebar-bg-color: #2b303b;
-  --text-color: #1a1a1a; /* Color de texto por defecto */
+  --text-color: #4b5258; /* Color de texto por defecto */
   --text-color-secondary: #6c757d;
   --background-color: #dedede;
   --background-color-light: #ffffff;
-  --background-color-hover: #f5f5f5;
+  --background-color-hover: #ecf4fd;
   --icon-color: #555555;
   --icon-color-active: white;
   --background-icon-color: #e8e8e8;
@@ -17,8 +17,8 @@
   --border-main-content: #d1d0d0;
   --primary-color: #3498db;
   --primary-color-light: #5dade2;
-  --font-size-sm: 0.875rem;
-  --font-size-base: 1rem;
+  --font-size-sm: 0.75rem;
+  --font-size-base: 0.875rem;
   --font-size-xl: 1.25rem;
   --font-weight-semibold: 600;
   --spacing-sm: 0.5rem;
@@ -336,12 +336,12 @@
 .user-name {
   font-weight: 500;
   white-space: nowrap;
-  color: #1a1a1a; /* Color fijo del tema light para todos los temas */
+  color: var(--text-color); /* Color fijo del tema light para todos los temas */
 }
 
 .user-company {
   font-size: 0.875rem;
-  color: #1a1a1a; /* Color fijo del tema light para todos los temas */
+  color: var(--text-color); /* Color fijo del tema light para todos los temas */
 }
 
 /* Contenido principal */

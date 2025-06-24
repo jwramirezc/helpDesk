@@ -50,29 +50,43 @@ body.submenu-active #main-content {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  border-bottom: 1px solid var(--border-color);
   flex-shrink: 0; /* No permitir que se encoja */
-  margin-top: var(--header-height); /* Espacio para el header */
+  margin-top: 10px; /* Espacio para el header */
+  min-height: 50px; /* Altura mínima para consistencia */
 }
 
 .submenu-pc-title {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-semibold);
   color: var(--text-color);
+  margin: 0; /* Eliminar márgenes por defecto */
+  line-height: 1.2; /* Mejorar alineación vertical del texto */
+  display: flex;
+  align-items: center;
 }
 
 .submenu-pc-close {
   cursor: pointer;
   color: var(--text-color-secondary);
-  font-size: var(--font-size-xl);
+  font-size: var(--font-size-base);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 24px; /* Ancho fijo para consistencia */
+  height: 24px; /* Alto fijo para consistencia */
+  border-radius: 4px; /* Bordes redondeados para mejor UX */
+  transition: all var(--transition-fast);
+  margin: 0; /* Eliminar márgenes por defecto */
 }
 
 .submenu-pc-close:hover {
   color: var(--primary-color);
+  background-color: var(--background-color-hover);
 }
 
 /* --- Contenedor de los items --- */
 .submenu-pc-items {
+  font-size: var(--font-size-base);
   list-style: none;
   padding: 0;
   margin: 0;
@@ -86,19 +100,22 @@ body.submenu-active #main-content {
   display: flex;
   align-items: center;
   padding: var(--spacing-sm) var(--spacing-lg);
-  color: var(--text-color-secondary);
+  color: var(--text-color);
   text-decoration: none;
   transition: background-color var(--transition-fast),
     color var(--transition-fast);
+  margin: 6px 15px;
+  border-radius: 5px;
 }
 
 .submenu-pc-item:hover {
   background-color: var(--background-color-hover);
   color: var(--text-color);
+  text-decoration: none;
 }
 
 .submenu-pc-item.active {
-  background-color: var(--primary-color-light);
+  background-color: var(--background-color-hover);
   color: var(--primary-color);
   font-weight: var(--font-weight-semibold);
 }

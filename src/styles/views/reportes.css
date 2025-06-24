@@ -41,7 +41,7 @@
 }
 
 .reportes-filters h4 {
-  color: var(--text-color, #333);
+  color: var(--text-color);
   margin-bottom: 20px;
   font-weight: 600;
 }
@@ -61,7 +61,7 @@
 .filter-item label {
   margin-bottom: 8px;
   font-weight: 500;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   font-size: 0.9rem;
 }
 
@@ -98,7 +98,7 @@
 }
 
 .reportes-content h4 {
-  color: var(--text-color, #333);
+  color: var(--text-color);
   margin-bottom: 20px;
   font-weight: 600;
 }
@@ -126,7 +126,7 @@
 }
 
 .reporte-card h5 {
-  color: var(--text-color, #333);
+  color: var(--text-color);
   margin-bottom: 15px;
   font-weight: 600;
 }
@@ -161,7 +161,7 @@
 }
 
 .chart-title {
-  color: var(--text-color, #333);
+  color: var(--text-color);
   font-weight: 600;
   margin: 0;
 }
@@ -175,7 +175,7 @@
   padding: 6px 12px;
   border: 1px solid var(--border-color, #e0e0e0);
   background-color: white;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -202,7 +202,7 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--text-muted, #6c757d);
+  color: var(--text-color);
   font-style: italic;
 }
 
@@ -223,7 +223,7 @@
 .reportes-table th {
   background-color: var(--light-color, #f8f9fa);
   font-weight: 600;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   position: sticky;
   top: 0;
   z-index: 10;
@@ -252,8 +252,8 @@
 }
 
 .reporte-status.processing {
-  background-color: rgba(23, 162, 184, 0.1);
-  color: #17a2b8;
+  background-color: rgba(0, 123, 255, 0.1);
+  color: #007bff;
 }
 
 .reporte-status.error {
@@ -261,26 +261,27 @@
   color: #dc3545;
 }
 
-/* Botones de acción */
+/* Acciones de reportes */
 .reportes-actions {
   display: flex;
   gap: 15px;
-  margin-top: 25px;
-  flex-wrap: wrap;
+  justify-content: flex-end;
+  align-items: center;
+  margin-bottom: 20px;
 }
 
 .btn-reporte {
-  padding: 12px 24px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  padding: 12px 20px;
   border: none;
-  border-radius: 5px;
-  font-size: 1rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
   font-weight: 500;
   cursor: pointer;
   transition: all 0.3s ease;
   text-decoration: none;
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
 }
 
 .btn-reporte-primary {
@@ -291,24 +292,22 @@
 .btn-reporte-primary:hover {
   background-color: #0056b3;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(0, 123, 255, 0.3);
 }
 
 .btn-reporte-success {
-  background-color: var(--success-color, #28a745);
+  background-color: #28a745;
   color: white;
 }
 
 .btn-reporte-success:hover {
   background-color: #1e7e34;
   transform: translateY(-2px);
-  box-shadow: 0 4px 8px rgba(40, 167, 69, 0.3);
 }
 
 .btn-reporte-outline {
   background-color: transparent;
   color: var(--primary-color, #007bff);
-  border: 2px solid var(--primary-color, #007bff);
+  border: 1px solid var(--primary-color, #007bff);
 }
 
 .btn-reporte-outline:hover {
@@ -317,18 +316,18 @@
   transform: translateY(-2px);
 }
 
-/* Exportación */
+/* Sección de exportación */
 .export-section {
   background: white;
   border-radius: 10px;
-  padding: 20px;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  margin-bottom: 20px;
+  padding: 25px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  margin-bottom: 30px;
 }
 
 .export-options {
   display: flex;
-  gap: 15px;
+  gap: 20px;
   align-items: center;
   flex-wrap: wrap;
 }
@@ -346,7 +345,7 @@
 .export-format label {
   margin: 0;
   font-size: 0.9rem;
-  color: var(--text-color, #333);
+  color: var(--text-color);
 }
 
 /* Paginación */
@@ -372,7 +371,7 @@
   padding: 8px 12px;
   border: 1px solid var(--border-color, #e0e0e0);
   background-color: white;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
@@ -541,27 +540,28 @@
   }
 }
 
-/* Tema oscuro */
+/* Modo oscuro */
 @media (prefers-color-scheme: dark) {
   .reportes-filters,
   .reportes-content,
   .export-section,
   .reporte-card,
   .chart-container {
-    background-color: var(--dark-color, #343a40);
-    color: var(--light-color, #f8f9fa);
+    background-color: #2d3748;
+    color: #e2e8f0;
   }
 
   .reportes-table th {
-    background-color: rgba(255, 255, 255, 0.1);
-    color: var(--light-color, #f8f9fa);
+    background-color: #4a5568;
+    color: #e2e8f0;
   }
 
   .reportes-table tr:hover {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: rgba(0, 123, 255, 0.1);
   }
 
   .chart-canvas {
-    background-color: rgba(255, 255, 255, 0.05);
+    background-color: #4a5568;
+    color: #e2e8f0;
   }
 }

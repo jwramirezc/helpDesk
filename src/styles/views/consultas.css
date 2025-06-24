@@ -41,7 +41,7 @@
 }
 
 .consulta-form h4 {
-  color: var(--text-color, #333);
+  color: var(--text-color);
   margin-bottom: 20px;
   font-weight: 600;
 }
@@ -54,7 +54,7 @@
   display: block;
   margin-bottom: 8px;
   font-weight: 500;
-  color: var(--text-color, #333);
+  color: var(--text-color);
 }
 
 .form-group input,
@@ -146,7 +146,7 @@
 }
 
 .consulta-results h4 {
-  color: var(--text-color, #333);
+  color: var(--text-color);
   margin-bottom: 20px;
   font-weight: 600;
 }
@@ -168,7 +168,7 @@
 .results-table th {
   background-color: var(--light-color, #f8f9fa);
   font-weight: 600;
-  color: var(--text-color, #333);
+  color: var(--text-color);
 }
 
 .results-table tr:hover {
@@ -228,7 +228,7 @@
   display: block;
   margin-bottom: 5px;
   font-weight: 500;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   font-size: 0.9rem;
 }
 
@@ -264,7 +264,7 @@
   padding: 8px 12px;
   border: 1px solid var(--border-color, #e0e0e0);
   background-color: white;
-  color: var(--text-color, #333);
+  color: var(--text-color);
   border-radius: 4px;
   cursor: pointer;
   transition: all 0.3s ease;
