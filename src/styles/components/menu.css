@@ -97,7 +97,7 @@
 }
 
 .mobile-back-button:hover {
-  background-color: var(--hover-color);
+  background-color: var(--background-color-hover);
   border-radius: 4px;
 }
 

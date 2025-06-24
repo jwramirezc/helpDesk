@@ -12,6 +12,7 @@
   --icon-color: #555555;
   --icon-color-active: white;
   --icon-color-hover: #007bff;
+  --icon-color-header-hover: #007bff;
   --background-icon-color: #e8e8e8;
   --border-color: #e0e0e0;
   --border-main-content: #d1d0d0;
@@ -197,7 +198,7 @@
 
 .mobile-menu-close:hover {
   background-color: var(--background-color-hover);
-  color: var(--icon-color-hover);
+  color: var(--icon-color-header-hover);
 }
 
 .mobile-menu-logo {
@@ -388,7 +389,7 @@
 
 .notifications i.fa-bell {
   font-size: 1.2rem;
-  color: #555555; /* Color fijo del tema light para todos los temas */
+  color: var(--icon-color-header-hover);
 }
 
 .notifications:hover {

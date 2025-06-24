@@ -52,7 +52,7 @@
 }
 
 .header-button:hover i {
-  color: #007bff;
+  color: var(--icon-color-header-hover);
 }
 
 /* Badge de notificaciones */
@@ -134,26 +134,26 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  background-color: #e9ecef;
+  background-color: var(--background-icon-color);
   color: var(--text-color);
   font-size: 1.2rem;
   transition: all 0.3s ease;
 }
 
 .user-avatar:hover .user-avatar-icon {
-  background-color: #dee2e6;
-  color: #495057;
+  background-color: var(--background-color-hover);
+  color: var(--icon-color-header-hover);
 }
 
 /* Tema oscuro para icono del avatar */
 [data-theme='dark'] .user-avatar-icon {
-  background-color: #495057;
-  color: #adb5bd;
+  background-color: var(--icon-color-background);
+  color: var(--icon-color);
 }
 
 [data-theme='dark'] .user-avatar:hover .user-avatar-icon {
-  background-color: #6c757d;
-  color: #ced4da;
+  background-color: var(--background-color-hover);
+  color: var(--icon-color-header-hover);
 }
 
 /* Estados especiales */
@@ -237,7 +237,7 @@
 
 /* Accesibilidad */
 .header-button:focus-visible {
-  outline: 2px solid #007bff;
+  outline: 2px solid var(--icon-color-header-hover);
   outline-offset: 2px;
 }
 

@@ -101,6 +101,7 @@ const ComponentConfig = BaseConfig.extend({
       'icon-color': '--icon-color',
       'icon-color-active': '--icon-color-active',
       'icon-color-hover': '--icon-color-hover',
+      'icon-color-header-hover': '--icon-color-header-hover',
       'icon-color-background': '--background-icon-color',
       'background-color-hover': '--background-color-hover',
       'text-color': '--text-color',
