@@ -18,7 +18,7 @@
     }
   },
   "notificaciones": {
-    "activas": true,
+    "activas": false,
     "sonido": true,
     "intervalo": 300000
   }
