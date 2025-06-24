@@ -115,7 +115,7 @@ body.submenu-active #main-content {
 
 .submenu-pc-item.active {
   background-color: var(--background-color-hover);
-  color: var(--primary-color);
+  color: var(--text-color);
   font-weight: var(--font-weight-semibold);
 }
 

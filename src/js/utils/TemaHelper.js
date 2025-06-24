@@ -144,6 +144,9 @@ class TemaHelper {
       'sidebar-bg': '--sidebar-bg-color',
       'icon-color': '--icon-color',
       'icon-color-active': '--icon-color-active',
+      'text-color': '--text-color',
+      'text-color-active': '--text-color-active',
+      'background-color': '--background-color',
       'background-icon': '--background-icon-color',
       'hover-color': '--hover-color',
     };

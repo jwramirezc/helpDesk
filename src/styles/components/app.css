@@ -6,7 +6,7 @@
   --sidebar-bg-color: #2b303b;
   --text-color: #4b5258; /* Color de texto por defecto */
   --text-color-secondary: #6c757d;
-  --background-color: #dedede;
+  --background-color: #ffffff;
   --background-color-light: #ffffff;
   --background-color-hover: #ecf4fd;
   --icon-color: #555555;
@@ -16,7 +16,7 @@
   --border-color: #e0e0e0;
   --border-main-content: #d1d0d0;
   --primary-color: #3498db;
-  --primary-color-light: #5dade2;
+  --primary-color-light: #ecf4fd;
   --font-size-sm: 0.75rem;
   --font-size-base: 0.875rem;
   --font-size-xl: 1.25rem;
@@ -34,6 +34,7 @@
   height: 100vh;
   background-color: var(--sidebar-bg-color);
   position: fixed;
+  border-right: 1px solid var(--border-main-content);
   top: 0;
   left: 0;
   z-index: var(--z-index-fixed);
@@ -104,7 +105,7 @@
 }
 
 .menu-item.active i {
-  color: var(--icon-color-active);
+  color: var(--text-color-active);
 }
 
 /* Mobile menu toggle - Comportamiento correcto */
@@ -227,7 +228,7 @@
   align-items: center;
   gap: 1rem;
   padding: 0.75rem 1rem;
-  color: var(--icon-color);
+  color: var(--text-color);
   text-decoration: none;
   transition: all 0.3s ease;
   border: none;
@@ -238,7 +239,7 @@
 }
 
 .mobile-menu-item:hover {
-  background-color: var(--hover-color);
+  background-color: var(--background-color);
   text-decoration: none;
   border-radius: 5px;
 }
@@ -256,6 +257,7 @@
   font-size: 1.2rem;
   width: 20px;
   text-align: center;
+  color: var(--icon-color);
 }
 
 .mobile-menu-item.active {
@@ -264,11 +266,11 @@
 
 .mobile-menu-item.active,
 .mobile-menu-item.active i {
-  color: var(--icon-color-active);
+  color: var(--text-color-active);
 }
 
 .mobile-menu-item.logout {
-  color: var(--icon-color);
+  color: var(--text-color);
 }
 
 .mobile-menu-item.logout i {
@@ -276,7 +278,7 @@
 }
 
 .mobile-menu-item.logout:hover {
-  background-color: var(--hover-color);
+  background-color: var(--background-color);
   text-decoration: none;
 }
 
@@ -334,6 +336,7 @@
 }
 
 .user-name {
+  font-size: var(--font-size-base);
   font-weight: 500;
   white-space: nowrap;
   color: var(--text-color); /* Color fijo del tema light para todos los temas */
@@ -350,7 +353,6 @@
   padding: 1rem;
   padding-top: calc(var(--header-height) + 1rem);
   min-height: 100vh;
-  background-color: var(--background-color);
 }
 
 .notifications {

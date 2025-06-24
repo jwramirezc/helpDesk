@@ -12,22 +12,23 @@
 }
 
 .menu-item.active i {
-  color: var(--icon-color-active);
+  color: var(--text-color-active);
 }
 
 .menu-item.has-submenu.active::after {
-  background-color: var(--icon-color-active);
+  background-color: var(--text-color-active);
   opacity: 1;
 }
 
 /* Estados activos para móvil */
 .mobile-menu-item.active {
   background-color: var(--primary-color);
-  color: var(--icon-color-active);
+  color: var(--text-color-active);
+  border-radius: 5px;
 }
 
 .mobile-menu-item.active i {
-  color: var(--icon-color-active);
+  color: var(--text-color-active);
 }
 
 .mobile-menu-item.has-submenu.active .submenu-arrow {
