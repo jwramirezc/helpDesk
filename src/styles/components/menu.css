@@ -120,13 +120,13 @@
   align-items: center;
   gap: var(--spacing-sm);
   font-weight: 600;
-  color: var(--text-color);
+  color: var(--secondary-color);
   justify-content: center; /* Centrar el título */
 }
 
 .mobile-submenu-title i {
   font-size: 1.2rem;
-  color: var(--primary-color);
+  color: var(--secondary-color);
 }
 
 /* Estilos específicos para el botón de cerrar del submenú */
