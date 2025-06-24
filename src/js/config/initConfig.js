@@ -10,10 +10,10 @@ class InitConfig {
   }
 
   /**
-   * Carga un archivo JSON de forma SINCRÓNICA.
+   * Carga un archivo JSON o JavaScript de forma SINCRÓNICA.
    * Esto garantiza que la configuración esté lista antes de que
    * se ejecuten los siguientes scripts incluidos en index.html.
-   * @param {string} path Ruta al archivo JSON.
+   * @param {string} path Ruta al archivo JSON o JavaScript.
    * @returns {object|null}
    */
   cargarJSONSync(path) {
@@ -22,13 +22,37 @@ class InitConfig {
       request.open('GET', path, false); // "false" -> llamada sincrónica
       request.send(null);
       if (request.status === 200) {
-        return JSON.parse(request.responseText);
+        // Determinar si es un archivo JavaScript o JSON basado en la extensión
+        const isJavaScript = path.endsWith('.js');
+
+        if (isJavaScript) {
+          // Para archivos JavaScript, ejecutar el script y usar window.menuConfig
+          const scriptContent = request.responseText;
+
+          // Crear un script temporal para ejecutar el contenido
+          const script = document.createElement('script');
+          script.textContent = scriptContent;
+          document.head.appendChild(script);
+
+          // Verificar si se creó la configuración global
+          if (window.menuConfig) {
+            document.head.removeChild(script);
+            return window.menuConfig;
+          } else {
+            document.head.removeChild(script);
+            console.error(`No se pudo cargar la configuración desde ${path}`);
+            return null;
+          }
+        } else {
+          // Para archivos JSON, usar el método tradicional
+          return JSON.parse(request.responseText);
+        }
       }
       console.error(
         `Error ${request.status} al intentar cargar el archivo ${path}`
       );
     } catch (error) {
-      console.error('Excepción al cargar JSON:', error);
+      console.error('Excepción al cargar archivo:', error);
     }
     return null;
   }

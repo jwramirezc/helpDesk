@@ -1,0 +1,104 @@
+/**
+ * Configuración del menú lateral de la aplicación
+ *
+ * Este archivo contiene la estructura del menú de navegación
+ * con iconos, etiquetas y configuraciones de submenús.
+ */
+const menuConfig = {
+  menuItems: {
+    top: [
+      {
+        id: 'menu_home',
+        label: 'Home',
+        icon: 'fas fa-home',
+        type: 'item',
+        target: 'home.html',
+      },
+      {
+        id: 'menu_helpdesk',
+        label: 'Help Desk',
+        icon: 'fas fa-ticket',
+        type: 'item',
+        target: 'helpdesk.html',
+      },
+      {
+        id: 'menu_pqrs',
+        label: 'PQRS',
+        icon: 'fas fa-comments',
+        type: 'item',
+        target: 'pqrs.html',
+      },
+      {
+        id: 'menu_consultas',
+        label: 'Consultas',
+        icon: 'fas fa-search',
+        type: 'item',
+        target: 'consultas.html',
+      },
+      {
+        id: 'menu_reportes',
+        label: 'Reportes',
+        icon: 'fas fa-chart-bar',
+        type: 'item',
+        target: 'reportes.html',
+      },
+    ],
+    bottom: [
+      {
+        id: 'menu_theme',
+        label: 'Tema',
+        icon: 'fas fa-moon',
+        type: 'item',
+        target: 'theme.html',
+      },
+      {
+        id: 'menu_config',
+        label: 'Configuración',
+        icon: 'fas fa-cog',
+        type: 'submenu',
+        popoverPlacement: 'right',
+        popoverOffset: 12,
+        children: [
+          {
+            id: 'menu_config_usuarios',
+            label: 'Usuarios',
+            icon: 'fas fa-users',
+            type: 'item',
+            target: 'configuracion/usuarios.html',
+          },
+          {
+            id: 'menu_config_perfiles',
+            label: 'Perfiles',
+            icon: 'fas fa-user-shield',
+            type: 'item',
+            target: 'configuracion/perfiles.html',
+          },
+          {
+            id: 'menu_config_sistema',
+            label: 'Sistema',
+            icon: 'fas fa-cogs',
+            type: 'item',
+            target: 'configuracion/sistema.html',
+          },
+        ],
+      },
+      {
+        id: 'menu_logout',
+        label: 'Cerrar Sesión',
+        icon: 'fas fa-sign-out-alt',
+        type: 'item',
+        target: 'logout.html',
+      },
+    ],
+  },
+};
+
+// Exportar para uso en módulos ES6
+if (typeof module !== 'undefined' && module.exports) {
+  module.exports = menuConfig;
+}
+
+// Hacer disponible globalmente para uso en navegador
+if (typeof window !== 'undefined') {
+  window.menuConfig = menuConfig;
+}

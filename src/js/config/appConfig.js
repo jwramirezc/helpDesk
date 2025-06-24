@@ -12,7 +12,7 @@ const AppConfig = {
     VIEWS: 'src/views/html/',
     STYLES: 'src/styles/views/',
     I18N: 'data/i18n/',
-    MENU_JSON: 'data/config/menu.json',
+    MENU_JSON: 'data/config/menu-config.js',
     DEFAULT_CONFIG: 'data/config/default-config.json',
     TEMAS_JSON: 'data/config/temas.json',
     NOTIFICACIONES_JSON: 'data/notificaciones.json',

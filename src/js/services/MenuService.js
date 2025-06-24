@@ -30,12 +30,21 @@ class MenuService {
 
   /**
    * Carga el menú directamente desde el servidor sin cache
-   * @param {string} menuPath - Ruta del archivo menu.json
+   * @param {string} menuPath - Ruta del archivo menu-config.js o menu.json
    * @returns {Promise<{top: Array<MenuItem>, bottom: Array<MenuItem>}>}
    */
   async loadMenuFromServer(menuPath) {
     try {
-      // Cargar directamente desde servidor
+      // Primero intentar usar la configuración global si está disponible
+      if (window.menuConfig) {
+        ComponentConfig.log(
+          'MenuService',
+          'Usando configuración global del menú'
+        );
+        return this.processMenuData(window.menuConfig);
+      }
+
+      // Si no hay configuración global, cargar desde el archivo
       const response = await fetch(menuPath);
       if (!response.ok) {
         throw new Error(
@@ -43,8 +52,33 @@ class MenuService {
         );
       }
 
-      const json = await response.json();
-      return this.processMenuData(json);
+      // Determinar si es un archivo JavaScript o JSON basado en la extensión
+      const isJavaScript = menuPath.endsWith('.js');
+
+      if (isJavaScript) {
+        // Para archivos JavaScript, ejecutar el script y usar window.menuConfig
+        const scriptContent = await response.text();
+
+        // Crear un script temporal para ejecutar el contenido
+        const script = document.createElement('script');
+        script.textContent = scriptContent;
+        document.head.appendChild(script);
+
+        // Verificar si se creó la configuración global
+        if (window.menuConfig) {
+          document.head.removeChild(script);
+          return this.processMenuData(window.menuConfig);
+        } else {
+          document.head.removeChild(script);
+          throw new Error(
+            'No se pudo cargar la configuración del menú desde el archivo JavaScript'
+          );
+        }
+      } else {
+        // Para archivos JSON, usar el método tradicional
+        const json = await response.json();
+        return this.processMenuData(json);
+      }
     } catch (error) {
       console.error('MenuService: Error al cargar menú:', error);
 

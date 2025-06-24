@@ -62,12 +62,6 @@
               "class": "submenu-item"
             },
             {
-              "id": "notification-divider-1",
-              "type": "divider",
-              "enabled": true,
-              "order": 3
-            },
-            {
               "id": "notification-settings",
               "label": "Configurar notificaciones",
               "icon": "fas fa-cog",
@@ -85,114 +79,6 @@
               "type": "item",
               "enabled": true,
               "order": 5,
-              "class": "submenu-item"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "btn-theme-toggle",
-      "name": "Cambiar tema",
-      "icon": "fas fa-moon",
-      "tooltip": "Cambiar tema",
-      "type": "popover",
-      "enabled": true,
-      "movil": false,
-      "order": 2,
-      "permissions": {
-        "roles": ["user", "admin", "moderator"],
-        "required": false
-      },
-      "popover": {
-        "content": "popover-theme",
-        "placement": "bottom",
-        "offset": 8,
-        "submenu": {
-          "enabled": true,
-          "items": [
-            {
-              "id": "set-theme-light",
-              "label": "Tema claro",
-              "icon": "fas fa-sun",
-              "action": "set-theme-light",
-              "type": "item",
-              "enabled": true,
-              "order": 1,
-              "class": "submenu-item"
-            },
-            {
-              "id": "set-theme-dark",
-              "label": "Tema oscuro",
-              "icon": "fas fa-moon",
-              "action": "set-theme-dark",
-              "type": "item",
-              "enabled": true,
-              "order": 2,
-              "class": "submenu-item"
-            },
-            {
-              "id": "set-theme-auto",
-              "label": "Automático",
-              "icon": "fas fa-magic",
-              "action": "set-theme-auto",
-              "type": "item",
-              "enabled": true,
-              "order": 3,
-              "class": "submenu-item"
-            }
-          ]
-        }
-      }
-    },
-    {
-      "id": "btn-language-selector",
-      "name": "Idioma",
-      "icon": "fas fa-globe",
-      "tooltip": "Cambiar idioma",
-      "type": "popover",
-      "enabled": true,
-      "movil": false,
-      "order": 3,
-      "permissions": {
-        "roles": ["user", "admin", "moderator"],
-        "required": false
-      },
-      "popover": {
-        "content": "popover-language",
-        "placement": "bottom",
-        "offset": 8,
-        "submenu": {
-          "enabled": true,
-          "items": [
-            {
-              "id": "set-language-es",
-              "label": "Español",
-              "icon": "🇪🇸",
-              "action": "set-language-es",
-              "type": "item",
-              "enabled": true,
-              "order": 1,
-              "class": "submenu-item"
-            },
-            {
-              "id": "set-language-en",
-              "label": "English",
-              "icon": "🇺🇸",
-              "action": "set-language-en",
-              "type": "item",
-              "enabled": true,
-              "order": 2,
-              "class": "submenu-item"
-            },
-            {
-              "id": "set-language-fr",
-              "label": "Français",
-              "icon": "🇫🇷",
-              "action": "set-language-fr",
-              "type": "item",
-              "enabled": true,
-              "order": 3,
               "class": "submenu-item"
             }
           ]
@@ -248,12 +134,6 @@
               "enabled": true,
               "order": 3,
               "class": "submenu-item"
-            },
-            {
-              "id": "help-divider-1",
-              "type": "divider",
-              "enabled": true,
-              "order": 4
             },
             {
               "id": "contact-support",
