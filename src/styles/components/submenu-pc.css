@@ -40,7 +40,6 @@ body.submenu-active #header {
 
 /* Ajustar el contenido principal cuando el submenú está activo */
 body.submenu-active #main-content {
-  margin-left: calc(var(--sidebar-width) + var(--submenu-width));
   transition: margin-left var(--transition-base);
 }
 
