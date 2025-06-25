@@ -25,7 +25,7 @@ class MenuItem {
     }
 
     // Validaciones específicas por tipo
-    if (config.type === 'item' && !config.target) {
+    if (config.type === 'item' && !config.target && config.id !== 'menu_home') {
       console.warn(
         `MenuItem: Ítem "${config.id}" de tipo "item" no tiene target definido`
       );

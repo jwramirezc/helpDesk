@@ -59,7 +59,6 @@ const ComponentConfig = BaseConfig.extend({
         right: 'left',
       },
       CUSTOM_PLACEMENTS: {
-        menu_reportes: 'right',
         menu_consultas: 'left',
       },
     },

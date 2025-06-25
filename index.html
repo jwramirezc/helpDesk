@@ -17,6 +17,8 @@
     <link rel="stylesheet" href="src/styles/components/header-buttons.css">
     <link rel="stylesheet" href="src/styles/components/menu.css">
     <link rel="stylesheet" href="src/styles/components/submenu-pc.css">
+    <!-- Estilos de vistas -->
+    <link rel="stylesheet" href="src/styles/views/home.css">
 </head>
 
 <body>
@@ -98,9 +100,7 @@
     <script src="src/js/views/HeaderView.js"></script>
     <script src="src/js/views/HomeView.js"></script>
     <script src="src/js/views/HelpDeskView.js"></script>
-    <script src="src/js/views/PQRSView.js"></script>
     <script src="src/js/views/ConsultasView.js"></script>
-    <script src="src/js/views/ReportesView.js"></script>
     <!-- Controladores -->
     <script src="src/js/controllers/ControladorUsuario.js"></script>
     <script src="src/js/controllers/ControladorMenu.js"></script>
@@ -108,6 +108,39 @@
     <script src="src/js/controllers/ControladorContenido.js"></script>
     <!-- Main JS -->
     <script src="src/js/main.js"></script>
+
+    <script>
+        // Funciones de navegación
+        function navigateToHelpDesk() {
+            // Simular clic en el ítem del menú Help Desk
+            const helpDeskItem = document.getElementById('menu_helpdesk');
+            if (helpDeskItem) {
+                helpDeskItem.click();
+            }
+        }
+
+        function navigateToConsultas() {
+            // Simular clic en el ítem del menú Consultas
+            const consultasItem = document.getElementById('menu_consultas');
+            if (consultasItem) {
+                consultasItem.click();
+            }
+        }
+
+        // Actualizar hora actual
+        function updateCurrentTime() {
+            const now = new Date();
+            const timeString = now.toLocaleTimeString('es-ES');
+            const timeElement = document.getElementById('current-time');
+            if (timeElement) {
+                timeElement.textContent = timeString;
+            }
+        }
+
+        // Actualizar cada segundo
+        setInterval(updateCurrentTime, 1000);
+        updateCurrentTime();
+    </script>
 </body>
 
 </html>

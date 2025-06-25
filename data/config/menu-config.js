@@ -1,8 +1,5 @@
 /**
  * Configuración del menú lateral de la aplicación
- *
- * Este archivo contiene la estructura del menú de navegación
- * con iconos, etiquetas y configuraciones de submenús.
  */
 const menuConfig = {
   menuItems: {
@@ -22,25 +19,11 @@ const menuConfig = {
         target: 'helpdesk.html',
       },
       {
-        id: 'menu_pqrs',
-        label: 'PQRS',
-        icon: 'fas fa-comments',
-        type: 'item',
-        target: 'pqrs.html',
-      },
-      {
         id: 'menu_consultas',
         label: 'Consultas',
         icon: 'fas fa-search',
         type: 'item',
         target: 'consultas.html',
-      },
-      {
-        id: 'menu_reportes',
-        label: 'Reportes',
-        icon: 'fas fa-chart-bar',
-        type: 'item',
-        target: 'reportes.html',
       },
     ],
     bottom: [

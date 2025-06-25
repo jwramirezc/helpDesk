@@ -208,10 +208,10 @@ const AppConfig = {
 
   /**
    * Obtiene la lista de estilos disponibles
-   * @returns {Array} Lista de nombres de vistas con CSS
+   * @returns {Array}
    */
   getAvailableStyles() {
-    return ['home', 'helpdesk', 'pqrs', 'consultas', 'reportes'];
+    return ['home', 'helpdesk', 'consultas'];
   },
 
   /**

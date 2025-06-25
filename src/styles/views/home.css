@@ -258,19 +258,19 @@
 /* Estilos para modo oscuro */
 @media (prefers-color-scheme: dark) {
   .home-card {
-    background: var(--dark-bg, #2d3748);
-    color: var(--dark-text, #e2e8f0);
+    background: #fff !important;
+    color: var(--main-text-color, #222);
   }
 
   .home-title {
-    color: var(--dark-primary, #63b3ed);
+    color: var(--main-primary-color);
   }
 
   .user-info-item strong {
-    color: var(--dark-primary, #63b3ed);
+    color: var(--main-primary-color);
   }
 
   .activity-item strong {
-    color: var(--dark-primary, #63b3ed);
+    color: var(--main-primary-color);
   }
 }

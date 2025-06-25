@@ -9,9 +9,7 @@ const ViewConfig = {
   VIEWS: {
     HOME: 'home',
     HELPDESK: 'helpdesk',
-    PQRS: 'pqrs',
     CONSULTAS: 'consultas',
-    REPORTES: 'reportes',
     CONFIGURACION: 'configuracion',
   },
 
@@ -19,9 +17,7 @@ const ViewConfig = {
   VIEW_CLASSES: {
     home: 'HomeView',
     helpdesk: 'HelpDeskView',
-    pqrs: 'PQRSView',
     consultas: 'ConsultasView',
-    reportes: 'ReportesView',
   },
 
   // Configuración de paginación
@@ -104,11 +100,6 @@ const ViewConfig = {
       PRIORITY: ['Baja', 'Media', 'Alta', 'Crítica'],
       CATEGORY: ['Soporte Técnico', 'Solicitud', 'Incidente', 'Consulta'],
     },
-    PQRS: {
-      TYPE: ['Petición', 'Queja', 'Reclamo', 'Sugerencia'],
-      STATUS: ['Recibida', 'En Revisión', 'Respondida', 'Cerrada'],
-      PRIORITY: ['Normal', 'Urgente', 'Crítica'],
-    },
   },
 
   // Configuración de exportación
@@ -120,8 +111,6 @@ const ViewConfig = {
     },
     FILENAME_PREFIX: {
       TICKETS: 'tickets_',
-      PQRS: 'pqrs_',
-      REPORTES: 'reportes_',
     },
   },
 
@@ -148,7 +137,6 @@ const ViewConfig = {
     DEBOUNCE_DELAY: 300,
     FIELDS: {
       TICKETS: ['id', 'titulo', 'descripcion', 'usuario'],
-      PQRS: ['id', 'tipo', 'descripcion', 'usuario'],
     },
   },
 
@@ -201,7 +189,7 @@ const ViewConfig = {
 
   /**
    * Obtiene datos simulados por tipo
-   * @param {string} type - Tipo de datos (TICKETS, PQRS)
+   * @param {string} type - Tipo de datos (TICKETS)
    * @param {string} field - Campo específico
    * @returns {Array}
    */

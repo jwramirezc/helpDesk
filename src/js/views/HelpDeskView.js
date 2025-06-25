@@ -24,7 +24,6 @@ class HelpDeskView {
   init() {
     if (this.isInitialized) return;
 
-    console.log('HelpDeskView: Inicializando vista helpdesk');
     this.inicializar();
     this.isInitialized = true;
   }

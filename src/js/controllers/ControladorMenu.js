@@ -234,7 +234,7 @@ class ControladorMenu {
     }
 
     // Si es un ítem normal, cargar la vista en el contenedor principal
-    if (type === 'item' && target) {
+    if (type === 'item') {
       // Ocultar submenú PC si está activo
       if (this.submenuPCComponent) {
         this.submenuPCComponent.hide();
@@ -242,12 +242,16 @@ class ControladorMenu {
 
       // Activar solo este ítem y desactivar los demás
       await this.activarSoloItem(id);
+
       // Cerrar el menú móvil antes de cargar la vista
       if (isMobile) {
         this.cerrarMenuMovil();
       }
-      // Cargar la vista en el contenedor principal
-      await this.cargarVista(id);
+
+      // Para todos los ítems, cargar la vista normalmente
+      if (target) {
+        await this.cargarVista(id);
+      }
       return;
     }
   }
@@ -810,6 +814,9 @@ class ControladorMenu {
     try {
       // Limpiar estado activo al cargar inicialmente
       this.menuService.limpiarEstadoActivo();
+
+      // Activar el botón Home por defecto
+      await this.activarSoloItem('menu_home');
 
       // Actualizar ícono del tema según el tema actual
       this.actualizarIconoTema();

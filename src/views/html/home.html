@@ -23,7 +23,7 @@
     <div class="home-dashboard">
         <div class="row">
             <!-- Tarjetas de acceso rápido -->
-            <div class="col-md-6 col-lg-3 mb-4">
+            <div class="col-md-6 col-lg-6 mb-4">
                 <div class="home-card">
                     <div class="card-icon bg-primary">
                         <i class="fas fa-ticket-alt"></i>
@@ -38,22 +38,7 @@
                 </div>
             </div>
 
-            <div class="col-md-6 col-lg-3 mb-4">
-                <div class="home-card">
-                    <div class="card-icon bg-warning">
-                        <i class="fas fa-comments"></i>
-                    </div>
-                    <div class="card-content">
-                        <h4>PQRS</h4>
-                        <p>Peticiones, Quejas, Reclamos y Sugerencias</p>
-                        <button class="btn btn-warning btn-sm" onclick="navigateToPQRS()">
-                            Ir a PQRS
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-3 mb-4">
+            <div class="col-md-6 col-lg-6 mb-4">
                 <div class="home-card">
                     <div class="card-icon bg-info">
                         <i class="fas fa-search"></i>
@@ -63,21 +48,6 @@
                         <p>Consulta información y reportes</p>
                         <button class="btn btn-info btn-sm" onclick="navigateToConsultas()">
                             Ir a Consultas
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <div class="col-md-6 col-lg-3 mb-4">
-                <div class="home-card">
-                    <div class="card-icon bg-success">
-                        <i class="fas fa-chart-bar"></i>
-                    </div>
-                    <div class="card-content">
-                        <h4>Reportes</h4>
-                        <p>Visualiza estadísticas y reportes</p>
-                        <button class="btn btn-success btn-sm" onclick="navigateToReportes()">
-                            Ver Reportes
                         </button>
                     </div>
                 </div>
@@ -119,10 +89,6 @@
                         <div class="activity-item">
                             <i class="fas fa-ticket-alt text-primary"></i>
                             <span>Tickets activos: <strong id="active-tickets">0</strong></span>
-                        </div>
-                        <div class="activity-item">
-                            <i class="fas fa-comments text-warning"></i>
-                            <span>PQRS pendientes: <strong id="pending-pqrs">0</strong></span>
                         </div>
                         <div class="activity-item">
                             <i class="fas fa-clock text-info"></i>
@@ -174,27 +140,11 @@
         }
     }
 
-    function navigateToPQRS() {
-        // Simular clic en el ítem del menú PQRS
-        const pqrsItem = document.getElementById('menu_pqrs');
-        if (pqrsItem) {
-            pqrsItem.click();
-        }
-    }
-
     function navigateToConsultas() {
         // Simular clic en el ítem del menú Consultas
         const consultasItem = document.getElementById('menu_consultas');
         if (consultasItem) {
             consultasItem.click();
-        }
-    }
-
-    function navigateToReportes() {
-        // Simular clic en el ítem del menú Reportes
-        const reportesItem = document.getElementById('menu_reportes');
-        if (reportesItem) {
-            reportesItem.click();
         }
     }
 

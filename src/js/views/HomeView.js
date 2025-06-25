@@ -54,19 +54,17 @@ class HomeView {
         );
         this.actualizarElemento('user-id', usuario.id || 'N/A');
       } else {
-        console.warn('HomeView: No se encontró información del usuario');
         this.mostrarMensajeError(
           'No se pudo cargar la información del usuario'
         );
       }
     } catch (error) {
-      console.error('HomeView: Error al cargar datos del usuario:', error);
       this.mostrarMensajeError('Error al cargar datos del usuario');
     }
   }
 
   /**
-   * Carga las estadísticas de actividad
+   * Carga las estadísticas de la aplicación
    */
   cargarEstadisticas() {
     try {
@@ -74,13 +72,11 @@ class HomeView {
       const estadisticas = this.obtenerEstadisticas();
 
       this.actualizarElemento('active-tickets', estadisticas.ticketsActivos);
-      this.actualizarElemento('pending-pqrs', estadisticas.pqrsPendientes);
       this.actualizarElemento('last-activity', estadisticas.ultimaActividad);
     } catch (error) {
       console.error('HomeView: Error al cargar estadísticas:', error);
       // Mostrar valores por defecto
       this.actualizarElemento('active-tickets', '0');
-      this.actualizarElemento('pending-pqrs', '0');
       this.actualizarElemento('last-activity', 'Hoy');
     }
   }
@@ -89,23 +85,8 @@ class HomeView {
    * Inicializa los eventos de la vista
    */
   inicializarEventos() {
-    // Eventos para los botones de navegación rápida
-    this.agregarEventoNavegacion('navigateToHelpDesk', 'menu_helpdesk');
-    this.agregarEventoNavegacion('navigateToPQRS', 'menu_pqrs');
-    this.agregarEventoNavegacion('navigateToConsultas', 'menu_consultas');
-    this.agregarEventoNavegacion('navigateToReportes', 'menu_reportes');
-  }
-
-  /**
-   * Agrega evento de navegación para un botón
-   * @param {string} functionName - Nombre de la función global
-   * @param {string} menuId - ID del ítem del menú
-   */
-  agregarEventoNavegacion(functionName, menuId) {
-    // Sobrescribir la función global para usar nuestro método
-    window[functionName] = () => {
-      this.navegarAMenu(menuId);
-    };
+    // No agregar eventos de navegación ya que las funciones globales
+    // están definidas en index.html y funcionan correctamente
   }
 
   /**
@@ -173,17 +154,10 @@ class HomeView {
    */
   obtenerUsuarioActual() {
     try {
-      console.log('HomeView: Obteniendo usuario actual...');
-
       // Usar ConfigService para obtener el usuario
       const usuario = this.configService.getUser();
-      console.log('HomeView: Usuario obtenido del ConfigService:', usuario);
 
       if (usuario && usuario.esValido()) {
-        console.log(
-          'HomeView: Usuario válido encontrado:',
-          usuario.nombreCompleto
-        );
         return usuario;
       }
 
@@ -210,7 +184,6 @@ class HomeView {
     // En un caso real, esto vendría de una API
     return {
       ticketsActivos: Math.floor(Math.random() * 20) + 1,
-      pqrsPendientes: Math.floor(Math.random() * 10) + 1,
       ultimaActividad: this.obtenerUltimaActividad(),
     };
   }
@@ -259,19 +232,14 @@ class HomeView {
    * Limpia recursos cuando se destruye la vista
    */
   destruir() {
-    console.log('HomeView: Destruyendo vista');
-
     // Limpiar intervalo de tiempo
     if (this.updateInterval) {
       clearInterval(this.updateInterval);
       this.updateInterval = null;
     }
 
-    // Limpiar funciones globales
-    delete window.navigateToHelpDesk;
-    delete window.navigateToPQRS;
-    delete window.navigateToConsultas;
-    delete window.navigateToReportes;
+    // No eliminar funciones globales ya que están definidas en index.html
+    // y deben permanecer para la navegación
 
     this.isInitialized = false;
   }
