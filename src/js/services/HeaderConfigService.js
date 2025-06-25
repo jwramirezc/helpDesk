@@ -163,7 +163,13 @@ class HeaderConfigService {
    * @returns {Object} Breakpoints del header
    */
   getHeaderBreakpoints() {
-    return ComponentConfig.HEADER.BREAKPOINTS;
+    // Usar breakpoints genéricos ya que HEADER config fue eliminada
+    return {
+      MOBILE_MAX: 768,
+      TABLET_MIN: 769,
+      TABLET_MAX: 1024,
+      DESKTOP_MIN: 1025,
+    };
   }
 
   /**

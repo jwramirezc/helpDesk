@@ -5,39 +5,6 @@
  * específicas de los componentes del sistema.
  */
 const ComponentConfig = BaseConfig.extend({
-  // Configuración de TooltipComponent
-  TOOLTIP: {
-    DEFAULT_OPTIONS: {
-      triggerSelector: '[data-tooltip]',
-      placement: 'right',
-      offset: 8,
-      delay: 200,
-      maxWidth: 200,
-      hideDelay: 100,
-    },
-    ARROW_OFFSETS: {
-      bottom: 4,
-      top: 4,
-      left: 4,
-      right: 4,
-    },
-    PLACEMENTS: {
-      TOP: 'top',
-      BOTTOM: 'bottom',
-      LEFT: 'left',
-      RIGHT: 'right',
-    },
-    CSS_CLASSES: {
-      TOOLTIP: 'custom-tooltip',
-      ARROW: 'tooltip-arrow',
-      PLACEMENT_PREFIX: 'tooltip-',
-      ARROW_PLACEMENT_PREFIX: 'tooltip-arrow-',
-    },
-    BREAKPOINTS: {
-      DESKTOP_MIN: 1025, // Solo activo en desktop (>1024px)
-    },
-  },
-
   // Configuración de PopoverComponent
   POPOVER: {
     DEFAULT_OPTIONS: {
@@ -80,77 +47,6 @@ const ComponentConfig = BaseConfig.extend({
     BREAKPOINTS: {
       TABLET_MIN: 769,
       TABLET_MAX: 1024,
-    },
-  },
-
-  // Configuración de ThemeComponent
-  THEME: {
-    DEFAULT_OPTIONS: {
-      defaultTheme: 'light',
-      storageKey: 'theme',
-      configKey: 'config',
-      themesPath: 'data/config/temas.json',
-    },
-    CSS_VARIABLES: {
-      primario: '--primary-color',
-      secundario: '--secondary-color',
-      fondo: '--background-color',
-      texto: '--text-color',
-      'sidebar-bg': '--sidebar-bg-color',
-      'icon-color': '--icon-color',
-      'icon-color-active': '--icon-color-active',
-      'icon-color-hover': '--icon-color-hover',
-      'icon-color-header-hover': '--icon-color-header-hover',
-      'icon-color-background': '--background-icon-color',
-      'background-color-hover': '--background-color-hover',
-      'text-color': '--text-color',
-      'text-color-active': '--text-color-active',
-      'icon-color-submenu': '--icon-color-submenu',
-      'text-color-submenu': '--text-color-submenu',
-      'background-color-item-submenu': '--background-color-item-submenu',
-    },
-    PATHS: {
-      DEFAULT_LOGO: 'public/images/logo-saia.png',
-      LOGO_PREFIX: 'public/images/logo-saia-',
-      LOGO_SUFFIX: '.png',
-      MOBILE_LOGO_PREFIX: 'public/images/logo-saia-',
-      MOBILE_LOGO_SUFFIX: '.png',
-    },
-  },
-
-  // Configuración de HeaderComponent
-  HEADER: {
-    DEFAULT_OPTIONS: {
-      showNotifications: true,
-      showUserInfo: true,
-      showUserAvatar: true,
-      notificationBadge: true,
-      tooltipEnabled: true,
-    },
-    CSS_CLASSES: {
-      USER_INFO: 'user-info',
-      NOTIFICATIONS: 'notifications',
-      USER_DETAILS: 'user-details',
-      USER_NAME: 'user-name',
-      USER_COMPANY: 'user-company',
-      USER_AVATAR: 'user-avatar',
-      NOTIFICATION_BADGE: 'notification-badge',
-      TOOLTIP_BOTTOM: 'tooltip-bottom',
-      MOBILE_HIDDEN: 'header-button-mobile-hidden',
-    },
-    PATHS: {
-      DEFAULT_AVATAR: 'public/images/default-avatar.png',
-    },
-    EVENTS: {
-      NOTIFICATIONS_CLICK: 'header:notifications-click',
-      USER_AVATAR_CLICK: 'header:user-avatar-click',
-      USER_DETAILS_CLICK: 'header:user-details-click',
-    },
-    BREAKPOINTS: {
-      MOBILE_MAX: 768,
-      TABLET_MIN: 769,
-      TABLET_MAX: 1024,
-      DESKTOP_MIN: 1025,
     },
   },
 
