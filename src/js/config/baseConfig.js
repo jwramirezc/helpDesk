@@ -16,21 +16,6 @@ const BaseConfig = {
     TABLET_MAX: 1024,
   },
 
-  // Configuración de animaciones (compartida)
-  ANIMATIONS: {
-    DURATION: {
-      FAST: 150,
-      NORMAL: 300,
-      SLOW: 500,
-    },
-    EASING: {
-      EASE: 'ease',
-      EASE_IN: 'ease-in',
-      EASE_OUT: 'ease-out',
-      EASE_IN_OUT: 'ease-in-out',
-    },
-  },
-
   // Configuración de desarrollo (compartida)
   DEVELOPMENT: {
     DEBUG_MODE:
@@ -38,42 +23,6 @@ const BaseConfig = {
       window.location.hostname === '127.0.0.1',
     LOG_LEVEL: 'error', // 'debug', 'info', 'warn', 'error'
     VALIDATE_ON_LOAD: true,
-  },
-
-  // Configuración de storage (compartida)
-  STORAGE: {
-    ACTIVE_ITEM_KEY: 'activeMenuItem',
-    ACTIVE_PARENT_KEY: 'activeParentMenuItem',
-    NAVIGATION_FLAG: 'hasNavigated',
-    THEME_KEY: 'theme',
-    CONFIG_KEY: 'config',
-  },
-
-  // Configuración de eventos (compartida)
-  EVENTS: {
-    CLICK: 'click',
-    RESIZE: 'resize',
-    TOUCHSTART: 'touchstart',
-    TOUCHEND: 'touchend',
-  },
-
-  // Configuración de rutas base (compartida)
-  PATHS: {
-    DEFAULT_AVATAR: 'public/images/default-avatar.png',
-    DEFAULT_LOGO: 'public/images/logo-saia.png',
-    LOGO_PREFIX: 'public/images/logo-saia-',
-    LOGO_SUFFIX: '.png',
-    MOBILE_LOGO_PREFIX: 'public/images/logo-saia-',
-    MOBILE_LOGO_SUFFIX: '.png',
-  },
-
-  // Configuración de límites (compartida)
-  LIMITS: {
-    MAX_SUBMENU_ITEMS: 10,
-    MAX_LOGS_TO_KEEP: 10,
-    FAST_OPERATION_THRESHOLD: 10, // ms
-    MAX_DEPTH: 3, // Máximo nivel de anidación
-    MAX_ITEMS_PER_SECTION: 20,
   },
 
   // Configuración de mensajes base (compartida)
@@ -137,24 +86,6 @@ const BaseConfig = {
   },
 
   /**
-   * Obtiene una dimensión específica
-   * @param {string} dimensionName - Nombre de la dimensión
-   * @returns {number}
-   */
-  getDimension(dimensionName) {
-    return this.DIMENSIONS?.[dimensionName.toUpperCase()] || 0;
-  },
-
-  /**
-   * Obtiene un límite específico
-   * @param {string} limitName - Nombre del límite
-   * @returns {number}
-   */
-  getLimit(limitName) {
-    return this.LIMITS[limitName.toUpperCase()] || 0;
-  },
-
-  /**
    * Obtiene un mensaje de error
    * @param {string} key - Clave del mensaje
    * @returns {string}
@@ -205,26 +136,24 @@ const BaseConfig = {
   },
 
   /**
-   * Extiende la configuración base con configuración específica
+   * Extiende la configuración base con configuraciones específicas
    * @param {Object} specificConfig - Configuración específica
-   * @returns {Object}
+   * @returns {Object} Configuración extendida
    */
   extend(specificConfig) {
     return {
       ...this,
       ...specificConfig,
       // Preservar métodos de baseConfig
-      getEnvironmentConfig: this.getEnvironmentConfig.bind(this),
-      isDevelopment: this.isDevelopment.bind(this),
-      isMobile: this.isMobile.bind(this),
-      getCurrentBreakpoint: this.getCurrentBreakpoint.bind(this),
-      getDimension: this.getDimension.bind(this),
-      getLimit: this.getLimit.bind(this),
-      getErrorMessage: this.getErrorMessage.bind(this),
-      getSuccessMessage: this.getSuccessMessage.bind(this),
-      log: this.log.bind(this),
-      logError: this.logError.bind(this),
-      extend: this.extend.bind(this),
+      getEnvironmentConfig: this.getEnvironmentConfig,
+      isDevelopment: this.isDevelopment,
+      isMobile: this.isMobile,
+      getCurrentBreakpoint: this.getCurrentBreakpoint,
+      getErrorMessage: this.getErrorMessage,
+      getSuccessMessage: this.getSuccessMessage,
+      log: this.log,
+      logError: this.logError,
+      extend: this.extend,
     };
   },
 };
