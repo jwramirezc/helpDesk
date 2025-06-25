@@ -8,7 +8,7 @@
  * console.log(result.isValid, result.errors, result.warnings);
  *
  * // Validar estructura completa del menú
- * const menuData = await fetch('data/config/menu-config.js').then(r => r.json());
+ * const menuData = await fetch('data/config/menu-config.json').then(r => r.json());
  * const validation = MenuValidator.validateMenuStructure(menuData);
  *
  * // Buscar duplicados

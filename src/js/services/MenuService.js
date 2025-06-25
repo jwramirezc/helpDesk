@@ -30,7 +30,7 @@ class MenuService {
 
   /**
    * Carga el menú directamente desde el servidor sin cache
-   * @param {string} menuPath - Ruta del archivo menu-config.js o menu.json
+   * @param {string} menuPath - Ruta del archivo menu-config.json
    * @returns {Promise<{top: Array<MenuItem>, bottom: Array<MenuItem>}>}
    */
   async loadMenuFromServer(menuPath) {
