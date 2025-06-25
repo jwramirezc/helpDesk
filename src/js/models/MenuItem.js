@@ -128,64 +128,6 @@ class MenuItem {
   }
 
   /**
-   * Obtiene el nivel de profundidad del ítem
-   * @returns {number}
-   */
-  getDepth() {
-    let depth = 0;
-    let current = this.parent;
-    while (current) {
-      depth++;
-      current = current.parent;
-    }
-    return depth;
-  }
-
-  /**
-   * Verifica si el ítem es un ítem raíz (sin padre)
-   * @returns {boolean}
-   */
-  isRoot() {
-    return this.parent === null;
-  }
-
-  /**
-   * Obtiene todos los ancestros del ítem
-   * @returns {Array<MenuItem>}
-   */
-  getAncestors() {
-    const ancestors = [];
-    let current = this.parent;
-    while (current) {
-      ancestors.unshift(current);
-      current = current.parent;
-    }
-    return ancestors;
-  }
-
-  /**
-   * Obtiene todos los descendientes del ítem (recursivo)
-   * @returns {Array<MenuItem>}
-   */
-  getDescendants() {
-    const descendants = [];
-    for (const child of this.children) {
-      descendants.push(child);
-      descendants.push(...child.getDescendants());
-    }
-    return descendants;
-  }
-
-  /**
-   * Verifica si el ítem tiene un ancestro específico
-   * @param {string} ancestorId - ID del ancestro a buscar
-   * @returns {boolean}
-   */
-  hasAncestor(ancestorId) {
-    return this.getAncestors().some(ancestor => ancestor.id === ancestorId);
-  }
-
-  /**
    * Obtiene información del ítem para debugging
    * @returns {Object}
    */
@@ -197,7 +139,6 @@ class MenuItem {
       isActive: this.isActive(),
       hasChildren: this.hasChildren(),
       childrenCount: this.children.length,
-      depth: this.getDepth(),
       path: this.getPath(),
       parentId: this.parent?.id || null,
       target: this.target,

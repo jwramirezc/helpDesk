@@ -61,17 +61,4 @@ class Usuario {
   static fromJSON(json) {
     return new Usuario(json);
   }
-
-  /**
-   * Crea un usuario desde datos de formulario
-   * @param {FormData} formData - Datos del formulario
-   * @returns {Usuario}
-   */
-  static fromFormData(formData) {
-    const datos = {};
-    for (const [key, value] of formData.entries()) {
-      datos[key] = value;
-    }
-    return new Usuario(datos);
-  }
 }
