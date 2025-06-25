@@ -28,7 +28,7 @@
                         <i class="fas fa-clock"></i>
                     </div>
                     <div class="stat-content">
-                        <h3 class="stat-number" id="tickets-pendientes">12</h3>
+                        <h3 class="stat-number" id="tickets-pendientes">0</h3>
                         <p class="stat-label">Pendientes</p>
                     </div>
                 </div>
@@ -39,7 +39,7 @@
                         <i class="fas fa-exclamation-triangle"></i>
                     </div>
                     <div class="stat-content">
-                        <h3 class="stat-number" id="tickets-urgentes">3</h3>
+                        <h3 class="stat-number" id="tickets-urgentes">0</h3>
                         <p class="stat-label">Urgentes</p>
                     </div>
                 </div>
@@ -50,7 +50,7 @@
                         <i class="fas fa-spinner"></i>
                     </div>
                     <div class="stat-content">
-                        <h3 class="stat-number" id="tickets-proceso">8</h3>
+                        <h3 class="stat-number" id="tickets-proceso">0</h3>
                         <p class="stat-label">En Proceso</p>
                     </div>
                 </div>
@@ -61,7 +61,7 @@
                         <i class="fas fa-check-circle"></i>
                     </div>
                     <div class="stat-content">
-                        <h3 class="stat-number" id="tickets-resueltos">45</h3>
+                        <h3 class="stat-number" id="tickets-resueltos">0</h3>
                         <p class="stat-label">Resueltos</p>
                     </div>
                 </div>
@@ -77,31 +77,19 @@
                     <div class="col-md-3 mb-2">
                         <label for="filtro-estado" class="form-label">Estado</label>
                         <select id="filtro-estado" class="form-select">
-                            <option value="">Todos los estados</option>
-                            <option value="pendiente">Pendiente</option>
-                            <option value="en-proceso">En Proceso</option>
-                            <option value="resuelto">Resuelto</option>
-                            <option value="cerrado">Cerrado</option>
+                            <!-- Opciones se cargan dinámicamente -->
                         </select>
                     </div>
                     <div class="col-md-3 mb-2">
                         <label for="filtro-prioridad" class="form-label">Prioridad</label>
                         <select id="filtro-prioridad" class="form-select">
-                            <option value="">Todas las prioridades</option>
-                            <option value="baja">Baja</option>
-                            <option value="media">Media</option>
-                            <option value="alta">Alta</option>
-                            <option value="urgente">Urgente</option>
+                            <!-- Opciones se cargan dinámicamente -->
                         </select>
                     </div>
                     <div class="col-md-3 mb-2">
                         <label for="filtro-categoria" class="form-label">Categoría</label>
                         <select id="filtro-categoria" class="form-select">
-                            <option value="">Todas las categorías</option>
-                            <option value="software">Software</option>
-                            <option value="hardware">Hardware</option>
-                            <option value="red">Red</option>
-                            <option value="usuario">Usuario</option>
+                            <!-- Opciones se cargan dinámicamente -->
                         </select>
                     </div>
                     <div class="col-md-3 mb-2">
@@ -188,10 +176,7 @@
                             <label for="ticket-prioridad" class="form-label">Prioridad *</label>
                             <select class="form-select" id="ticket-prioridad" required>
                                 <option value="">Seleccionar...</option>
-                                <option value="baja">Baja</option>
-                                <option value="media">Media</option>
-                                <option value="alta">Alta</option>
-                                <option value="urgente">Urgente</option>
+                                <!-- Opciones se cargan dinámicamente -->
                             </select>
                         </div>
                     </div>
@@ -200,19 +185,14 @@
                             <label for="ticket-categoria" class="form-label">Categoría *</label>
                             <select class="form-select" id="ticket-categoria" required>
                                 <option value="">Seleccionar...</option>
-                                <option value="software">Software</option>
-                                <option value="hardware">Hardware</option>
-                                <option value="red">Red</option>
-                                <option value="usuario">Usuario</option>
+                                <!-- Opciones se cargan dinámicamente -->
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
                             <label for="ticket-departamento" class="form-label">Departamento</label>
                             <select class="form-select" id="ticket-departamento">
                                 <option value="">Seleccionar...</option>
-                                <option value="soporte">Soporte Técnico</option>
-                                <option value="desarrollo">Desarrollo</option>
-                                <option value="infraestructura">Infraestructura</option>
+                                <!-- Opciones se cargan dinámicamente -->
                             </select>
                         </div>
                     </div>

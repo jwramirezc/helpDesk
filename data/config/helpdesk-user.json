@@ -1,0 +1,114 @@
+{
+  "usuario": {
+    "nombre": "Juan Valdez",
+    "id": "USR-001"
+  },
+  "resumen": {
+    "pendientes": 12,
+    "urgentes": 3,
+    "enProceso": 8,
+    "resueltos": 45
+  },
+  "tickets": [
+    {
+      "id": "TKT-0001",
+      "asunto": "Actualización de antivirus",
+      "descripcion": "Necesito actualizar el antivirus en mi equipo de trabajo. El sistema indica que hay una nueva versión disponible pero no puedo completar la instalación.",
+      "categoria": "Software",
+      "prioridad": "Baja",
+      "estado": "Resuelto",
+      "fecha": "2025-06-05",
+      "departamento": "Soporte Técnico"
+    },
+    {
+      "id": "TKT-0002",
+      "asunto": "Backup de datos",
+      "descripcion": "Solicito asistencia para configurar el backup automático de mis archivos importantes. Necesito que se configure para que se ejecute diariamente.",
+      "categoria": "Software",
+      "prioridad": "Media",
+      "estado": "Pendiente",
+      "fecha": "2025-06-18",
+      "departamento": "Soporte Técnico"
+    },
+    {
+      "id": "TKT-0003",
+      "asunto": "Error de conexión a internet",
+      "descripcion": "Desde hace 2 horas no puedo conectarme a internet. El cable de red parece estar bien conectado pero no hay señal. Es urgente para una reunión importante.",
+      "categoria": "Red",
+      "prioridad": "Urgente",
+      "estado": "Pendiente",
+      "fecha": "2025-06-03",
+      "departamento": "Infraestructura"
+    },
+    {
+      "id": "TKT-0004",
+      "asunto": "Problema con el servidor",
+      "descripcion": "El servidor de archivos está respondiendo muy lento. Los archivos tardan mucho en abrirse y a veces se pierde la conexión.",
+      "categoria": "Hardware",
+      "prioridad": "Media",
+      "estado": "Cerrado",
+      "fecha": "2025-06-13",
+      "departamento": "Infraestructura"
+    },
+    {
+      "id": "TKT-0005",
+      "asunto": "Problema con el sistema de correo",
+      "descripcion": "No puedo enviar correos electrónicos desde Outlook. El sistema muestra un error de autenticación. Necesito resolver esto urgentemente.",
+      "categoria": "Hardware",
+      "prioridad": "Media",
+      "estado": "Resuelto",
+      "fecha": "2025-05-30",
+      "departamento": "Soporte Técnico"
+    },
+    {
+      "id": "TKT-0006",
+      "asunto": "Impresora no funciona",
+      "descripcion": "La impresora de la oficina no está imprimiendo. El papel se atasca y cuando funciona, la calidad de impresión es muy mala.",
+      "categoria": "Hardware",
+      "prioridad": "Alta",
+      "estado": "En Proceso",
+      "fecha": "2025-06-15",
+      "departamento": "Soporte Técnico"
+    },
+    {
+      "id": "TKT-0007",
+      "asunto": "Solicitud de nuevo software",
+      "descripcion": "Necesito instalar Adobe Photoshop para el departamento de diseño. Es necesario para el trabajo diario del equipo.",
+      "categoria": "Software",
+      "prioridad": "Baja",
+      "estado": "Pendiente",
+      "fecha": "2025-06-20",
+      "departamento": "Desarrollo"
+    },
+    {
+      "id": "TKT-0008",
+      "asunto": "Configuración de VPN",
+      "descripcion": "Necesito configurar la VPN para trabajar desde casa. El sistema de autenticación no reconoce mis credenciales.",
+      "categoria": "Red",
+      "prioridad": "Alta",
+      "estado": "En Proceso",
+      "fecha": "2025-06-12",
+      "departamento": "Infraestructura"
+    },
+    {
+      "id": "TKT-0009",
+      "asunto": "Problema con el teclado",
+      "descripcion": "Algunas teclas del teclado no responden correctamente. Especialmente las teclas de números y símbolos.",
+      "categoria": "Hardware",
+      "prioridad": "Media",
+      "estado": "Pendiente",
+      "fecha": "2025-06-22",
+      "departamento": "Soporte Técnico"
+    },
+    {
+      "id": "TKT-0010",
+      "asunto": "Error en sistema de facturación",
+      "descripcion": "El sistema de facturación está generando reportes incorrectos. Los totales no coinciden con los datos reales.",
+      "categoria": "Software",
+      "prioridad": "Urgente",
+      "estado": "En Proceso",
+      "fecha": "2025-06-01",
+      "departamento": "Desarrollo"
+    }
+  ]
+}

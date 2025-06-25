@@ -128,10 +128,10 @@
 }
 
 .helpdesk-filtros .form-label {
-  font-weight: 600;
+  font-weight: var(--font-weight-semibold);
   color: var(--main-text-color);
-  margin-bottom: 0.5rem;
-  font-size: 0.9rem;
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-sm);
   text-transform: uppercase;
   letter-spacing: 0.5px;
 }
@@ -139,8 +139,8 @@
 .helpdesk-filtros .form-select,
 .helpdesk-filtros .form-control {
   border-radius: var(--helpdesk-border-radius);
-  border: 1px solid #dee2e6;
-  transition: var(--helpdesk-transition);
+  border: 1px solid var(--main-border-color);
+  transition: var(--transition-base);
 }
 
 .helpdesk-filtros .form-select:focus,
@@ -168,25 +168,43 @@
 }
 
 .helpdesk-tabla .card-header {
-  background: linear-gradient(135deg, var(--main-primary-color), #0056b3);
+  background: var(--main-primary-color);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative;
 }
 
 .helpdesk-tabla .card-header h5 {
+  text-align: center;
+  width: 100%;
   margin: 0;
   font-weight: 600;
+  color: white;
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
 }
 
-.helpdesk-tabla .btn-group .btn {
-  border-radius: var(--helpdesk-border-radius);
-  margin-left: 0.25rem;
-  transition: var(--helpdesk-transition);
+.helpdesk-tabla .card-header .btn-group {
+  position: absolute;
+  right: 1rem;
+  z-index: 1;
 }
 
-.helpdesk-tabla .btn-group .btn:hover {
-  transform: translateY(-1px);
+.helpdesk-tabla .card-header .btn-group .btn {
+  color: white;
+  border: none;
+  background-color: transparent;
+}
+
+.helpdesk-tabla .card-header .btn-group .btn:hover {
+  color: var(--main-primary-color);
+  background-color: white;
+  border: none;
 }
 
 /* Estilos de la tabla */
@@ -244,6 +262,7 @@
    ======================================== */
 .helpdesk-paginacion {
   margin-top: 2rem;
+  font-size: var(--font-size-sm);
 }
 
 .helpdesk-paginacion .pagination {
@@ -253,8 +272,8 @@
 .helpdesk-paginacion .page-link {
   border: none;
   color: var(--main-primary-color);
-  padding: 0.75rem 1rem;
-  margin: 0 0.25rem;
+  padding: 0.2rem 0.75rem;
+  margin: 0 0.5rem;
   border-radius: var(--helpdesk-border-radius);
   transition: var(--helpdesk-transition);
 }
@@ -263,10 +282,12 @@
   background-color: var(--main-primary-color);
   color: white;
   transform: translateY(-1px);
+  text-decoration: none;
 }
 
 .helpdesk-paginacion .page-item.active .page-link {
   background-color: var(--main-primary-color);
+  color: var(--helpdesk-light);
   border-color: var(--main-primary-color);
 }
 
@@ -300,21 +321,23 @@
 }
 
 #modal-nuevo-ticket .form-label {
-  font-weight: 600;
-  color: var(--helpdesk-dark);
-  margin-bottom: 0.5rem;
+  font-weight: var(--font-weight-semibold);
+  color: var(--main-text-color);
+  margin-bottom: var(--spacing-sm);
+  font-size: var(--font-size-sm);
 }
 
 #modal-nuevo-ticket .form-control,
 #modal-nuevo-ticket .form-select {
   border-radius: var(--helpdesk-border-radius);
-  border: 1px solid #dee2e6;
-  transition: var(--helpdesk-transition);
+  border: 1px solid var(--main-border-color);
+  transition: var(--transition-base);
+  font-size: var(--font-size-base);
 }
 
 #modal-nuevo-ticket .form-control:focus,
 #modal-nuevo-ticket .form-select:focus {
-  border-color: var(--helpdesk-primary);
+  border-color: var(--main-primary-color);
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
@@ -544,4 +567,111 @@
 
 .helpdesk-empty p {
   margin-bottom: 1.5rem;
+}
+
+/* ========================================
+   BOTÓN DE ACCIONES
+   ======================================== */
+.btn-acciones-ticket {
+  width: 32px;
+  height: 32px;
+  padding: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--helpdesk-border-radius);
+  transition: var(--transition-base);
+  background-color: transparent;
+  border: 1px solid var(--main-border-color);
+  margin: 0 auto;
+}
+
+.btn-acciones-ticket:hover {
+  background-color: var(--main-light-color);
+  border-color: var(--main-primary-color);
+  transform: translateY(-1px);
+  box-shadow: var(--main-shadow);
+}
+
+.btn-acciones-ticket:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+  outline: none;
+}
+
+.btn-acciones-ticket i {
+  font-size: var(--font-size-sm);
+  color: var(--main-text-color-secondary);
+}
+
+.btn-acciones-ticket:hover i {
+  color: var(--main-primary-color);
+}
+
+/* ========================================
+   POPOVER DE ACCIONES
+   ======================================== */
+.helpdesk-popover {
+  position: fixed;
+  z-index: 9999;
+  background: white;
+  border: 1px solid var(--main-border-color);
+  border-radius: var(--helpdesk-border-radius);
+  box-shadow: var(--main-shadow-hover);
+  padding: 8px 0;
+  min-width: 150px;
+  font-size: var(--font-size-sm);
+  animation: popoverFadeIn 0.2s ease-out;
+}
+
+.popover-item {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: var(--transition-base);
+  color: var(--main-text-color);
+  text-decoration: none;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+}
+
+.popover-item:hover {
+  background-color: var(--main-light-color);
+  color: var(--main-primary-color);
+}
+
+.popover-item i {
+  font-size: 1rem;
+  width: 16px;
+  text-align: center;
+  color: var(--main-text-color-secondary);
+}
+
+.popover-item:hover i {
+  color: var(--main-primary-color);
+}
+
+.popover-item span {
+  flex: 1;
+  font-weight: 500;
+}
+
+@keyframes popoverFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-8px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Centrar contenido de la columna ACCIONES */
+#tabla-tickets th:last-child,
+#tabla-tickets td:last-child {
+  text-align: center;
 }
