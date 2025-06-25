@@ -69,22 +69,6 @@ class ControladorHeader {
   }
 
   /**
-   * Actualiza el estado de notificaciones
-   * @param {boolean} tieneNotificaciones - Nuevo estado
-   */
-  updateNotificationsState(tieneNotificaciones) {
-    if (!this.isInitialized || !this.headerView) {
-      ComponentConfig.logError(
-        'ControladorHeader',
-        'Controlador no inicializado para actualizar notificaciones'
-      );
-      return;
-    }
-
-    this.headerView.updateNotificationsState(tieneNotificaciones);
-  }
-
-  /**
    * Obtiene información del estado del controlador
    * @returns {Object} Estado del controlador
    */
@@ -98,82 +82,6 @@ class ControladorHeader {
       configServiceInfo: this.headerConfigService?.getServiceInfo(),
       popoverServiceInfo: this.headerPopoverService?.getServiceInfo(),
     };
-  }
-
-  /**
-   * Valida la configuración del header
-   * @returns {Object} Resultado de la validación
-   */
-  validateConfiguration() {
-    if (!this.headerConfigService) {
-      return {
-        isValid: false,
-        errors: ['HeaderConfigService no inicializado'],
-        warnings: [],
-      };
-    }
-
-    return this.headerConfigService.validateConfig();
-  }
-
-  /**
-   * Obtiene botones habilitados para un rol específico
-   * @param {string} userRole - Rol del usuario
-   * @returns {Array} Botones habilitados
-   */
-  getEnabledButtons(userRole) {
-    if (!this.headerConfigService) {
-      return [];
-    }
-
-    return this.headerConfigService.getEnabledButtons(userRole);
-  }
-
-  /**
-   * Obtiene botones con submenús
-   * @returns {Array} Botones con submenús
-   */
-  getButtonsWithSubmenus() {
-    if (!this.headerConfigService) {
-      return [];
-    }
-
-    return this.headerConfigService.getButtonsWithSubmenus();
-  }
-
-  /**
-   * Actualiza la configuración del header
-   * @param {Object} newConfig - Nueva configuración
-   */
-  async updateConfiguration(newConfig) {
-    if (!this.headerConfigService) {
-      ComponentConfig.logError(
-        'ControladorHeader',
-        'HeaderConfigService no inicializado para actualizar configuración'
-      );
-      return;
-    }
-
-    try {
-      // Actualizar configuración
-      this.headerConfigService.updateConfig(newConfig);
-
-      // Actualizar popovers si es necesario
-      if (this.headerPopoverService) {
-        await this.headerPopoverService.updatePopovers();
-      }
-
-      ComponentConfig.log(
-        'ControladorHeader',
-        'Configuración actualizada correctamente'
-      );
-    } catch (error) {
-      ComponentConfig.logError(
-        'ControladorHeader',
-        'Error al actualizar configuración',
-        error
-      );
-    }
   }
 
   /**
@@ -201,15 +109,15 @@ class ControladorHeader {
    * Destruye el controlador y limpia recursos
    */
   destroy() {
+    if (this.headerView) {
+      this.headerView.destroy();
+    }
+
     if (this.headerPopoverService) {
       this.headerPopoverService.destroy();
     }
 
     this.isInitialized = false;
-    this.headerView = null;
-    this.headerConfigService = null;
-    this.headerPopoverService = null;
-
     ComponentConfig.log('ControladorHeader', 'Controlador destruido');
   }
 }
