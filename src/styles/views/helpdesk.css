@@ -5,7 +5,7 @@
 /* Variables específicas de la vista */
 :root {
   --helpdesk-primary: #007bff;
-  --helpdesk-secondary: #6c757d;
+  --helpdesk-secondary: #888f95;
   --helpdesk-success: #28a745;
   --helpdesk-warning: #ffc107;
   --helpdesk-danger: #dc3545;
@@ -38,7 +38,7 @@
 }
 
 .helpdesk-title {
-  color: var(--main-primary-color);
+  color: var(--helpdesk-primary);
   font-weight: 700;
   margin-bottom: 0.5rem;
   font-size: 2rem;
@@ -145,7 +145,7 @@
 
 .helpdesk-filtros .form-select:focus,
 .helpdesk-filtros .form-control:focus {
-  border-color: var(--main-primary-color);
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
@@ -168,7 +168,7 @@
 }
 
 .helpdesk-tabla .card-header {
-  background: var(--main-primary-color);
+  background: var(--helpdesk-secondary);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -758,7 +758,7 @@
 }
 
 #modal-nuevo-ticket .modal-header {
-  background: var(--main-primary-color);
+  background: var(--helpdesk-secondary);
   color: white;
   border-bottom: none;
   border-radius: var(--helpdesk-border-radius) var(--helpdesk-border-radius) 0 0;
@@ -792,7 +792,7 @@
 
 #modal-nuevo-ticket .form-control:focus,
 #modal-nuevo-ticket .form-select:focus {
-  border-color: var(--main-primary-color);
+  border-color: var(--primary-color);
   box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
