@@ -12,6 +12,7 @@ class MenuItem {
    * @param {string} [config.openAction] - Acción al abrir ('alert' para submenús en fase 1)
    * @param {string} [config.message] - Mensaje para alert en fase 1
    * @param {Array<Object>} [config.children] - Subítems para tipo 'submenu'
+   * @param {boolean} [config.enabled] - Indica si el ítem está habilitado (por defecto true)
    * @param {MenuItem|null} [parent] - Referencia al ítem padre
    */
   constructor(config, parent = null) {
@@ -47,6 +48,7 @@ class MenuItem {
     this.target = config.target || '';
     this.openAction = config.openAction || '';
     this.message = config.message || '';
+    this.enabled = config.enabled !== undefined ? config.enabled : true;
     // Propiedades específicas para popover
     this.popoverPlacement = config.popoverPlacement || '';
     this.popoverOffset = config.popoverOffset || null;
@@ -63,6 +65,14 @@ class MenuItem {
    */
   isActive() {
     return this._active;
+  }
+
+  /**
+   * Indica si el ítem está habilitado
+   * @returns {boolean}
+   */
+  isEnabled() {
+    return this.enabled;
   }
 
   /**
@@ -137,6 +147,7 @@ class MenuItem {
       label: this.label,
       type: this.type,
       isActive: this.isActive(),
+      isEnabled: this.isEnabled(),
       hasChildren: this.hasChildren(),
       childrenCount: this.children.length,
       path: this.getPath(),
@@ -152,6 +163,11 @@ class MenuItem {
    * @returns {string}
    */
   toHTML(isMobile = false) {
+    // Si el ítem no está habilitado, no generar HTML
+    if (!this.isEnabled()) {
+      return '';
+    }
+
     const itemClass = isMobile ? 'mobile-menu-item' : 'menu-item';
     const hasSubmenuClass = this.type === 'submenu' ? 'has-submenu' : '';
     const activeClass = this._active ? 'active' : '';

@@ -29,6 +29,18 @@ class MenuService {
   }
 
   /**
+   * Devuelve solo los items habilitados del menú
+   * @returns {Promise<{top: Array<MenuItem>, bottom: Array<MenuItem>}>}
+   */
+  async getEnabledMenuItems() {
+    const menuItems = await this.getMenuItems();
+    return {
+      top: menuItems.top.filter(item => item.isEnabled()),
+      bottom: menuItems.bottom.filter(item => item.isEnabled()),
+    };
+  }
+
+  /**
    * Carga el menú directamente desde el servidor sin cache
    * @param {string} menuPath - Ruta del archivo menu-config.json
    * @returns {Promise<{top: Array<MenuItem>, bottom: Array<MenuItem>}>}
@@ -126,9 +138,14 @@ class MenuService {
 
     const menuItems = json.menuItems || { top: [], bottom: [] };
 
+    // Filtrar elementos habilitados
     const result = {
-      top: menuItems.top.map(item => new MenuItem(item)),
-      bottom: menuItems.bottom.map(item => new MenuItem(item)),
+      top: menuItems.top
+        .map(item => new MenuItem(item))
+        .filter(item => item.isEnabled()),
+      bottom: menuItems.bottom
+        .map(item => new MenuItem(item))
+        .filter(item => item.isEnabled()),
     };
 
     // Restaurar estado activo
@@ -262,6 +279,58 @@ class MenuService {
       totalSubitems,
       topItems: menuItems.top.length,
       bottomItems: menuItems.bottom.length,
+    };
+  }
+
+  /**
+   * Obtiene estadísticas de elementos habilitados del menú
+   * @returns {Promise<Object>}
+   */
+  async getEnabledMenuStats() {
+    const menuItems = await this.getMenuItems();
+    let totalEnabledItems = 0;
+    let totalEnabledSubmenus = 0;
+    let totalEnabledSubitems = 0;
+
+    // Contar items top habilitados
+    for (const item of menuItems.top) {
+      if (item.isEnabled()) {
+        totalEnabledItems++;
+        if (item.hasChildren()) {
+          const enabledChildren = item.children.filter(child =>
+            child.isEnabled()
+          );
+          if (enabledChildren.length > 0) {
+            totalEnabledSubmenus++;
+            totalEnabledSubitems += enabledChildren.length;
+          }
+        }
+      }
+    }
+
+    // Contar items bottom habilitados
+    for (const item of menuItems.bottom) {
+      if (item.isEnabled()) {
+        totalEnabledItems++;
+        if (item.hasChildren()) {
+          const enabledChildren = item.children.filter(child =>
+            child.isEnabled()
+          );
+          if (enabledChildren.length > 0) {
+            totalEnabledSubmenus++;
+            totalEnabledSubitems += enabledChildren.length;
+          }
+        }
+      }
+    }
+
+    return {
+      totalEnabledItems,
+      totalEnabledSubmenus,
+      totalEnabledSubitems,
+      enabledTopItems: menuItems.top.filter(item => item.isEnabled()).length,
+      enabledBottomItems: menuItems.bottom.filter(item => item.isEnabled())
+        .length,
     };
   }
 

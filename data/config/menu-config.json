@@ -6,14 +6,16 @@
         "label": "Home",
         "icon": "fas fa-home",
         "type": "item",
-        "target": "home.html"
+        "target": "home.html",
+        "enabled": true
       },
       {
         "id": "menu_helpdesk",
         "label": "Help Desk",
         "icon": "fas fa-ticket",
         "type": "item",
-        "target": "helpdesk.html"
+        "target": "helpdesk.html",
+        "enabled": true
       },
       {
         "id": "menu_reportes",
@@ -22,27 +24,31 @@
         "type": "submenu",
         "popoverPlacement": "right",
         "popoverOffset": 12,
+        "enabled": true,
         "children": [
           {
             "id": "tickets_pendientes",
             "label": "Tickets Pendientes",
             "icon": "fas fa-chart-bar",
             "type": "item",
-            "target": "views/html/tickets_pendientes.html"
+            "target": "views/html/tickets_pendientes.html",
+            "enabled": true
           },
           {
             "id": "tickets_proceso",
             "label": "Tickets en Proceso",
             "icon": "fas fa|-chart-bar",
             "type": "item",
-            "target": "views/html/tickets_proceso.html"
+            "target": "views/html/tickets_proceso.html",
+            "enabled": true
           },
           {
             "id": "tickets_resueltos",
             "label": "Tickets Resueltos",
             "icon": "fas fa-chart-bar",
             "type": "item",
-            "target": "views/html/tickets_resueltos.html"
+            "target": "views/html/tickets_resueltos.html",
+            "enabled": true
           }
         ]
       }
@@ -53,21 +59,24 @@
         "label": "Tema",
         "icon": "fas fa-moon",
         "type": "item",
-        "target": "theme.html"
+        "target": "theme.html",
+        "enabled": true
       },
       {
         "id": "menu_config",
         "label": "Configuración",
         "icon": "fas fa-cog",
         "type": "item",
-        "target": "config.html"
+        "target": "config.html",
+        "enabled": false
       },
       {
         "id": "menu_logout",
         "label": "Cerrar Sesión",
         "icon": "fas fa-sign-out-alt",
         "type": "item",
-        "target": "logout.html"
+        "target": "logout.html",
+        "enabled": true
       }
     ]
   }
