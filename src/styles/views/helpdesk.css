@@ -216,19 +216,28 @@
   border: none;
 }
 
+/* Borde externo específico para tabla-tickets-bootstrap */
+#tabla-tickets-bootstrap {
+  border: 1px solid #e9ecef !important;
+}
+
+#tabla-tickets-bootstrap.table {
+  border: 1px solid #e9ecef !important;
+}
+
 .bootstrap-table .table thead th {
   background: #f8f9fa;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
   border-top: none;
+  border-right: 1px solid #e9ecef;
   font-weight: 600;
   color: #495057;
   padding: 0.75rem;
   vertical-align: middle;
-  border-right: 1px solid #e9ecef;
 }
 
 .bootstrap-table .table thead th:last-child {
-  border-right: none;
+  border-right: 1px solid #e9ecef;
 }
 
 .bootstrap-table .table tbody td {
@@ -239,7 +248,7 @@
 }
 
 .bootstrap-table .table tbody td:last-child {
-  border-right: none;
+  border-right: 1px solid #e9ecef;
 }
 
 .bootstrap-table .table tbody tr:hover {
@@ -260,17 +269,17 @@
 
 #tabla-temporal .table thead th {
   background: #f8f9fa;
-  border-bottom: 2px solid #e9ecef;
+  border-bottom: 1px solid #e9ecef;
   border-top: none;
+  border-right: 1px solid #e9ecef;
   font-weight: 600;
   color: #495057;
   padding: 0.75rem;
   vertical-align: middle;
-  border-right: 1px solid #e9ecef;
 }
 
 #tabla-temporal .table thead th:last-child {
-  border-right: none;
+  border-right: 1px solid #e9ecef;
 }
 
 #tabla-temporal .table tbody td {
@@ -281,7 +290,7 @@
 }
 
 #tabla-temporal .table tbody td:last-child {
-  border-right: none;
+  border-right: 1px solid #e9ecef;
 }
 
 #tabla-temporal .table tbody tr:hover {
