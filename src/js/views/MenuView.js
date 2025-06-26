@@ -53,9 +53,6 @@ class MenuView {
    */
   _renderDesktopMenu(menuItems, logoPath) {
     const sidebarHTML = `
-      <div class="sidebar-logo sidebar-item" id="sidebar_logo" data-tooltip="saiasoftware.com" style="cursor:pointer;">
-        <img src="${logoPath}" alt="Logo">
-      </div>
       <div class="sidebar-menu">
         <div class="menu-top">
           ${menuItems.top.map(item => item.toHTML(false)).join('')}
@@ -63,6 +60,9 @@ class MenuView {
         <div class="menu-bottom">
           ${menuItems.bottom.map(item => item.toHTML(false)).join('')}
         </div>
+      </div>
+      <div class="sidebar-logo sidebar-item" id="sidebar_logo" data-tooltip="saiasoftware.com" style="cursor:pointer;">
+        <img src="${logoPath}" alt="Logo">
       </div>`;
 
     this.sidebar.innerHTML = sidebarHTML;

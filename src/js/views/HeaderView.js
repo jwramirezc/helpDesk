@@ -98,8 +98,11 @@ class HeaderView {
       },
     ].sort((a, b) => a.order - b.order);
 
-    // Renderizar HTML
+    // Renderizar HTML con estructura de dos columnas
     this.header.innerHTML = `
+      <div class="header-logo">
+        <img src="public/images/logo-cliente.png" alt="Logo Cliente" class="client-logo">
+      </div>
       <div class="user-info">
         ${elements.map(el => el.html).join('')}
       </div>`;

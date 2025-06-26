@@ -63,7 +63,8 @@
 }
 
 .sidebar-logo {
-  margin-bottom: 2rem;
+  margin-top: auto;
+  margin-bottom: 1rem;
   padding: 0.5rem;
 }
 
@@ -77,7 +78,7 @@
   flex: 1;
   display: flex;
   flex-direction: column;
-  justify-content: space-between;
+  justify-content: flex-start;
   width: 100%;
 }
 
@@ -320,17 +321,35 @@
   border-bottom: 1px solid #d1d0d0; /* Borde fijo del tema light para todos los temas */
   display: flex;
   align-items: center;
-  justify-content: flex-end;
+  justify-content: space-between;
   padding: 0 2rem;
   z-index: var(--z-index-fixed);
   /* box-shadow: var(--shadow-sm); */
+}
+
+/* Logo del cliente */
+.header-logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.client-logo {
+  height: 40px;
+  width: auto;
+  max-width: 200px;
+  object-fit: contain;
+  transition: transform 0.3s ease;
+}
+
+.client-logo:hover {
+  transform: scale(1.05);
 }
 
 .user-info {
   display: flex;
   align-items: center;
   gap: 1rem;
-  margin-left: auto;
 }
 
 .user-avatar {
@@ -430,6 +449,13 @@
 
   #header {
     left: 0;
+    padding: 0 1rem;
+  }
+
+  /* Logo responsivo en móviles */
+  .client-logo {
+    height: 32px;
+    max-width: 150px;
   }
 
   #sidebar.active {
@@ -455,6 +481,22 @@
 @media (min-width: 769px) {
   .mobile-menu-toggle {
     display: none !important;
+  }
+}
+
+/* Estilos para pantallas muy pequeñas */
+@media (max-width: 480px) {
+  #header {
+    padding: 0 0.5rem;
+  }
+
+  .client-logo {
+    height: 28px;
+    max-width: 120px;
+  }
+
+  .user-info {
+    gap: 0.5rem;
   }
 }
 
