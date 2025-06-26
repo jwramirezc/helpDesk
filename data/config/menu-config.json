@@ -19,8 +19,32 @@
         "id": "menu_reportes",
         "label": "Reportes",
         "icon": "fas fa-chart-bar",
-        "type": "item",
-        "target": "reportes.html"
+        "type": "submenu",
+        "popoverPlacement": "right",
+        "popoverOffset": 12,
+        "children": [
+          {
+            "id": "tickets_pendientes",
+            "label": "Tickets Pendientes",
+            "icon": "fas fa-chart-bar",
+            "type": "item",
+            "target": "views/html/tickets_pendientes.html"
+          },
+          {
+            "id": "tickets_proceso",
+            "label": "Tickets en Proceso",
+            "icon": "fas fa-chart-bar",
+            "type": "item",
+            "target": "views/html/tickets_proceso.html"
+          },
+          {
+            "id": "tickets_resueltos",
+            "label": "Tickets Resueltos",
+            "icon": "fas fa-chart-bar",
+            "type": "item",
+            "target": "views/html/tickets_resueltos.html"
+          }
+        ]
       }
     ],
     "bottom": [
@@ -35,32 +59,8 @@
         "id": "menu_config",
         "label": "Configuración",
         "icon": "fas fa-cog",
-        "type": "submenu",
-        "popoverPlacement": "right",
-        "popoverOffset": 12,
-        "children": [
-          {
-            "id": "menu_config_usuarios",
-            "label": "Usuarios",
-            "icon": "fas fa-users",
-            "type": "item",
-            "target": "configuracion/usuarios.html"
-          },
-          {
-            "id": "menu_config_perfiles",
-            "label": "Perfiles",
-            "icon": "fas fa-user-shield",
-            "type": "item",
-            "target": "configuracion/perfiles.html"
-          },
-          {
-            "id": "menu_config_sistema",
-            "label": "Sistema",
-            "icon": "fas fa-cogs",
-            "type": "item",
-            "target": "configuracion/sistema.html"
-          }
-        ]
+        "type": "item",
+        "target": "config.html"
       },
       {
         "id": "menu_logout",
