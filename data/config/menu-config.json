@@ -37,7 +37,7 @@
           {
             "id": "tickets_proceso",
             "label": "Tickets en Proceso",
-            "icon": "fas fa|-chart-bar",
+            "icon": "fas fa-chart-bar",
             "type": "item",
             "target": "views/html/tickets_proceso.html",
             "enabled": true
