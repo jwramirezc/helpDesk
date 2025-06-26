@@ -290,11 +290,11 @@
    FORMATO DE TICKETS
    ======================================== */
 .ticket-asunto {
+  color: var(--helpdesk-title-color);
   font-weight: 500;
 }
 
 .ticket-asunto strong {
-  color: var(--text-color);
   font-weight: 600;
   display: block;
   margin-bottom: 0.25rem;
