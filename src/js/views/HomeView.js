@@ -164,7 +164,6 @@ class HomeView {
         return usuario;
       }
 
-      console.log('HomeView: Usuario no válido, usando datos por defecto');
       // Si no hay usuario válido en ConfigService, usar datos por defecto
       return {
         nombre: 'Usuario',
@@ -252,8 +251,6 @@ class HomeView {
    */
   inicializarNewsService() {
     try {
-      console.log('HomeView: Inicializando NewsService...');
-
       // Verificar que NewsService esté disponible
       if (typeof NewsService === 'undefined') {
         console.error('HomeView: NewsService no está disponible');
@@ -265,9 +262,7 @@ class HomeView {
       const newsService = new NewsService();
       newsService
         .init('news-container')
-        .then(() => {
-          console.log('HomeView: NewsService inicializado correctamente');
-        })
+        .then(() => {})
         .catch(error => {
           console.error('HomeView: Error al inicializar NewsService:', error);
           this.mostrarErrorNoticias('Error al cargar las noticias');
