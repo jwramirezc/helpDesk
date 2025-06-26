@@ -173,147 +173,592 @@
   border: none;
   padding: 1rem 1.5rem;
   display: flex;
-  justify-content: center;
+  justify-content: space-between;
   align-items: center;
-  position: relative;
 }
 
 .helpdesk-tabla .card-header h5 {
-  text-align: center;
-  width: 100%;
   margin: 0;
   font-weight: 600;
   color: white;
-  position: absolute;
-  left: 50%;
-  transform: translateX(-50%);
+  display: flex;
+  align-items: center;
 }
 
 .helpdesk-tabla .card-header .btn-group {
-  position: absolute;
-  right: 1rem;
-  z-index: 1;
+  display: flex;
+  gap: 0.5rem;
 }
 
 .helpdesk-tabla .card-header .btn-group .btn {
   color: white;
-  border: none;
-  background-color: transparent;
-}
-
-.helpdesk-tabla .card-header .btn-group .btn:hover {
-  color: var(--main-primary-color);
-  background-color: white;
-  border: none;
-}
-
-/* Estilos de la tabla */
-.helpdesk-tabla .table {
-  margin: 0;
-}
-
-.helpdesk-tabla .table thead th {
-  background-color: var(--main-light-color);
-  border: none;
-  padding: 1rem;
-  font-weight: 600;
-  color: var(--main-text-color);
-  text-transform: uppercase;
-  font-size: 0.8rem;
-  letter-spacing: 0.5px;
-}
-
-.helpdesk-tabla .table tbody td {
-  padding: 1rem;
-  vertical-align: middle;
-  border-bottom: 1px solid #f8f9fa;
-}
-
-.helpdesk-tabla .table tbody tr:hover {
-  background-color: rgba(0, 123, 255, 0.05);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  background: transparent;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--helpdesk-border-radius);
   transition: var(--helpdesk-transition);
 }
 
-/* Estilos para el asunto del ticket */
+.helpdesk-tabla .card-header .btn-group .btn:hover {
+  background: rgba(255, 255, 255, 0.1);
+  border-color: rgba(255, 255, 255, 0.5);
+}
+
+/* ========================================
+   BOOTSTRAP TABLE
+   ======================================== */
+.bootstrap-table {
+  border: 1px solid #e9ecef;
+}
+
+.bootstrap-table .table {
+  margin-bottom: 0;
+  border: none;
+}
+
+.bootstrap-table .table thead th {
+  background: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+  padding: 0.75rem;
+  vertical-align: middle;
+  border-right: 1px solid #e9ecef;
+}
+
+.bootstrap-table .table thead th:last-child {
+  border-right: none;
+}
+
+.bootstrap-table .table tbody td {
+  border-bottom: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
+  padding: 0.75rem;
+  vertical-align: middle;
+}
+
+.bootstrap-table .table tbody td:last-child {
+  border-right: none;
+}
+
+.bootstrap-table .table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+.bootstrap-table .table tbody tr:hover td {
+  background-color: #f8f9fa;
+}
+
+/* ========================================
+   TABLA TEMPORAL (FALLBACK)
+   ======================================== */
+#tabla-temporal .table {
+  margin-bottom: 0;
+  border: 1px solid #e9ecef;
+}
+
+#tabla-temporal .table thead th {
+  background: #f8f9fa;
+  border-bottom: 2px solid #e9ecef;
+  border-top: none;
+  font-weight: 600;
+  color: #495057;
+  padding: 0.75rem;
+  vertical-align: middle;
+  border-right: 1px solid #e9ecef;
+}
+
+#tabla-temporal .table thead th:last-child {
+  border-right: none;
+}
+
+#tabla-temporal .table tbody td {
+  border-bottom: 1px solid #e9ecef;
+  border-right: 1px solid #e9ecef;
+  padding: 0.75rem;
+  vertical-align: middle;
+}
+
+#tabla-temporal .table tbody td:last-child {
+  border-right: none;
+}
+
+#tabla-temporal .table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* ========================================
+   ELEMENTOS DE TICKETS
+   ======================================== */
 .ticket-asunto {
-  max-width: 300px;
+  line-height: 1.4;
 }
 
 .ticket-asunto strong {
-  color: var(--main-text-color);
+  display: block;
+  color: var(--main-dark-color);
   font-weight: 600;
+  margin-bottom: 0.25rem;
 }
 
 .ticket-asunto small {
-  font-size: 0.8rem;
-  line-height: 1.3;
+  color: var(--main-text-color-secondary);
+  font-size: 0.875rem;
 }
 
-/* Estilos para badges */
 .helpdesk-tabla .badge {
   font-size: 0.75rem;
-  padding: 0.5rem 0.75rem;
-  border-radius: 20px;
+  padding: 0.375rem 0.75rem;
+  border-radius: 0.375rem;
   font-weight: 500;
 }
 
 /* ========================================
-   PAGINACIÓN
+   TOOLBAR DE BOOTSTRAP TABLE CON ÍCONOS
    ======================================== */
-.helpdesk-paginacion {
-  margin-top: 2rem;
-  font-size: var(--font-size-sm);
+
+/* Estilos generales de la toolbar */
+.bootstrap-table .fixed-table-toolbar {
+  padding: 1rem;
+  background: #f8f9fa;
+  border-bottom: 1px solid #dee2e6;
 }
 
-.helpdesk-paginacion .pagination {
-  margin: 0;
-}
-
-.helpdesk-paginacion .page-link {
-  border: none;
-  color: var(--main-primary-color);
-  padding: 0.2rem 0.75rem;
-  margin: 0 0.5rem;
+.bootstrap-table .fixed-table-toolbar .btn {
+  margin-right: 0.5rem;
   border-radius: var(--helpdesk-border-radius);
-  transition: var(--helpdesk-transition);
 }
 
-.helpdesk-paginacion .page-link:hover {
-  background-color: var(--main-primary-color);
-  color: white;
-  transform: translateY(-1px);
-  text-decoration: none;
+.bootstrap-table .fixed-table-toolbar .search {
+  margin-bottom: 0;
 }
 
-.helpdesk-paginacion .page-item.active .page-link {
-  background-color: var(--main-primary-color);
-  color: var(--helpdesk-light);
-  border-color: var(--main-primary-color);
+.bootstrap-table .fixed-table-toolbar .search input {
+  border-radius: var(--helpdesk-border-radius);
+  border: 1px solid #ced4da;
+  padding: 0.375rem 0.75rem;
 }
 
-.helpdesk-paginacion .page-item.disabled .page-link {
-  color: var(--main-text-color-secondary);
-  background-color: transparent;
+/* Botón de búsqueda */
+.bootstrap-table .toolbar .btn[data-toggle='search']::before {
+  content: '\f002'; /* Ícono de lupa de Font Awesome */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+/* Botón de refresh */
+.bootstrap-table .toolbar .btn[data-toggle='refresh']::before {
+  content: '\f021'; /* Ícono de refresh de Font Awesome */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+/* Botón de toggle */
+.bootstrap-table .toolbar .btn[data-toggle='toggle']::before {
+  content: '\f0c9'; /* Ícono de hamburguesa de Font Awesome */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+/* Botón de columnas */
+.bootstrap-table .toolbar .btn[data-toggle='columns']::before {
+  content: '\f0db'; /* Ícono de columnas de Font Awesome */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+/* Botón de export */
+.bootstrap-table .toolbar .btn[data-toggle='export']::before {
+  content: '\f56d'; /* Ícono de descarga de Font Awesome */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+/* Estilos generales para botones de toolbar */
+.bootstrap-table .toolbar .btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0.375rem 0.75rem;
+  font-size: 0.875rem;
+  border: 1px solid #dee2e6;
+  background: transparent;
+  color: #495057;
+  transition: all 0.2s ease;
+  margin-left: 0.25rem;
+}
+
+.bootstrap-table .toolbar .btn:hover {
+  background: #f8f9fa;
+  border-color: #adb5bd;
+  color: #212529;
+}
+
+.bootstrap-table .toolbar .btn:focus {
+  box-shadow: none;
+  outline: none;
+}
+
+.bootstrap-table .toolbar .btn.active {
+  background: #e9ecef;
+  border-color: #6c757d;
+  color: #495057;
+}
+
+/* Responsive para botones de toolbar */
+@media (max-width: 768px) {
+  .bootstrap-table .toolbar .btn {
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
+    margin-left: 0.125rem;
+  }
+
+  .bootstrap-table .toolbar .btn::before {
+    margin-right: 0.25rem;
+  }
 }
 
 /* ========================================
-   MODAL DE NUEVO TICKET
+   BOTONES DE COLUMNAS CON ÍCONOS ESPECÍFICOS
+   ======================================== */
+.columns.columns-right.btn-group.float-right {
+  background: transparent !important;
+  border: none !important;
+  box-shadow: none !important;
+}
+
+.columns.columns-right.btn-group.float-right .btn {
+  background: transparent !important;
+  border: 1px solid #dee2e6 !important;
+  color: #495057 !important;
+  margin-left: 0.25rem;
+  transition: all 0.2s ease;
+  position: relative;
+  padding-left: 2rem !important; /* Espacio para el ícono */
+}
+
+/* Íconos específicos para botones de columnas individuales */
+.columns.columns-right.btn-group.float-right .btn[data-field='id']::before {
+  content: '\f02a'; /* Ícono de ID - Font Awesome */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.columns.columns-right.btn-group.float-right .btn[data-field='asunto']::before {
+  content: '\f075'; /* Ícono de comentario/asunto */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.columns.columns-right.btn-group.float-right
+  .btn[data-field='categoria']::before {
+  content: '\f02b'; /* Ícono de etiqueta/categoría */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.columns.columns-right.btn-group.float-right .btn[data-field='estado']::before {
+  content: '\f111'; /* Ícono de círculo/estado */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.columns.columns-right.btn-group.float-right .btn[data-field='fecha']::before {
+  content: '\f073'; /* Ícono de calendario */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+.columns.columns-right.btn-group.float-right
+  .btn[data-field='departamento']::before {
+  content: '\f1ad'; /* Ícono de edificio/departamento */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Íconos para botones de control de columnas */
+.columns.columns-right.btn-group.float-right
+  .btn[data-toggle='dropdown']::before {
+  content: '\f0c9'; /* Ícono de hamburguesa para menú de columnas */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de mostrar/ocultar todas las columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='all']::before {
+  content: '\f0db'; /* Ícono de columnas múltiples */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de configuración de columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='config']::before {
+  content: '\f013'; /* Ícono de engranaje/configuración */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de vista de columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='view']::before {
+  content: '\f06e'; /* Ícono de ojo/vista */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de ordenar columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='sort']::before {
+  content: '\f0dc'; /* Ícono de ordenar */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de filtro de columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='filter']::before {
+  content: '\f0b0'; /* Ícono de filtro */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de exportar columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='export']::before {
+  content: '\f56d'; /* Ícono de descarga/exportar */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de imprimir columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='print']::before {
+  content: '\f02f'; /* Ícono de impresora */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de copiar columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='copy']::before {
+  content: '\f0c5'; /* Ícono de copiar */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de seleccionar columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='select']::before {
+  content: '\f00c'; /* Ícono de check/seleccionar */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de ocultar columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='hide']::before {
+  content: '\f070'; /* Ícono de ojo tachado/ocultar */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Botón de mostrar columnas */
+.columns.columns-right.btn-group.float-right .btn[data-field='show']::before {
+  content: '\f06e'; /* Ícono de ojo/mostrar */
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  position: absolute;
+  left: 0.5rem;
+  top: 50%;
+  transform: translateY(-50%);
+  font-size: 0.75rem;
+  color: #6c757d;
+}
+
+/* Efectos hover para todos los botones */
+.columns.columns-right.btn-group.float-right .btn:hover {
+  background: #f8f9fa !important;
+  border-color: #adb5bd !important;
+  color: #212529 !important;
+}
+
+.columns.columns-right.btn-group.float-right .btn:hover::before {
+  color: #495057;
+}
+
+.columns.columns-right.btn-group.float-right .btn:focus {
+  background: transparent !important;
+  border-color: #dee2e6 !important;
+  box-shadow: none !important;
+}
+
+.columns.columns-right.btn-group.float-right .btn.active {
+  background: #e9ecef !important;
+  border-color: #6c757d !important;
+  color: #495057 !important;
+}
+
+.columns.columns-right.btn-group.float-right .btn.active::before {
+  color: #495057;
+}
+
+/* Estilos específicos para botones de columnas individuales */
+.columns.columns-right.btn-group.float-right .btn[data-field] {
+  background: transparent !important;
+  border: 1px solid #dee2e6 !important;
+  color: #495057 !important;
+  font-size: 0.875rem;
+  padding: 0.375rem 0.75rem 0.375rem 2rem !important; /* Padding izquierdo para ícono */
+  min-width: 120px; /* Ancho mínimo para consistencia */
+  text-align: left;
+}
+
+.columns.columns-right.btn-group.float-right .btn[data-field]:hover {
+  background: #f8f9fa !important;
+  border-color: #adb5bd !important;
+  color: #212529 !important;
+}
+
+.columns.columns-right.btn-group.float-right .btn[data-field].active {
+  background: #e9ecef !important;
+  border-color: #6c757d !important;
+  color: #495057 !important;
+}
+
+/* Responsive para botones de columnas */
+@media (max-width: 768px) {
+  .columns.columns-right.btn-group.float-right .btn {
+    padding: 0.25rem 0.5rem 0.25rem 1.5rem !important;
+    font-size: 0.8rem;
+    min-width: 100px;
+  }
+
+  .columns.columns-right.btn-group.float-right .btn::before {
+    left: 0.25rem;
+    font-size: 0.7rem;
+  }
+}
+
+/* ========================================
+   MODAL Y FORMULARIOS
    ======================================== */
 #modal-nuevo-ticket .modal-content {
   border: none;
   border-radius: var(--helpdesk-border-radius);
-  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+  box-shadow: var(--helpdesk-shadow-hover);
 }
 
 #modal-nuevo-ticket .modal-header {
-  background: linear-gradient(135deg, var(--helpdesk-primary), #0056b3);
+  background: var(--main-primary-color);
   color: white;
-  border: none;
+  border-bottom: none;
   border-radius: var(--helpdesk-border-radius) var(--helpdesk-border-radius) 0 0;
 }
 
 #modal-nuevo-ticket .modal-title {
   font-weight: 600;
+  display: flex;
+  align-items: center;
 }
 
 #modal-nuevo-ticket .modal-body {
@@ -325,6 +770,8 @@
   color: var(--main-text-color);
   margin-bottom: var(--spacing-sm);
   font-size: var(--font-size-sm);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
 }
 
 #modal-nuevo-ticket .form-control,
@@ -332,7 +779,6 @@
   border-radius: var(--helpdesk-border-radius);
   border: 1px solid var(--main-border-color);
   transition: var(--transition-base);
-  font-size: var(--font-size-base);
 }
 
 #modal-nuevo-ticket .form-control:focus,
@@ -342,52 +788,80 @@
 }
 
 #modal-nuevo-ticket .modal-footer {
-  border-top: 1px solid #dee2e6;
+  border-top: 1px solid var(--main-border-color);
   padding: 1.5rem 2rem;
 }
 
 #modal-nuevo-ticket .btn {
   border-radius: var(--helpdesk-border-radius);
-  padding: 0.75rem 1.5rem;
   font-weight: 500;
+  padding: 0.5rem 1.5rem;
   transition: var(--helpdesk-transition);
 }
 
 #modal-nuevo-ticket .btn:hover {
   transform: translateY(-1px);
+  box-shadow: var(--helpdesk-shadow);
 }
 
 /* ========================================
-   COMPONENTES REUTILIZABLES
+   VALIDACIÓN DE FORMULARIOS
    ======================================== */
-.card-vista {
-  background: white;
+.form-control.is-valid,
+.form-select.is-valid {
+  border-color: var(--helpdesk-success);
+  box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
+}
+
+.form-control.is-invalid,
+.form-select.is-invalid {
+  border-color: var(--helpdesk-danger);
+  box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
+}
+
+.valid-feedback {
+  display: block;
+  color: var(--helpdesk-success);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+.invalid-feedback {
+  display: block;
+  color: var(--helpdesk-danger);
+  font-size: 0.875rem;
+  margin-top: 0.25rem;
+}
+
+/* ========================================
+   NOTIFICACIONES
+   ======================================== */
+.alert {
+  border: none;
   border-radius: var(--helpdesk-border-radius);
+  font-weight: 500;
   box-shadow: var(--helpdesk-shadow);
-  transition: var(--helpdesk-transition);
-  border: 1px solid #e9ecef;
-  overflow: hidden;
 }
 
-.card-vista:hover {
-  box-shadow: var(--helpdesk-shadow-hover);
+.alert-success {
+  background: rgba(40, 167, 69, 0.1);
+  color: var(--helpdesk-success);
+  border-left: 4px solid var(--helpdesk-success);
 }
 
-.card-vista-header {
-  background: linear-gradient(135deg, var(--helpdesk-primary), #0056b3);
-  color: white;
-  padding: 1rem 1.5rem;
-  border-bottom: 1px solid #e9ecef;
+.alert-danger {
+  background: rgba(220, 53, 69, 0.1);
+  color: var(--helpdesk-danger);
+  border-left: 4px solid var(--helpdesk-danger);
 }
 
-.card-vista-title {
-  margin: 0;
-  font-weight: 600;
+.alert i {
+  margin-right: 0.5rem;
   font-size: 1.1rem;
 }
 
 /* ========================================
-   RESPONSIVE DESIGN
+   RESPONSIVE
    ======================================== */
 @media (max-width: 768px) {
   .helpdesk-container {
@@ -400,7 +874,7 @@
 
   .helpdesk-stat-card {
     padding: 1rem;
-    margin-bottom: 1rem;
+    gap: 0.75rem;
   }
 
   .stat-icon {
@@ -409,7 +883,7 @@
   }
 
   .stat-icon i {
-    font-size: 1.2rem;
+    font-size: 1.25rem;
   }
 
   .stat-number {
@@ -422,12 +896,12 @@
 
   .helpdesk-tabla .table thead th,
   .helpdesk-tabla .table tbody td {
-    padding: 0.75rem 0.5rem;
-    font-size: 0.9rem;
+    padding: 0.5rem;
+    font-size: 0.875rem;
   }
 
   .ticket-asunto {
-    max-width: 200px;
+    font-size: 0.875rem;
   }
 
   .helpdesk-tabla .btn-group .btn {
@@ -446,12 +920,12 @@
 
 @media (max-width: 576px) {
   .helpdesk-header .row {
-    text-align: center;
+    flex-direction: column;
+    gap: 1rem;
   }
 
   .helpdesk-header .text-end {
-    text-align: center !important;
-    margin-top: 1rem;
+    text-align: left !important;
   }
 
   .stat-icon {
@@ -472,13 +946,13 @@
   }
 
   .helpdesk-paginacion .page-link {
-    padding: 0.5rem 0.75rem;
-    font-size: 0.9rem;
+    padding: 0.25rem 0.5rem;
+    font-size: 0.8rem;
   }
 }
 
 /* ========================================
-   ANIMACIONES Y EFECTOS
+   ANIMACIONES
    ======================================== */
 @keyframes fadeIn {
   from {
@@ -496,18 +970,21 @@
 }
 
 .helpdesk-stat-card {
-  animation: fadeIn 0.5s ease-out;
+  animation: fadeIn 0.6s ease-out;
 }
 
 .helpdesk-stat-card:nth-child(1) {
   animation-delay: 0.1s;
 }
+
 .helpdesk-stat-card:nth-child(2) {
   animation-delay: 0.2s;
 }
+
 .helpdesk-stat-card:nth-child(3) {
   animation-delay: 0.3s;
 }
+
 .helpdesk-stat-card:nth-child(4) {
   animation-delay: 0.4s;
 }
@@ -517,41 +994,37 @@
    ======================================== */
 .ticket-row.urgente {
   background-color: rgba(220, 53, 69, 0.05);
-  border-left: 4px solid var(--helpdesk-danger);
 }
 
 .ticket-row.pendiente {
   background-color: rgba(255, 193, 7, 0.05);
-  border-left: 4px solid var(--helpdesk-warning);
 }
 
 .ticket-row.resuelto {
   background-color: rgba(40, 167, 69, 0.05);
-  border-left: 4px solid var(--helpdesk-success);
 }
 
 /* ========================================
-   LOADING STATES
+   ESTADOS DE CARGA Y VACÍO
    ======================================== */
 .helpdesk-loading {
   display: flex;
   justify-content: center;
   align-items: center;
   padding: 3rem;
-  color: var(--helpdesk-secondary);
+  color: var(--main-text-color-secondary);
 }
 
 .helpdesk-loading .spinner-border {
+  width: 3rem;
+  height: 3rem;
   margin-right: 1rem;
 }
 
-/* ========================================
-   ESTADOS VACÍOS
-   ======================================== */
 .helpdesk-empty {
   text-align: center;
   padding: 3rem;
-  color: var(--helpdesk-secondary);
+  color: var(--main-text-color-secondary);
 }
 
 .helpdesk-empty i {
@@ -562,116 +1035,10 @@
 
 .helpdesk-empty h4 {
   margin-bottom: 0.5rem;
-  color: var(--helpdesk-dark);
+  color: var(--main-text-color);
 }
 
 .helpdesk-empty p {
-  margin-bottom: 1.5rem;
-}
-
-/* ========================================
-   BOTÓN DE ACCIONES
-   ======================================== */
-.btn-acciones-ticket {
-  width: 32px;
-  height: 32px;
-  padding: 0;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  border-radius: var(--helpdesk-border-radius);
-  transition: var(--transition-base);
-  background-color: transparent;
-  border: 1px solid var(--main-border-color);
-  margin: 0 auto;
-}
-
-.btn-acciones-ticket:hover {
-  background-color: var(--main-light-color);
-  border-color: var(--main-primary-color);
-  transform: translateY(-1px);
-  box-shadow: var(--main-shadow);
-}
-
-.btn-acciones-ticket:focus {
-  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
-  outline: none;
-}
-
-.btn-acciones-ticket i {
-  font-size: var(--font-size-sm);
-  color: var(--main-text-color-secondary);
-}
-
-.btn-acciones-ticket:hover i {
-  color: var(--main-primary-color);
-}
-
-/* ========================================
-   POPOVER DE ACCIONES
-   ======================================== */
-.helpdesk-popover {
-  position: fixed;
-  z-index: 9999;
-  background: white;
-  border: 1px solid var(--main-border-color);
-  border-radius: var(--helpdesk-border-radius);
-  box-shadow: var(--main-shadow-hover);
-  padding: 8px 0;
-  min-width: 150px;
-  font-size: var(--font-size-sm);
-  animation: popoverFadeIn 0.2s ease-out;
-}
-
-.popover-item {
-  display: flex;
-  align-items: center;
-  gap: 12px;
-  padding: 8px 16px;
-  cursor: pointer;
-  transition: var(--transition-base);
-  color: var(--main-text-color);
-  text-decoration: none;
-  border: none;
-  background: none;
-  width: 100%;
-  text-align: left;
-}
-
-.popover-item:hover {
-  background-color: var(--main-light-color);
-  color: var(--main-primary-color);
-}
-
-.popover-item i {
-  font-size: 1rem;
-  width: 16px;
-  text-align: center;
-  color: var(--main-text-color-secondary);
-}
-
-.popover-item:hover i {
-  color: var(--main-primary-color);
-}
-
-.popover-item span {
-  flex: 1;
-  font-weight: 500;
-}
-
-@keyframes popoverFadeIn {
-  from {
-    opacity: 0;
-    transform: translateY(-8px);
-  }
-  to {
-    opacity: 1;
-    transform: translateY(0);
-  }
-}
-
-/* Centrar contenido de la columna ACCIONES */
-#tabla-tickets th:last-child,
-#tabla-tickets td:last-child {
-  text-align: center;
+  margin: 0;
+  font-size: 1.1rem;
 }

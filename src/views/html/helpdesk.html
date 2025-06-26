@@ -22,7 +22,7 @@
     <!-- Dashboard de estadísticas -->
     <div class="helpdesk-stats">
         <div class="row">
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-3">
                 <div class="helpdesk-stat-card">
                     <div class="stat-icon bg-primary">
                         <i class="fas fa-clock"></i>
@@ -33,18 +33,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
-                <div class="helpdesk-stat-card">
-                    <div class="stat-icon bg-warning">
-                        <i class="fas fa-exclamation-triangle"></i>
-                    </div>
-                    <div class="stat-content">
-                        <h3 class="stat-number" id="tickets-urgentes">0</h3>
-                        <p class="stat-label">Urgentes</p>
-                    </div>
-                </div>
-            </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-3">
                 <div class="helpdesk-stat-card">
                     <div class="stat-icon bg-info">
                         <i class="fas fa-spinner"></i>
@@ -55,7 +44,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-md-3 mb-3">
+            <div class="col-md-4 mb-3">
                 <div class="helpdesk-stat-card">
                     <div class="stat-icon bg-success">
                         <i class="fas fa-check-circle"></i>
@@ -74,25 +63,19 @@
         <div class="card">
             <div class="card-body">
                 <div class="row">
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-4 mb-2">
                         <label for="filtro-estado" class="form-label">Estado</label>
                         <select id="filtro-estado" class="form-select">
                             <!-- Opciones se cargan dinámicamente -->
                         </select>
                     </div>
-                    <div class="col-md-3 mb-2">
-                        <label for="filtro-prioridad" class="form-label">Prioridad</label>
-                        <select id="filtro-prioridad" class="form-select">
-                            <!-- Opciones se cargan dinámicamente -->
-                        </select>
-                    </div>
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-4 mb-2">
                         <label for="filtro-categoria" class="form-label">Categoría</label>
                         <select id="filtro-categoria" class="form-select">
                             <!-- Opciones se cargan dinámicamente -->
                         </select>
                     </div>
-                    <div class="col-md-3 mb-2">
+                    <div class="col-md-4 mb-2">
                         <label for="buscar-ticket" class="form-label">Buscar</label>
                         <div class="input-group">
                             <input type="text" id="buscar-ticket" class="form-control" placeholder="Buscar ticket...">
@@ -109,47 +92,49 @@
     <!-- Tabla de tickets -->
     <div class="helpdesk-tabla">
         <div class="card">
-            <div class="card-header d-flex justify-content-between align-items-center">
-                <h5 class="mb-0">Mis Tickets</h5>
-                <div class="btn-group" role="group">
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-refresh">
-                        <i class="fas fa-sync-alt"></i>
-                    </button>
-                    <button type="button" class="btn btn-outline-secondary btn-sm" id="btn-export">
-                        <i class="fas fa-download"></i>
-                    </button>
-                </div>
+            <div class="card-header">
+                <h5 class="mb-0">
+                    <i class="fas fa-ticket-alt me-2"></i>
+                    Mis Tickets
+                </h5>
             </div>
             <div class="card-body p-0">
-                <div class="table-responsive">
-                    <table class="table table-hover mb-0" id="tabla-tickets">
+                <!-- Tabla temporal (fallback) -->
+                <div id="tabla-temporal" class="table-responsive">
+                    <table class="table table-hover mb-0">
                         <thead class="table-light">
                             <tr>
                                 <th>ID</th>
                                 <th>Asunto</th>
                                 <th>Categoría</th>
-                                <th>Prioridad</th>
                                 <th>Estado</th>
                                 <th>Fecha</th>
-                                <th>Acciones</th>
+                                <th>Departamento</th>
                             </tr>
                         </thead>
                         <tbody id="tickets-tbody">
-                            <!-- Los tickets se cargan dinámicamente -->
+                            <!-- Los datos se cargan dinámicamente -->
                         </tbody>
+                    </table>
+                </div>
+
+                <!-- Bootstrap Table Container -->
+                <div id="bootstrap-table-container" style="display: none;">
+                    <table id="tabla-tickets-bootstrap" data-toggle="table">
+                        <thead>
+                            <tr>
+                                <th data-field="id" data-sortable="true" data-width="100">ID</th>
+                                <th data-field="asunto" data-sortable="true">Asunto</th>
+                                <th data-field="categoria" data-sortable="true" data-width="120">Categoría</th>
+                                <th data-field="estado" data-sortable="true" data-width="120">Estado</th>
+                                <th data-field="fecha" data-sortable="true" data-width="100">Fecha</th>
+                                <th data-field="departamento" data-sortable="true" data-width="150">Departamento</th>
+                            </tr>
+                        </thead>
                     </table>
                 </div>
             </div>
         </div>
-    </div>
-
-    <!-- Paginación -->
-    <div class="helpdesk-paginacion">
-        <nav aria-label="Navegación de tickets">
-            <ul class="pagination justify-content-center" id="paginacion-tickets">
-                <!-- La paginación se genera dinámicamente -->
-            </ul>
-        </nav>
     </div>
 </div>
 
@@ -173,8 +158,8 @@
                             <input type="text" class="form-control" id="ticket-asunto" required>
                         </div>
                         <div class="col-md-4 mb-3">
-                            <label for="ticket-prioridad" class="form-label">Prioridad *</label>
-                            <select class="form-select" id="ticket-prioridad" required>
+                            <label for="ticket-categoria" class="form-label">Categoría *</label>
+                            <select class="form-select" id="ticket-categoria" required>
                                 <option value="">Seleccionar...</option>
                                 <!-- Opciones se cargan dinámicamente -->
                             </select>
@@ -182,15 +167,15 @@
                     </div>
                     <div class="row">
                         <div class="col-md-6 mb-3">
-                            <label for="ticket-categoria" class="form-label">Categoría *</label>
-                            <select class="form-select" id="ticket-categoria" required>
+                            <label for="ticket-departamento" class="form-label">Departamento</label>
+                            <select class="form-select" id="ticket-departamento">
                                 <option value="">Seleccionar...</option>
                                 <!-- Opciones se cargan dinámicamente -->
                             </select>
                         </div>
                         <div class="col-md-6 mb-3">
-                            <label for="ticket-departamento" class="form-label">Departamento</label>
-                            <select class="form-select" id="ticket-departamento">
+                            <label for="ticket-estado" class="form-label">Estado *</label>
+                            <select class="form-select" id="ticket-estado" required>
                                 <option value="">Seleccionar...</option>
                                 <!-- Opciones se cargan dinámicamente -->
                             </select>
@@ -218,3 +203,9 @@
         </div>
     </div>
 </div>
+
+<!-- Scripts para Bootstrap Table -->
+<script>
+    // La inicialización se maneja en la clase HelpDeskView
+    console.log('HelpDesk HTML cargado');
+</script>

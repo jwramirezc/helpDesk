@@ -1,0 +1,116 @@
+{
+  "usuario": {
+    "id": 1,
+    "nombre": "Juan Pérez",
+    "email": "juan.perez@empresa.com",
+    "departamento": "IT"
+  },
+  "resumen": {
+    "total": 10,
+    "pendientes": 4,
+    "enProceso": 4,
+    "resueltos": 2
+  },
+  "tickets": [
+    {
+      "id": "TKT-001",
+      "asunto": "Problema con acceso a la base de datos",
+      "descripcion": "No puedo acceder a la base de datos desde mi aplicación",
+      "categoria": "Base de Datos",
+      "estado": "Pendiente",
+      "fecha": "2024-01-15T09:30:00Z",
+      "departamento": "IT",
+      "usuario": "Juan Pérez"
+    },
+    {
+      "id": "TKT-002",
+      "asunto": "Error en el sistema de reportes",
+      "descripcion": "Los reportes no se generan correctamente",
+      "categoria": "Sistema",
+      "estado": "En Proceso",
+      "fecha": "2024-01-14T14:20:00Z",
+      "departamento": "Finanzas",
+      "usuario": "María García"
+    },
+    {
+      "id": "TKT-003",
+      "asunto": "Problema con la impresora de red",
+      "descripcion": "La impresora no responde desde mi computadora",
+      "categoria": "Hardware",
+      "estado": "Resuelto",
+      "fecha": "2024-01-13T11:15:00Z",
+      "departamento": "Recursos Humanos",
+      "usuario": "Carlos López"
+    },
+    {
+      "id": "TKT-004",
+      "asunto": "Solicitud de acceso a nuevo módulo",
+      "descripcion": "Necesito acceso al módulo de gestión de proyectos",
+      "categoria": "Accesos",
+      "estado": "Pendiente",
+      "fecha": "2024-01-12T16:45:00Z",
+      "departamento": "Proyectos",
+      "usuario": "Ana Martínez"
+    },
+    {
+      "id": "TKT-005",
+      "asunto": "Error en la aplicación web",
+      "descripcion": "La aplicación web no carga correctamente en Chrome",
+      "categoria": "Aplicación Web",
+      "estado": "En Proceso",
+      "fecha": "2024-01-11T10:30:00Z",
+      "departamento": "Ventas",
+      "usuario": "Luis Rodríguez"
+    },
+    {
+      "id": "TKT-006",
+      "asunto": "Problema con el correo electrónico",
+      "descripcion": "No puedo enviar correos desde Outlook",
+      "categoria": "Correo Electrónico",
+      "estado": "Resuelto",
+      "fecha": "2024-01-10T13:20:00Z",
+      "departamento": "Marketing",
+      "usuario": "Sofia Torres"
+    },
+    {
+      "id": "TKT-007",
+      "asunto": "Solicitud de instalación de software",
+      "descripcion": "Necesito instalar Adobe Photoshop en mi equipo",
+      "categoria": "Software",
+      "estado": "Pendiente",
+      "fecha": "2024-01-09T15:10:00Z",
+      "departamento": "Diseño",
+      "usuario": "Roberto Silva"
+    },
+    {
+      "id": "TKT-008",
+      "asunto": "Problema con la red WiFi",
+      "descripcion": "La conexión WiFi es muy lenta en mi área",
+      "categoria": "Red",
+      "estado": "En Proceso",
+      "fecha": "2024-01-08T09:45:00Z",
+      "departamento": "Operaciones",
+      "usuario": "Carmen Vega"
+    },
+    {
+      "id": "TKT-009",
+      "asunto": "Error en el sistema de facturación",
+      "descripcion": "Las facturas no se generan con el formato correcto",
+      "categoria": "Sistema",
+      "estado": "Pendiente",
+      "fecha": "2024-01-07T12:30:00Z",
+      "departamento": "Contabilidad",
+      "usuario": "Diego Morales"
+    },
+    {
+      "id": "TKT-010",
+      "asunto": "Problema con el servidor de archivos",
+      "descripcion": "No puedo acceder a los archivos compartidos",
+      "categoria": "Servidor",
+      "estado": "En Proceso",
+      "fecha": "2024-01-06T14:15:00Z",
+      "departamento": "IT",
+      "usuario": "Patricia Ruiz"
+    }
+  ]
+}

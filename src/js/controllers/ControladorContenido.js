@@ -112,31 +112,44 @@ class ControladorContenido {
    * @param {string} vista - Nombre de la vista
    */
   async cargarVistaJS(vista) {
+    console.log('=== CARGANDO VISTA JS ===');
+    console.log('Vista solicitada:', vista);
+
     // Usar configuración centralizada de ViewConfig
     const nombreClase = ViewConfig.VIEW_CLASSES[vista];
+    console.log('Nombre de clase:', nombreClase);
+    console.log('Clase disponible en window:', !!window[nombreClase]);
 
     if (nombreClase && window[nombreClase]) {
       try {
+        console.log('Limpiando vista anterior...');
         // Limpiar vista anterior si existe
         if (this.vistaActual && this.vistaActual.destruir) {
           this.vistaActual.destruir();
         }
 
+        console.log('Creando nueva instancia de', nombreClase);
         // Crear nueva instancia
         this.vistaActual = new window[nombreClase]();
+        console.log('Instancia creada:', this.vistaActual);
 
         // Inicializar la vista si tiene método init
         if (
           this.vistaActual.init &&
           typeof this.vistaActual.init === 'function'
         ) {
+          console.log('Llamando a init() en la vista...');
           await this.vistaActual.init();
+          console.log('Vista inicializada correctamente');
+        } else {
+          console.log('La vista no tiene método init');
         }
       } catch (error) {
         console.error(
           `ControladorContenido: Error al inicializar vista JS ${nombreClase}:`,
           error
         );
+        console.error('Stack trace:', error.stack);
 
         // Mostrar error en la interfaz
         this.mainContent.innerHTML += `

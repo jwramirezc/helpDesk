@@ -6,169 +6,325 @@
 
 class HelpDeskView {
   constructor() {
+    console.log('=== CONSTRUCTOR HELPDESKVIEW ===');
+    console.log('Configuración disponible:', !!helpdeskConfig);
+
     this.tickets = [];
     this.datosUsuario = null;
     this.filtros = {
       estado: '',
-      prioridad: '',
       categoria: '',
       busqueda: '',
     };
     this.paginaActual = 1;
-    this.ticketsPorPagina = helpdeskConfig.paginacion.itemsPorPagina;
+    this.ticketsPorPagina = 10; // Valor por defecto
     this.modal = null;
     this.isInitialized = false;
     this.config = helpdeskConfig;
-    this.activePopover = null;
-    this.activeTrigger = null;
+    this.bootstrapTable = null;
+    this.intervaloActualizacion = null;
+
+    console.log('HelpDeskView construida con configuración:', this.config);
   }
 
   /**
    * Inicializa la vista
    */
   init() {
-    if (this.isInitialized) return;
+    console.log('=== MÉTODO INIT EJECUTÁNDOSE ===');
+    console.log('isInitialized actual:', this.isInitialized);
 
+    if (this.isInitialized) {
+      console.log('HelpDeskView ya está inicializada, saliendo...');
+      return;
+    }
+
+    console.log('=== INICIALIZANDO HELPDESKVIEW ===');
+
+    // Configurar eventos globales para Bootstrap Table
+    console.log('Configurando eventos globales...');
+    this.configurarEventosGlobales();
+
+    // Configurar formatters globales para Bootstrap Table
+    console.log('Configurando formatters globales...');
+    this.configurarFormattersGlobales();
+
+    console.log('Llamando a inicializar()...');
     this.inicializar();
     this.isInitialized = true;
+    console.log('HelpDeskView marcada como inicializada');
+  }
+
+  /**
+   * Configura eventos globales para Bootstrap Table
+   */
+  configurarEventosGlobales() {
+    window.operateEvents = {
+      'click .btn-outline-primary': (e, value, row, index) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.verTicket(row.id);
+      },
+      'click .btn-outline-warning': (e, value, row, index) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.editarTicket(row.id);
+      },
+      'click .btn-outline-danger': (e, value, row, index) => {
+        e.preventDefault();
+        e.stopPropagation();
+        this.eliminarTicket(row.id);
+      },
+    };
+  }
+
+  /**
+   * Configura formatters globales para Bootstrap Table
+   */
+  configurarFormattersGlobales() {
+    // Formatters usando la configuración centralizada
+    const formatters = this.config.formatters;
+
+    window.idFormatter = formatters.id;
+    window.asuntoFormatter = formatters.asunto;
+    window.categoriaFormatter = formatters.categoria;
+    window.estadoFormatter = formatters.estado;
+    window.fechaFormatter = formatters.fecha;
+    window.departamentoFormatter = formatters.departamento;
+
+    // Formatter para acciones (vacío ya que no se usan)
+    window.operateFormatter = function (value, row, index) {
+      return '';
+    };
   }
 
   /**
    * Inicializa la vista (método interno)
    */
   async inicializar() {
-    await this.cargarDatosIniciales();
-    this.cargarFiltros();
-    this.configurarPopoverAcciones();
-    this.agregarEventos();
-    await this.cargarTickets();
+    console.log('=== MÉTODO INICIALIZAR EJECUTÁNDOSE ===');
+    console.log('Estado de inicialización:', this.isInitialized);
+    console.log('Configuración disponible:', !!this.config);
+    console.log('URL de datos:', this.config ? this.config.datos.url : 'N/A');
+
+    try {
+      // Probar acceso al JSON primero
+      console.log('Iniciando prueba de acceso JSON...');
+      const accesoExitoso = await this.probarAccesoJSON();
+      console.log('Resultado de prueba de acceso:', accesoExitoso);
+
+      if (!accesoExitoso) {
+        console.error('No se pudo acceder al archivo JSON');
+        this.mostrarError(
+          'No se pudo cargar los datos. Verifique la conexión.'
+        );
+        return;
+      }
+
+      console.log('Cargando datos iniciales...');
+      await this.cargarDatosIniciales();
+
+      console.log('Cargando filtros...');
+      this.cargarFiltros();
+
+      console.log('Agregando eventos...');
+      this.agregarEventos();
+
+      console.log('Cargando tickets...');
+      await this.cargarTickets();
+
+      // Intentar inicializar Bootstrap Table, pero usar tabla simple como fallback
+      console.log('Intentando inicializar Bootstrap Table...');
+      try {
+        this.inicializarBootstrapTable();
+      } catch (error) {
+        console.log(
+          'Error al inicializar Bootstrap Table, usando tabla simple:',
+          error.message
+        );
+        this.renderizarTablaSimple();
+      }
+
+      console.log('Configurando actualización automática...');
+      this.configurarActualizacionAutomatica();
+
+      console.log('=== INICIALIZACIÓN COMPLETADA ===');
+    } catch (error) {
+      console.error('Error durante la inicialización:', error);
+      this.mostrarError('Error al inicializar la vista: ' + error.message);
+    }
   }
 
   /**
-   * Carga datos iniciales desde el archivo JSON
+   * Prueba el acceso al archivo JSON
+   */
+  async probarAccesoJSON() {
+    try {
+      console.log('Probando acceso a:', this.config.datos.url);
+      const response = await fetch(this.config.datos.url);
+
+      if (!response.ok) {
+        console.error('Error HTTP:', response.status, response.statusText);
+        return false;
+      }
+
+      const data = await response.json();
+      console.log('Acceso JSON exitoso, datos recibidos:', !!data);
+      return !!data;
+    } catch (error) {
+      console.error('Error al acceder al JSON:', error);
+      return false;
+    }
+  }
+
+  /**
+   * Carga los datos iniciales desde el JSON
    */
   async cargarDatosIniciales() {
     try {
+      console.log('Cargando datos desde:', this.config.datos.url);
       const response = await fetch(this.config.datos.url);
+
       if (!response.ok) {
-        throw new Error(`HTTP error! status: ${response.status}`);
+        throw new Error(`HTTP ${response.status}: ${response.statusText}`);
       }
 
-      const datos = await response.json();
-      this.datosUsuario = datos.usuario;
-      this.tickets = datos.tickets || [];
+      const data = await response.json();
+      console.log('Datos cargados:', data);
 
-      // Actualizar estadísticas desde los datos del JSON
-      this.actualizarEstadisticas(datos.resumen);
+      this.tickets = data.tickets || [];
+      this.datosUsuario = data.usuario || null;
 
-      if (this.config.desarrollo.modoDebug) {
-        console.log('Datos cargados:', datos);
+      // Actualizar estadísticas
+      if (data.resumen) {
+        this.actualizarEstadisticas(data.resumen);
       }
+
+      console.log('Datos iniciales cargados exitosamente');
+      console.log('Tickets cargados:', this.tickets.length);
+      console.log('Usuario:', this.datosUsuario);
     } catch (error) {
       console.error('Error al cargar datos iniciales:', error);
-      this.mostrarError('Error al cargar los datos del usuario');
-
-      // Fallback con datos por defecto
-      this.actualizarEstadisticas({
-        pendientes: 0,
-        urgentes: 0,
-        enProceso: 0,
-        resueltos: 0,
-      });
+      throw error;
     }
   }
 
   /**
-   * Carga las opciones de los filtros desde la configuración
+   * Carga los filtros con las opciones de la configuración
    */
   cargarFiltros() {
-    // Cargar filtro de estados
-    const filtroEstado = document.getElementById('filtro-estado');
-    if (filtroEstado) {
-      filtroEstado.innerHTML = this.config.filtros.estados
-        .map(
-          estado => `<option value="${estado.value}">${estado.label}</option>`
-        )
-        .join('');
-    }
-
-    // Cargar filtro de prioridades
-    const filtroPrioridad = document.getElementById('filtro-prioridad');
-    if (filtroPrioridad) {
-      filtroPrioridad.innerHTML = this.config.filtros.prioridades
-        .map(
-          prioridad =>
-            `<option value="${prioridad.value}">${prioridad.label}</option>`
-        )
-        .join('');
-    }
-
-    // Cargar filtro de categorías
-    const filtroCategoria = document.getElementById('filtro-categoria');
-    if (filtroCategoria) {
-      filtroCategoria.innerHTML = this.config.filtros.categorias
-        .map(
-          categoria =>
-            `<option value="${categoria.value}">${categoria.label}</option>`
-        )
-        .join('');
-    }
-
-    // Cargar opciones del formulario nuevo ticket
+    console.log('Cargando filtros...');
+    this.cargarFiltroEstados();
+    this.cargarFiltroCategorias();
     this.cargarOpcionesFormulario();
   }
 
   /**
-   * Carga las opciones del formulario de nuevo ticket
+   * Carga las opciones del filtro de estados
    */
-  cargarOpcionesFormulario() {
-    // Prioridades para el formulario
-    const ticketPrioridad = document.getElementById('ticket-prioridad');
-    if (ticketPrioridad) {
-      const opcionesPrioridad = this.config.filtros.prioridades
-        .filter(p => p.value !== '') // Excluir "Todas las prioridades"
-        .map(
-          prioridad =>
-            `<option value="${prioridad.value}">${prioridad.label}</option>`
-        )
-        .join('');
-      ticketPrioridad.innerHTML =
-        '<option value="">Seleccionar...</option>' + opcionesPrioridad;
-    }
+  cargarFiltroEstados() {
+    const selectEstado = document.getElementById('filtro-estado');
+    if (!selectEstado) return;
 
-    // Categorías para el formulario
-    const ticketCategoria = document.getElementById('ticket-categoria');
-    if (ticketCategoria) {
-      const opcionesCategoria = this.config.filtros.categorias
-        .filter(c => c.value !== '') // Excluir "Todas las categorías"
-        .map(
-          categoria =>
-            `<option value="${categoria.value}">${categoria.label}</option>`
-        )
-        .join('');
-      ticketCategoria.innerHTML =
-        '<option value="">Seleccionar...</option>' + opcionesCategoria;
-    }
-
-    // Departamentos para el formulario
-    const ticketDepartamento = document.getElementById('ticket-departamento');
-    if (ticketDepartamento) {
-      const opcionesDepartamento = this.config.filtros.departamentos
-        .filter(d => d.value !== '') // Excluir "Todos los departamentos"
-        .map(
-          departamento =>
-            `<option value="${departamento.value}">${departamento.label}</option>`
-        )
-        .join('');
-      ticketDepartamento.innerHTML =
-        '<option value="">Seleccionar...</option>' + opcionesDepartamento;
-    }
+    const opciones = this.config.opciones.estados;
+    selectEstado.innerHTML = opciones
+      .map(opcion => `<option value="${opcion.value}">${opcion.label}</option>`)
+      .join('');
   }
 
   /**
-   * Agrega todos los eventos de la vista
+   * Carga las opciones del filtro de categorías
+   */
+  cargarFiltroCategorias() {
+    const selectCategoria = document.getElementById('filtro-categoria');
+    if (!selectCategoria) return;
+
+    const opciones = this.config.opciones.categorias;
+    selectCategoria.innerHTML = opciones
+      .map(opcion => `<option value="${opcion.value}">${opcion.label}</option>`)
+      .join('');
+  }
+
+  /**
+   * Carga las opciones del formulario
+   */
+  cargarOpcionesFormulario() {
+    this.cargarOpcionesCategoria();
+    this.cargarOpcionesDepartamento();
+    this.cargarOpcionesEstado();
+  }
+
+  /**
+   * Carga las opciones de categoría en el formulario
+   */
+  cargarOpcionesCategoria() {
+    const selectCategoria = document.getElementById('ticket-categoria');
+    if (!selectCategoria) return;
+
+    const opciones = this.config.opciones.categorias.filter(
+      opcion => opcion.value !== ''
+    );
+    selectCategoria.innerHTML =
+      '<option value="">Seleccionar...</option>' +
+      opciones
+        .map(
+          opcion => `<option value="${opcion.value}">${opcion.label}</option>`
+        )
+        .join('');
+  }
+
+  /**
+   * Carga las opciones de departamento en el formulario
+   */
+  cargarOpcionesDepartamento() {
+    const selectDepartamento = document.getElementById('ticket-departamento');
+    if (!selectDepartamento) return;
+
+    const opciones = this.config.opciones.departamentos.filter(
+      opcion => opcion.value !== ''
+    );
+    selectDepartamento.innerHTML =
+      '<option value="">Seleccionar...</option>' +
+      opciones
+        .map(
+          opcion => `<option value="${opcion.value}">${opcion.label}</option>`
+        )
+        .join('');
+  }
+
+  /**
+   * Carga las opciones de estado en el formulario
+   */
+  cargarOpcionesEstado() {
+    const selectEstado = document.getElementById('ticket-estado');
+    if (!selectEstado) return;
+
+    const opciones = this.config.opciones.estados.filter(
+      opcion => opcion.value !== ''
+    );
+    selectEstado.innerHTML =
+      '<option value="">Seleccionar...</option>' +
+      opciones
+        .map(
+          opcion => `<option value="${opcion.value}">${opcion.label}</option>`
+        )
+        .join('');
+  }
+
+  /**
+   * Agrega todos los eventos necesarios
    */
   agregarEventos() {
+    this.agregarEventosBotones();
+    this.agregarEventosFiltros();
+    this.agregarEventosBusqueda();
+    this.agregarEventosFormulario();
+  }
+
+  /**
+   * Agrega eventos a los botones principales
+   */
+  agregarEventosBotones() {
     // Botón nuevo ticket
     const btnNuevoTicket = document.getElementById('nuevo-ticket-btn');
     if (btnNuevoTicket) {
@@ -177,300 +333,445 @@ class HelpDeskView {
       );
     }
 
-    // Filtros
-    const filtroEstado = document.getElementById('filtro-estado');
-    if (filtroEstado) {
-      filtroEstado.addEventListener('change', e => {
-        this.filtros.estado = e.target.value;
-        this.aplicarFiltros();
-      });
-    }
-
-    const filtroPrioridad = document.getElementById('filtro-prioridad');
-    if (filtroPrioridad) {
-      filtroPrioridad.addEventListener('change', e => {
-        this.filtros.prioridad = e.target.value;
-        this.aplicarFiltros();
-      });
-    }
-
-    const filtroCategoria = document.getElementById('filtro-categoria');
-    if (filtroCategoria) {
-      filtroCategoria.addEventListener('change', e => {
-        this.filtros.categoria = e.target.value;
-        this.aplicarFiltros();
-      });
-    }
-
-    // Búsqueda con debounce
-    const buscarTicket = document.getElementById('buscar-ticket');
-    if (buscarTicket) {
-      let timeoutId;
-      buscarTicket.addEventListener('input', e => {
-        clearTimeout(timeoutId);
-        timeoutId = setTimeout(() => {
-          this.filtros.busqueda = e.target.value;
-          this.aplicarFiltros();
-        }, this.config.busqueda.tiempoDebounce);
-      });
-    }
-
-    // Botones de acción
-    const btnRefresh = document.getElementById('btn-refresh');
-    if (btnRefresh) {
-      btnRefresh.addEventListener('click', () => this.refrescarTickets());
-    }
-
-    const btnExport = document.getElementById('btn-export');
-    if (btnExport) {
-      btnExport.addEventListener('click', () => this.exportarTickets());
-    }
-
-    // Formulario nuevo ticket
+    // Botón guardar ticket
     const btnGuardarTicket = document.getElementById('btn-guardar-ticket');
     if (btnGuardarTicket) {
       btnGuardarTicket.addEventListener('click', () =>
         this.guardarNuevoTicket()
       );
     }
-
-    // Eventos de la tabla
-    this.agregarEventosTabla();
   }
 
   /**
-   * Agrega eventos a la tabla de tickets
+   * Agrega eventos a los filtros
    */
-  agregarEventosTabla() {
-    const tabla = document.getElementById('tabla-tickets');
-    if (tabla) {
-      tabla.addEventListener('click', e => {
-        const target = e.target;
+  agregarEventosFiltros() {
+    const filtroEstado = document.getElementById('filtro-estado');
+    const filtroCategoria = document.getElementById('filtro-categoria');
 
-        // Botón de acciones (popover)
-        if (target.closest('.btn-acciones-ticket')) {
-          e.preventDefault();
-          e.stopPropagation();
-          const button = target.closest('.btn-acciones-ticket');
-          const ticketId = button.dataset.ticketId;
+    if (filtroEstado) {
+      filtroEstado.addEventListener('change', e => {
+        this.filtros.estado = e.target.value;
+        this.filtrarTickets();
+      });
+    }
 
-          // Mostrar popover de acciones
-          this.mostrarPopoverAcciones(ticketId, button);
-        }
+    if (filtroCategoria) {
+      filtroCategoria.addEventListener('change', e => {
+        this.filtros.categoria = e.target.value;
+        this.filtrarTickets();
       });
     }
   }
 
   /**
-   * Carga los tickets desde el servidor
+   * Agrega eventos de búsqueda
    */
-  async cargarTickets() {
-    try {
-      // Los tickets ya están cargados en cargarDatosIniciales()
-      this.renderizarTabla();
-      this.renderizarPaginacion();
-    } catch (error) {
-      console.error('Error al cargar tickets:', error);
-      this.mostrarError('Error al cargar los tickets');
+  agregarEventosBusqueda() {
+    const buscarTicket = document.getElementById('buscar-ticket');
+    if (!buscarTicket) return;
+
+    let timeoutId;
+    buscarTicket.addEventListener('input', e => {
+      clearTimeout(timeoutId);
+      timeoutId = setTimeout(() => {
+        this.filtros.busqueda = e.target.value;
+        this.filtrarTickets();
+      }, this.config.busqueda.tiempoDebounce);
+    });
+  }
+
+  /**
+   * Agrega eventos al formulario
+   */
+  agregarEventosFormulario() {
+    const form = document.getElementById('form-nuevo-ticket');
+    if (!form) return;
+
+    // Validación en tiempo real
+    const campos = [
+      'ticket-asunto',
+      'ticket-categoria',
+      'ticket-estado',
+      'ticket-descripcion',
+    ];
+    campos.forEach(campoId => {
+      const campo = document.getElementById(campoId);
+      if (campo) {
+        campo.addEventListener('blur', () => this.validarCampo(campoId));
+        campo.addEventListener('input', () => this.validarCampo(campoId));
+      }
+    });
+  }
+
+  /**
+   * Valida un campo del formulario
+   */
+  validarCampo(campoId) {
+    const campo = document.getElementById(campoId);
+    if (!campo) return;
+
+    const valor = campo.value.trim();
+    let esValido = true;
+    let mensaje = '';
+
+    switch (campoId) {
+      case 'ticket-asunto':
+        if (valor.length < 5) {
+          esValido = false;
+          mensaje = 'El asunto debe tener al menos 5 caracteres';
+        }
+        break;
+      case 'ticket-categoria':
+        if (!valor) {
+          esValido = false;
+          mensaje = 'Debe seleccionar una categoría';
+        }
+        break;
+      case 'ticket-estado':
+        if (!valor) {
+          esValido = false;
+          mensaje = 'Debe seleccionar un estado';
+        }
+        break;
+      case 'ticket-descripcion':
+        if (valor.length < 10) {
+          esValido = false;
+          mensaje = 'La descripción debe tener al menos 10 caracteres';
+        }
+        break;
+    }
+
+    this.mostrarValidacionCampo(campo, esValido, mensaje);
+    return esValido;
+  }
+
+  /**
+   * Muestra la validación de un campo
+   */
+  mostrarValidacionCampo(elemento, esValido, mensaje) {
+    elemento.classList.remove('is-valid', 'is-invalid');
+    elemento.classList.add(esValido ? 'is-valid' : 'is-invalid');
+
+    // Remover mensajes anteriores
+    const feedbackAnterior = elemento.parentNode.querySelector(
+      '.valid-feedback, .invalid-feedback'
+    );
+    if (feedbackAnterior) {
+      feedbackAnterior.remove();
+    }
+
+    // Agregar nuevo mensaje si es necesario
+    if (!esValido && mensaje) {
+      const feedback = document.createElement('div');
+      feedback.className = 'invalid-feedback';
+      feedback.textContent = mensaje;
+      elemento.parentNode.appendChild(feedback);
     }
   }
 
   /**
-   * Renderiza la tabla de tickets usando la configuración
+   * Carga los tickets y los renderiza
+   */
+  async cargarTickets() {
+    try {
+      console.log('Cargando tickets...');
+
+      if (this.tickets.length === 0) {
+        console.log('No hay tickets para cargar');
+        this.renderizarTabla();
+        return;
+      }
+
+      console.log('Tickets disponibles:', this.tickets.length);
+      this.renderizarTabla();
+    } catch (error) {
+      console.error('Error al cargar tickets:', error);
+      this.mostrarError('Error al cargar los tickets: ' + error.message);
+    }
+  }
+
+  /**
+   * Verifica las dependencias necesarias
+   */
+  verificarDependencias() {
+    console.log('Verificando dependencias...');
+
+    const dependencias = {
+      jquery: typeof $ !== 'undefined',
+      bootstrap: typeof bootstrap !== 'undefined',
+      bootstrapTable: typeof $.fn.bootstrapTable !== 'undefined',
+    };
+
+    console.log('Estado de dependencias:', dependencias);
+
+    if (!dependencias.jquery) {
+      console.error('jQuery no está disponible');
+      return false;
+    }
+
+    if (!dependencias.bootstrap) {
+      console.error('Bootstrap no está disponible');
+      return false;
+    }
+
+    if (!dependencias.bootstrapTable) {
+      console.error('Bootstrap Table no está disponible');
+      return false;
+    }
+
+    console.log('Todas las dependencias están disponibles');
+    return true;
+  }
+
+  /**
+   * Inicializa Bootstrap Table
+   */
+  inicializarBootstrapTable() {
+    console.log('=== INICIALIZANDO BOOTSTRAP TABLE ===');
+
+    // Verificar dependencias
+    if (!this.verificarDependencias()) {
+      throw new Error('Dependencias no disponibles');
+    }
+
+    const tabla = document.getElementById('tabla-tickets-bootstrap');
+    if (!tabla) {
+      throw new Error('Tabla Bootstrap no encontrada');
+    }
+
+    // Ocultar tabla temporal
+    const tablaTemporal = document.getElementById('tabla-temporal');
+    if (tablaTemporal) {
+      tablaTemporal.style.display = 'none';
+    }
+
+    // Mostrar contenedor de Bootstrap Table
+    const container = document.getElementById('bootstrap-table-container');
+    if (container) {
+      container.style.display = 'block';
+    }
+
+    // Configurar Bootstrap Table
+    const config = this.config.bootstrapTable.configuracion;
+    const opciones = {
+      ...config,
+      data: this.tickets,
+      columns: this.config.columnas.map(col => ({
+        field: col.key,
+        title: col.label,
+        sortable: col.sortable,
+        width: col.width,
+        visible: col.visible,
+        formatter: this.config.formatters[col.key],
+      })),
+    };
+
+    console.log('Configuración Bootstrap Table:', opciones);
+
+    // Inicializar Bootstrap Table
+    $(tabla).bootstrapTable(opciones);
+
+    this.bootstrapTable = $(tabla);
+    console.log('Bootstrap Table inicializado exitosamente');
+  }
+
+  /**
+   * Renderiza la tabla (método principal)
    */
   renderizarTabla() {
+    console.log('Renderizando tabla...');
+
+    if (this.bootstrapTable) {
+      console.log('Actualizando Bootstrap Table...');
+      this.bootstrapTable.bootstrapTable('load', this.tickets);
+    } else {
+      console.log('Usando tabla simple...');
+      this.renderizarTablaSimple();
+    }
+  }
+
+  /**
+   * Renderiza la tabla simple (fallback)
+   */
+  renderizarTablaSimple() {
+    console.log('Renderizando tabla simple...');
+
     const tbody = document.getElementById('tickets-tbody');
-    if (!tbody) return;
+    if (!tbody) {
+      console.error('Tbody no encontrado');
+      return;
+    }
 
-    const ticketsFiltrados = this.filtrarTickets();
-    const inicio = (this.paginaActual - 1) * this.ticketsPorPagina;
-    const fin = inicio + this.ticketsPorPagina;
-    const ticketsPaginados = ticketsFiltrados.slice(inicio, fin);
+    if (this.tickets.length === 0) {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-muted py-4">
+            <i class="fas fa-inbox fa-2x mb-2"></i>
+            <p>No hay tickets disponibles</p>
+          </td>
+        </tr>
+      `;
+      return;
+    }
 
-    tbody.innerHTML = ticketsPaginados
-      .map(ticket => {
-        const row = {};
-        this.config.columnas.forEach(columna => {
-          if (columna.key === 'acciones') {
-            row[columna.key] = columna.formatter(null, ticket);
-          } else {
-            row[columna.key] = columna.formatter
-              ? columna.formatter(ticket[columna.key], ticket)
-              : ticket[columna.key];
-          }
-        });
-
-        return `
-          <tr class="ticket-row" data-ticket-id="${ticket.id}">
-            <td>${row.id}</td>
-            <td>${row.asunto}</td>
-            <td>${row.categoria}</td>
-            <td>${row.prioridad}</td>
-            <td>${row.estado}</td>
-            <td>${row.fecha}</td>
-            <td>${row.acciones}</td>
-          </tr>
-        `;
-      })
+    tbody.innerHTML = this.tickets
+      .map(ticket => this.generarFilaTabla(ticket))
       .join('');
   }
 
   /**
-   * Filtra los tickets según los criterios aplicados
+   * Genera una fila de tabla para un ticket
+   */
+  generarFilaTabla(ticket) {
+    return `
+      <tr>
+        <td><span class="badge bg-secondary">${ticket.id}</span></td>
+        <td>
+          <div class="ticket-asunto">
+            <strong>${ticket.asunto}</strong>
+            <small class="text-muted d-block">${
+              ticket.descripcion
+                ? ticket.descripcion.substring(0, 50) + '...'
+                : ''
+            }</small>
+          </div>
+        </td>
+        <td><span class="badge bg-info">${ticket.categoria}</span></td>
+        <td>${this.formatearEstado(ticket.estado)}</td>
+        <td><small class="text-muted">${new Date(
+          ticket.fecha
+        ).toLocaleDateString('es-ES')}</small></td>
+        <td><span class="text-muted">${ticket.departamento}</span></td>
+      </tr>
+    `;
+  }
+
+  /**
+   * Formatea el estado de un ticket
+   */
+  formatearEstado(estado) {
+    const clases = {
+      Pendiente: 'bg-warning',
+      'En Proceso': 'bg-info',
+      Resuelto: 'bg-success',
+      Cerrado: 'bg-secondary',
+    };
+    return `<span class="badge ${
+      clases[estado] || 'bg-secondary'
+    }">${estado}</span>`;
+  }
+
+  /**
+   * Filtra los tickets según los criterios establecidos
    */
   filtrarTickets() {
-    return this.tickets.filter(ticket => {
-      // Filtro por estado
-      if (
-        this.filtros.estado &&
-        ticket.estado.toLowerCase() !== this.filtros.estado.toLowerCase()
-      ) {
-        return false;
-      }
+    console.log('Filtrando tickets...');
+    console.log('Filtros actuales:', this.filtros);
 
-      // Filtro por prioridad
-      if (
-        this.filtros.prioridad &&
-        ticket.prioridad.toLowerCase() !== this.filtros.prioridad.toLowerCase()
-      ) {
-        return false;
-      }
+    let ticketsFiltrados = [...this.tickets];
 
-      // Filtro por categoría
-      if (
-        this.filtros.categoria &&
-        ticket.categoria.toLowerCase() !== this.filtros.categoria.toLowerCase()
-      ) {
-        return false;
-      }
+    // Filtro por estado
+    if (this.filtros.estado) {
+      ticketsFiltrados = ticketsFiltrados.filter(
+        ticket => ticket.estado === this.filtros.estado
+      );
+    }
 
-      // Filtro por búsqueda
-      if (this.filtros.busqueda) {
-        const busqueda = this.filtros.busqueda.toLowerCase();
-        const campos = this.config.busqueda.campos;
-        const coincide = campos.some(campo => {
-          const valor = ticket[campo]?.toString().toLowerCase() || '';
-          return valor.includes(busqueda);
-        });
-        if (!coincide) return false;
-      }
+    // Filtro por categoría
+    if (this.filtros.categoria) {
+      ticketsFiltrados = ticketsFiltrados.filter(
+        ticket => ticket.categoria === this.filtros.categoria
+      );
+    }
 
-      return true;
-    });
+    // Filtro por búsqueda
+    if (this.filtros.busqueda) {
+      const busqueda = this.filtros.busqueda.toLowerCase();
+      ticketsFiltrados = ticketsFiltrados.filter(ticket =>
+        this.config.busqueda.campos.some(
+          campo =>
+            ticket[campo] &&
+            ticket[campo].toString().toLowerCase().includes(busqueda)
+        )
+      );
+    }
+
+    console.log('Tickets filtrados:', ticketsFiltrados.length);
+
+    // Actualizar tabla con tickets filtrados
+    if (this.bootstrapTable) {
+      this.bootstrapTable.bootstrapTable('load', ticketsFiltrados);
+    } else {
+      this.tickets = ticketsFiltrados;
+      this.renderizarTablaSimple();
+    }
   }
 
   /**
-   * Aplica los filtros y actualiza la vista
+   * Aplica los filtros actuales
    */
   aplicarFiltros() {
-    this.paginaActual = 1; // Resetear a la primera página
-    this.renderizarTabla();
-    this.renderizarPaginacion();
+    this.filtrarTickets();
   }
 
   /**
-   * Renderiza la paginación
+   * Actualiza las estadísticas mostradas
    */
-  renderizarPaginacion() {
-    const paginacion = document.getElementById('paginacion-tickets');
-    if (!paginacion || !this.config.paginacion.mostrarNavegacion) return;
+  actualizarEstadisticas(stats) {
+    console.log('Actualizando estadísticas:', stats);
 
-    const ticketsFiltrados = this.filtrarTickets();
-    const totalPaginas = Math.ceil(
-      ticketsFiltrados.length / this.ticketsPorPagina
-    );
+    const elementos = {
+      pendientes: document.getElementById('tickets-pendientes'),
+      proceso: document.getElementById('tickets-proceso'),
+      resueltos: document.getElementById('tickets-resueltos'),
+    };
 
-    if (totalPaginas <= 1) {
-      paginacion.innerHTML = '';
+    if (elementos.pendientes) {
+      elementos.pendientes.textContent = stats.pendientes || 0;
+    }
+    if (elementos.proceso) {
+      elementos.proceso.textContent = stats.enProceso || 0;
+    }
+    if (elementos.resueltos) {
+      elementos.resueltos.textContent = stats.resueltos || 0;
+    }
+  }
+
+  /**
+   * Configura la actualización automática
+   */
+  configurarActualizacionAutomatica() {
+    if (!this.config.datos.actualizacionAutomatica) {
+      console.log('Actualización automática deshabilitada');
       return;
     }
 
-    let paginacionHTML = '';
+    console.log(
+      'Configurando actualización automática cada',
+      this.config.datos.intervaloActualizacion,
+      'ms'
+    );
 
-    // Botón anterior
-    paginacionHTML += `
-      <li class="page-item ${this.paginaActual === 1 ? 'disabled' : ''}">
-        <a class="page-link" href="#" data-pagina="${
-          this.paginaActual - 1
-        }">Anterior</a>
-      </li>
-    `;
-
-    // Números de página
-    for (let i = 1; i <= totalPaginas; i++) {
-      if (
-        i === 1 ||
-        i === totalPaginas ||
-        (i >= this.paginaActual - 2 && i <= this.paginaActual + 2)
-      ) {
-        paginacionHTML += `
-          <li class="page-item ${i === this.paginaActual ? 'active' : ''}">
-            <a class="page-link" href="#" data-pagina="${i}">${i}</a>
-          </li>
-        `;
-      } else if (i === this.paginaActual - 3 || i === this.paginaActual + 3) {
-        paginacionHTML += `
-          <li class="page-item disabled">
-            <span class="page-link">...</span>
-          </li>
-        `;
-      }
-    }
-
-    // Botón siguiente
-    paginacionHTML += `
-      <li class="page-item ${
-        this.paginaActual === totalPaginas ? 'disabled' : ''
-      }">
-        <a class="page-link" href="#" data-pagina="${
-          this.paginaActual + 1
-        }">Siguiente</a>
-      </li>
-    `;
-
-    paginacion.innerHTML = paginacionHTML;
-
-    // Agregar eventos de paginación
-    paginacion.addEventListener('click', e => {
-      e.preventDefault();
-      const target = e.target;
-      if (target.classList.contains('page-link')) {
-        const pagina = parseInt(target.dataset.pagina);
-        if (pagina && pagina !== this.paginaActual) {
-          this.paginaActual = pagina;
-          this.renderizarTabla();
-          this.renderizarPaginacion();
-        }
-      }
-    });
+    this.intervaloActualizacion = setInterval(async () => {
+      console.log('Actualización automática ejecutándose...');
+      await this.refrescarTickets();
+    }, this.config.datos.intervaloActualizacion);
   }
 
   /**
-   * Actualiza las estadísticas del dashboard
-   */
-  actualizarEstadisticas(stats) {
-    const elementos = {
-      'tickets-pendientes': stats.pendientes,
-      'tickets-urgentes': stats.urgentes,
-      'tickets-proceso': stats.enProceso,
-      'tickets-resueltos': stats.resueltos,
-    };
-
-    Object.entries(elementos).forEach(([id, valor]) => {
-      const elemento = document.getElementById(id);
-      if (elemento) {
-        elemento.textContent = valor;
-      }
-    });
-  }
-
-  /**
-   * Abre el modal para crear nuevo ticket
+   * Abre el modal para crear un nuevo ticket
    */
   abrirModalNuevoTicket() {
-    this.modal = new bootstrap.Modal(
-      document.getElementById('modal-nuevo-ticket')
-    );
+    console.log('Abriendo modal nuevo ticket...');
+
+    if (!this.modal) {
+      this.modal = new bootstrap.Modal(
+        document.getElementById('modal-nuevo-ticket')
+      );
+    }
+
+    this.limpiarFormulario();
     this.modal.show();
   }
 
@@ -478,84 +779,124 @@ class HelpDeskView {
    * Guarda un nuevo ticket
    */
   async guardarNuevoTicket() {
-    const form = document.getElementById('form-nuevo-ticket');
-    if (!form.checkValidity()) {
-      form.reportValidity();
+    console.log('Guardando nuevo ticket...');
+
+    // Validar formulario
+    const campos = [
+      'ticket-asunto',
+      'ticket-categoria',
+      'ticket-estado',
+      'ticket-descripcion',
+    ];
+    const camposValidos = campos.every(campo => this.validarCampo(campo));
+
+    if (!camposValidos) {
+      this.mostrarError(
+        'Por favor, complete todos los campos requeridos correctamente'
+      );
       return;
     }
 
-    // Validar campos según la configuración
-    const validaciones = this.config.formularioNuevoTicket.validaciones;
-    const asunto = document.getElementById('ticket-asunto').value;
-
-    if (validaciones.asunto) {
-      if (asunto.length < validaciones.asunto.minLength) {
-        this.mostrarError(
-          `El asunto debe tener al menos ${validaciones.asunto.minLength} caracteres`
-        );
-        return;
-      }
-      if (
-        validaciones.asunto.pattern &&
-        !validaciones.asunto.pattern.test(asunto)
-      ) {
-        this.mostrarError('El asunto contiene caracteres no válidos');
-        return;
-      }
-    }
-
+    // Obtener datos del formulario
     const nuevoTicket = {
-      id: `TKT-${String(this.tickets.length + 1).padStart(4, '0')}`,
-      asunto: asunto,
+      id: `TKT-${Date.now()}`,
+      asunto: document.getElementById('ticket-asunto').value.trim(),
+      descripcion: document.getElementById('ticket-descripcion').value.trim(),
       categoria: document.getElementById('ticket-categoria').value,
-      prioridad: document.getElementById('ticket-prioridad').value,
-      estado: 'Pendiente',
-      fecha: new Date().toISOString().split('T')[0],
-      descripcion: document.getElementById('ticket-descripcion').value,
+      estado: document.getElementById('ticket-estado').value,
       departamento:
-        document.getElementById('ticket-departamento').value ||
-        'Soporte Técnico',
+        document.getElementById('ticket-departamento').value || 'IT',
+      fecha: new Date().toISOString(),
+      usuario: this.datosUsuario ? this.datosUsuario.nombre : 'Usuario',
     };
 
+    console.log('Nuevo ticket a guardar:', nuevoTicket);
+
     try {
-      // Simular guardado
+      // Agregar a la lista local
       this.tickets.unshift(nuevoTicket);
+
+      // Actualizar tabla
       this.renderizarTabla();
-      this.renderizarPaginacion();
 
-      // Cerrar modal y limpiar formulario
-      this.modal.hide();
-      form.reset();
+      // Cerrar modal
+      if (this.modal) {
+        this.modal.hide();
+      }
 
+      // Mostrar mensaje de éxito
       this.mostrarExito('Ticket creado exitosamente');
+
+      // Limpiar formulario
+      this.limpiarFormulario();
     } catch (error) {
       console.error('Error al guardar ticket:', error);
-      this.mostrarError('Error al crear el ticket');
+      this.mostrarError('Error al crear el ticket: ' + error.message);
     }
+  }
+
+  /**
+   * Limpia el formulario de nuevo ticket
+   */
+  limpiarFormulario() {
+    const campos = [
+      'ticket-asunto',
+      'ticket-categoria',
+      'ticket-departamento',
+      'ticket-estado',
+      'ticket-descripcion',
+      'ticket-adjuntos',
+    ];
+
+    campos.forEach(campoId => {
+      const campo = document.getElementById(campoId);
+      if (campo) {
+        campo.value = '';
+        campo.classList.remove('is-valid', 'is-invalid');
+
+        // Remover mensajes de validación
+        const feedback = campo.parentNode.querySelector(
+          '.valid-feedback, .invalid-feedback'
+        );
+        if (feedback) {
+          feedback.remove();
+        }
+      }
+    });
   }
 
   /**
    * Refresca los tickets
    */
   async refrescarTickets() {
-    await this.cargarDatosIniciales();
-    this.renderizarTabla();
-    this.renderizarPaginacion();
-    this.mostrarExito('Tickets actualizados');
+    console.log('Refrescando tickets...');
+
+    try {
+      await this.cargarDatosIniciales();
+      this.renderizarTabla();
+      console.log('Tickets refrescados exitosamente');
+    } catch (error) {
+      console.error('Error al refrescar tickets:', error);
+    }
   }
 
   /**
    * Exporta los tickets
    */
   exportarTickets() {
-    if (!this.config.exportacion.habilitarCSV) {
-      this.mostrarError('La exportación CSV no está habilitada');
+    console.log('Exportando tickets...');
+
+    if (this.tickets.length === 0) {
+      this.mostrarError('No hay tickets para exportar');
       return;
     }
 
-    const ticketsFiltrados = this.filtrarTickets();
-    const csv = this.convertirACSV(ticketsFiltrados);
-    this.descargarArchivo(csv, 'tickets.csv', 'text/csv');
+    const csv = this.convertirACSV(this.tickets);
+    const nombreArchivo =
+      this.config.bootstrapTable.configuracion.exportOptions.fileName ||
+      'mis-tickets';
+
+    this.descargarArchivo(csv, `${nombreArchivo}.csv`, 'text/csv');
     this.mostrarExito('Tickets exportados exitosamente');
   }
 
@@ -567,24 +908,26 @@ class HelpDeskView {
       'ID',
       'Asunto',
       'Categoría',
-      'Prioridad',
       'Estado',
       'Fecha',
-      'Descripción',
+      'Departamento',
+      'Usuario',
     ];
     const rows = tickets.map(ticket => [
       ticket.id,
       ticket.asunto,
       ticket.categoria,
-      ticket.prioridad,
       ticket.estado,
-      ticket.fecha,
-      ticket.descripcion,
+      new Date(ticket.fecha).toLocaleDateString('es-ES'),
+      ticket.departamento,
+      ticket.usuario,
     ]);
 
-    return [headers, ...rows]
+    const csvContent = [headers, ...rows]
       .map(row => row.map(cell => `"${cell}"`).join(','))
       .join('\n');
+
+    return csvContent;
   }
 
   /**
@@ -603,256 +946,126 @@ class HelpDeskView {
   }
 
   /**
-   * Ver un ticket específico
-   */
-  verTicket(ticketId) {
-    const ticket = this.tickets.find(t => t.id === ticketId);
-    if (ticket) {
-      alert(`Viendo ticket: ${ticket.asunto}`);
-      // Aquí podrías abrir un modal con los detalles del ticket
-    }
-  }
-
-  /**
-   * Editar un ticket específico
-   */
-  editarTicket(ticketId) {
-    const ticket = this.tickets.find(t => t.id === ticketId);
-    if (ticket) {
-      alert(`Editando ticket: ${ticket.asunto}`);
-      // Aquí podrías abrir un modal para editar el ticket
-    }
-  }
-
-  /**
-   * Eliminar un ticket específico
-   */
-  eliminarTicket(ticketId) {
-    if (confirm('¿Estás seguro de que quieres eliminar este ticket?')) {
-      this.tickets = this.tickets.filter(t => t.id !== ticketId);
-      this.renderizarTabla();
-      this.renderizarPaginacion();
-      this.mostrarExito('Ticket eliminado exitosamente');
-    }
-  }
-
-  /**
    * Muestra un mensaje de éxito
    */
   mostrarExito(mensaje) {
-    if (this.config.notificaciones.mostrarExito) {
-      console.log('Éxito:', mensaje);
-      // Aquí podrías usar una librería de notificaciones como Toastr
-    }
+    if (!this.config.notificaciones.mostrarExito) return;
+
+    console.log('Éxito:', mensaje);
+
+    // Crear notificación
+    const notificacion = document.createElement('div');
+    notificacion.className =
+      'alert alert-success alert-dismissible fade show position-fixed';
+    notificacion.style.cssText = `
+      top: 20px;
+      right: 20px;
+      z-index: 9999;
+      min-width: 300px;
+    `;
+    notificacion.innerHTML = `
+      <i class="fas fa-check-circle me-2"></i>
+      ${mensaje}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
+    `;
+
+    document.body.appendChild(notificacion);
+
+    // Auto-remover después del tiempo configurado
+    setTimeout(() => {
+      if (notificacion.parentNode) {
+        notificacion.remove();
+      }
+    }, this.config.notificaciones.duracion);
   }
 
   /**
    * Muestra un mensaje de error
    */
   mostrarError(mensaje) {
-    if (this.config.notificaciones.mostrarError) {
-      console.error('Error:', mensaje);
-      // Aquí podrías usar una librería de notificaciones como Toastr
-    }
-  }
+    if (!this.config.notificaciones.mostrarError) return;
 
-  /**
-   * Capitaliza la primera letra de una cadena
-   */
-  capitalizar(str) {
-    return str.charAt(0).toUpperCase() + str.slice(1);
-  }
+    console.error('Error:', mensaje);
 
-  /**
-   * Método para limpiar recursos cuando se destruye la vista
-   */
-  destruir() {
-    // Limpiar eventos y recursos si es necesario
-    if (this.modal) {
-      this.modal.dispose();
-    }
-
-    // Limpiar popover activo
-    this.ocultarPopoverAcciones();
-  }
-
-  /**
-   * Configura el popover de acciones
-   */
-  configurarPopoverAcciones() {
-    if (!this.config.accionesPopover.habilitado) return;
-
-    // Agregar event listener global para cerrar popover
-    document.addEventListener('click', e => {
-      if (
-        !e.target.closest('.btn-acciones-ticket') &&
-        !e.target.closest('.helpdesk-popover')
-      ) {
-        this.ocultarPopoverAcciones();
-      }
-    });
-
-    // Agregar event listener para ESC
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') {
-        this.ocultarPopoverAcciones();
-      }
-    });
-  }
-
-  /**
-   * Muestra el popover de acciones para un ticket
-   */
-  mostrarPopoverAcciones(ticketId, trigger) {
-    // Ocultar popover activo si existe
-    this.ocultarPopoverAcciones();
-
-    // Crear el popover
-    const popover = this.crearPopoverAcciones(ticketId);
-    document.body.appendChild(popover);
-
-    // Posicionar el popover
-    this.posicionarPopover(popover, trigger);
-
-    // Guardar referencias
-    this.activePopover = popover;
-    this.activeTrigger = trigger;
-
-    // Mostrar el popover
-    popover.style.display = 'block';
-  }
-
-  /**
-   * Crea el popover de acciones para un ticket
-   */
-  crearPopoverAcciones(ticketId) {
-    const popover = document.createElement('div');
-    popover.className = 'helpdesk-popover';
-    popover.style.cssText = `
-      position: fixed;
+    // Crear notificación
+    const notificacion = document.createElement('div');
+    notificacion.className =
+      'alert alert-danger alert-dismissible fade show position-fixed';
+    notificacion.style.cssText = `
+      top: 20px;
+      right: 20px;
       z-index: 9999;
-      background: white;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-      padding: 8px 0;
-      min-width: 150px;
-      display: none;
+      min-width: 300px;
+    `;
+    notificacion.innerHTML = `
+      <i class="fas fa-exclamation-triangle me-2"></i>
+      ${mensaje}
+      <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
 
-    // Filtrar opciones habilitadas
-    const opcionesHabilitadas = this.config.accionesPopover.opciones.filter(
-      opcion => opcion.habilitado !== false && opcion.type !== 'separator'
-    );
+    document.body.appendChild(notificacion);
 
-    // Crear contenido del popover
-    const contenido = opcionesHabilitadas
-      .map(opcion => {
-        return `
-        <div class="popover-item" data-accion="${opcion.accion}" data-ticket-id="${ticketId}">
-          <i class="${opcion.icon}"></i>
-          <span>${opcion.label}</span>
-        </div>
-      `;
-      })
-      .join('');
-
-    popover.innerHTML = contenido;
-
-    // Agregar event listeners a los items
-    popover.addEventListener('click', e => {
-      const item = e.target.closest('.popover-item');
-      if (item) {
-        const accion = item.dataset.accion;
-        const ticketId = item.dataset.ticketId;
-        this.ejecutarAccionTicket(accion, ticketId);
-        this.ocultarPopoverAcciones();
+    // Auto-remover después del tiempo configurado
+    setTimeout(() => {
+      if (notificacion.parentNode) {
+        notificacion.remove();
       }
-    });
-
-    return popover;
+    }, this.config.notificaciones.duracion);
   }
 
   /**
-   * Posiciona el popover relativo al trigger
+   * Capitaliza una cadena
    */
-  posicionarPopover(popover, trigger) {
-    const triggerRect = trigger.getBoundingClientRect();
-    const popoverRect = popover.getBoundingClientRect();
-    const placement = this.config.accionesPopover.placement;
-    const offset = this.config.accionesPopover.offset;
-
-    let top, left;
-
-    switch (placement) {
-      case 'bottom':
-        top = triggerRect.bottom + offset;
-        left = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2;
-        break;
-      case 'top':
-        top = triggerRect.top - popoverRect.height - offset;
-        left = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2;
-        break;
-      case 'left':
-        top = triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2;
-        left = triggerRect.left - popoverRect.width - offset;
-        break;
-      case 'right':
-        top = triggerRect.top + triggerRect.height / 2 - popoverRect.height / 2;
-        left = triggerRect.right + offset;
-        break;
-      default:
-        top = triggerRect.bottom + offset;
-        left = triggerRect.left + triggerRect.width / 2 - popoverRect.width / 2;
-    }
-
-    // Asegurar que el popover no se salga de la pantalla
-    const viewportWidth = window.innerWidth;
-    const viewportHeight = window.innerHeight;
-
-    if (left < 0) left = 10;
-    if (left + popoverRect.width > viewportWidth)
-      left = viewportWidth - popoverRect.width - 10;
-    if (top < 0) top = 10;
-    if (top + popoverRect.height > viewportHeight)
-      top = viewportHeight - popoverRect.height - 10;
-
-    popover.style.top = `${top}px`;
-    popover.style.left = `${left}px`;
+  capitalizar(str) {
+    return str.charAt(0).toUpperCase() + str.slice(1).toLowerCase();
   }
 
   /**
-   * Oculta el popover de acciones
+   * Métodos placeholder para acciones futuras
    */
-  ocultarPopoverAcciones() {
-    if (this.activePopover) {
-      this.activePopover.remove();
-      this.activePopover = null;
-      this.activeTrigger = null;
-    }
+  verTicket(id) {
+    console.log('Ver ticket:', id);
+    this.mostrarExito(`Viendo ticket ${id}`);
+  }
+
+  editarTicket(id) {
+    console.log('Editar ticket:', id);
+    this.mostrarExito(`Editando ticket ${id}`);
+  }
+
+  eliminarTicket(id) {
+    console.log('Eliminar ticket:', id);
+    this.mostrarExito(`Eliminando ticket ${id}`);
   }
 
   /**
-   * Ejecuta una acción específica para un ticket
+   * Destruye la vista y limpia recursos
    */
-  ejecutarAccionTicket(accion, ticketId) {
-    switch (accion) {
-      case 'ver':
-        this.verTicket(ticketId);
-        break;
-      case 'editar':
-        this.editarTicket(ticketId);
-        break;
-      case 'eliminar':
-        this.eliminarTicket(ticketId);
-        break;
-      default:
-        console.warn(`Acción no implementada: ${accion}`);
+  destruir() {
+    console.log('Destruyendo HelpDeskView...');
+
+    // Limpiar intervalo de actualización
+    if (this.intervaloActualizacion) {
+      clearInterval(this.intervaloActualizacion);
+      this.intervaloActualizacion = null;
     }
+
+    // Destruir Bootstrap Table si existe
+    if (this.bootstrapTable) {
+      this.bootstrapTable.bootstrapTable('destroy');
+      this.bootstrapTable = null;
+    }
+
+    // Destruir modal si existe
+    if (this.modal) {
+      this.modal.dispose();
+      this.modal = null;
+    }
+
+    this.isInitialized = false;
+    console.log('HelpDeskView destruida');
   }
 }
 
-// Exportar la clase al objeto window global
-if (typeof window !== 'undefined') {
-  window.HelpDeskView = HelpDeskView;
-}
+// Exportar para uso global
+window.HelpDeskView = HelpDeskView;
