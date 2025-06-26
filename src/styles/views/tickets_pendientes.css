@@ -1,0 +1,357 @@
+/* Estilos para la vista de Tickets Pendientes */
+
+.tickets-pendientes-container {
+  padding: 20px;
+  max-width: 1400px;
+  margin: 0 auto;
+}
+
+/* Header de la vista */
+.tickets-pendientes-header {
+  margin-bottom: 30px;
+  padding: 20px 0;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tickets-pendientes-title {
+  color: #2c3e50;
+  font-weight: 600;
+  margin-bottom: 5px;
+}
+
+.tickets-pendientes-subtitle {
+  font-size: 0.95rem;
+  margin-bottom: 0;
+}
+
+/* Estadísticas */
+.tickets-pendientes-stats {
+  margin-bottom: 30px;
+}
+
+.ticket-stat-card {
+  background: #fff;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  border: 1px solid #e9ecef;
+  display: flex;
+  align-items: center;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.ticket-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.15);
+}
+
+.ticket-stat-card .stat-icon {
+  width: 60px;
+  height: 60px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-right: 15px;
+  color: white;
+  font-size: 1.5rem;
+}
+
+.ticket-stat-card .stat-content {
+  flex: 1;
+}
+
+.ticket-stat-card .stat-number {
+  font-size: 2rem;
+  font-weight: 700;
+  margin: 0;
+  color: #2c3e50;
+}
+
+.ticket-stat-card .stat-label {
+  margin: 0;
+  color: #6c757d;
+  font-size: 0.9rem;
+  font-weight: 500;
+}
+
+/* Filtros */
+.tickets-pendientes-filtros {
+  margin-bottom: 30px;
+}
+
+.tickets-pendientes-filtros .card {
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.tickets-pendientes-filtros .form-label {
+  font-weight: 500;
+  color: #495057;
+  margin-bottom: 8px;
+}
+
+.tickets-pendientes-filtros .form-select,
+.tickets-pendientes-filtros .form-control {
+  border: 1px solid #ced4da;
+  border-radius: 6px;
+  transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+}
+
+.tickets-pendientes-filtros .form-select:focus,
+.tickets-pendientes-filtros .form-control:focus {
+  border-color: #80bdff;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+/* Tabla */
+.tickets-pendientes-tabla .card {
+  border: 1px solid #e9ecef;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.05);
+}
+
+.tickets-pendientes-tabla .card-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+  padding: 15px 20px;
+}
+
+.tickets-pendientes-tabla .card-header h5 {
+  color: #495057;
+  font-weight: 600;
+  margin: 0;
+}
+
+.tickets-pendientes-tabla .table {
+  margin: 0;
+}
+
+.tickets-pendientes-tabla .table th {
+  background-color: #f8f9fa;
+  border-bottom: 2px solid #dee2e6;
+  color: #495057;
+  font-weight: 600;
+  padding: 12px 15px;
+  font-size: 0.9rem;
+}
+
+.tickets-pendientes-tabla .table td {
+  padding: 12px 15px;
+  vertical-align: middle;
+  border-bottom: 1px solid #e9ecef;
+}
+
+.tickets-pendientes-tabla .table tbody tr:hover {
+  background-color: #f8f9fa;
+}
+
+/* Estados de prioridad */
+.prioridad-alta {
+  color: #dc3545;
+  font-weight: 600;
+}
+
+.prioridad-media {
+  color: #fd7e14;
+  font-weight: 600;
+}
+
+.prioridad-baja {
+  color: #28a745;
+  font-weight: 600;
+}
+
+/* Estados de tickets */
+.estado-pendiente {
+  background-color: #fff3cd;
+  color: #856404;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.estado-en-proceso {
+  background-color: #cce5ff;
+  color: #004085;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+.estado-espera {
+  background-color: #e2e3e5;
+  color: #383d41;
+  padding: 4px 8px;
+  border-radius: 4px;
+  font-size: 0.8rem;
+  font-weight: 500;
+}
+
+/* Botones de acción */
+.btn-accion {
+  padding: 4px 8px;
+  font-size: 0.8rem;
+  margin: 0 2px;
+}
+
+.btn-ver-detalle {
+  background-color: #17a2b8;
+  border-color: #17a2b8;
+  color: white;
+}
+
+.btn-ver-detalle:hover {
+  background-color: #138496;
+  border-color: #117a8b;
+  color: white;
+}
+
+.btn-asignar {
+  background-color: #28a745;
+  border-color: #28a745;
+  color: white;
+}
+
+.btn-asignar:hover {
+  background-color: #218838;
+  border-color: #1e7e34;
+  color: white;
+}
+
+/* Paginación */
+.tickets-pendientes-paginacion .pagination {
+  margin: 0;
+}
+
+.tickets-pendientes-paginacion .page-link {
+  color: #007bff;
+  border: 1px solid #dee2e6;
+  padding: 8px 12px;
+}
+
+.tickets-pendientes-paginacion .page-link:hover {
+  color: #0056b3;
+  background-color: #e9ecef;
+  border-color: #dee2e6;
+}
+
+.tickets-pendientes-paginacion .page-item.active .page-link {
+  background-color: #007bff;
+  border-color: #007bff;
+}
+
+/* Modal */
+#modal-detalle-ticket .modal-header {
+  background-color: #f8f9fa;
+  border-bottom: 1px solid #e9ecef;
+}
+
+#modal-detalle-ticket .modal-title {
+  color: #495057;
+  font-weight: 600;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .tickets-pendientes-container {
+    padding: 15px;
+  }
+
+  .tickets-pendientes-header {
+    margin-bottom: 20px;
+    padding: 15px 0;
+  }
+
+  .tickets-pendientes-title {
+    font-size: 1.5rem;
+  }
+
+  .ticket-stat-card {
+    padding: 15px;
+    margin-bottom: 15px;
+  }
+
+  .ticket-stat-card .stat-icon {
+    width: 50px;
+    height: 50px;
+    font-size: 1.2rem;
+    margin-right: 12px;
+  }
+
+  .ticket-stat-card .stat-number {
+    font-size: 1.5rem;
+  }
+
+  .tickets-pendientes-tabla .table-responsive {
+    font-size: 0.85rem;
+  }
+
+  .tickets-pendientes-tabla .table th,
+  .tickets-pendientes-tabla .table td {
+    padding: 8px 10px;
+  }
+}
+
+/* Animaciones */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.tickets-pendientes-container {
+  animation: fadeIn 0.3s ease-in-out;
+}
+
+.ticket-stat-card {
+  animation: fadeIn 0.4s ease-in-out;
+}
+
+/* Estados de carga */
+.loading-spinner {
+  display: inline-block;
+  width: 20px;
+  height: 20px;
+  border: 3px solid #f3f3f3;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
+}
+
+/* Mensajes de estado vacío */
+.empty-state {
+  text-align: center;
+  padding: 40px 20px;
+  color: #6c757d;
+}
+
+.empty-state i {
+  font-size: 3rem;
+  margin-bottom: 15px;
+  opacity: 0.5;
+}
+
+.empty-state h4 {
+  margin-bottom: 10px;
+  color: #495057;
+}
+
+.empty-state p {
+  margin-bottom: 0;
+}
