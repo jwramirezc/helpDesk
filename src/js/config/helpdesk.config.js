@@ -153,11 +153,3 @@ const helpdeskConfig = {
 
 // Exportar para uso global
 window.helpdeskConfig = helpdeskConfig;
-
-// Log de verificación
-console.log('=== CONFIGURACIÓN HELPDESK CARGADA ===');
-console.log('helpdeskConfig disponible:', !!window.helpdeskConfig);
-console.log(
-  'URL de datos configurada:',
-  window.helpdeskConfig ? window.helpdeskConfig.datos.url : 'N/A'
-);

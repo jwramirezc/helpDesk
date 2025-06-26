@@ -6,9 +6,6 @@
 
 class HelpDeskView {
   constructor() {
-    console.log('=== CONSTRUCTOR HELPDESKVIEW ===');
-    console.log('Configuración disponible:', !!helpdeskConfig);
-
     this.tickets = [];
     this.datosUsuario = null;
     this.filtros = {
@@ -23,36 +20,24 @@ class HelpDeskView {
     this.config = helpdeskConfig;
     this.bootstrapTable = null;
     this.intervaloActualizacion = null;
-
-    console.log('HelpDeskView construida con configuración:', this.config);
   }
 
   /**
    * Inicializa la vista
    */
   init() {
-    console.log('=== MÉTODO INIT EJECUTÁNDOSE ===');
-    console.log('isInitialized actual:', this.isInitialized);
-
     if (this.isInitialized) {
-      console.log('HelpDeskView ya está inicializada, saliendo...');
       return;
     }
 
-    console.log('=== INICIALIZANDO HELPDESKVIEW ===');
-
     // Configurar eventos globales para Bootstrap Table
-    console.log('Configurando eventos globales...');
     this.configurarEventosGlobales();
 
     // Configurar formatters globales para Bootstrap Table
-    console.log('Configurando formatters globales...');
     this.configurarFormattersGlobales();
 
-    console.log('Llamando a inicializar()...');
     this.inicializar();
     this.isInitialized = true;
-    console.log('HelpDeskView marcada como inicializada');
   }
 
   /**
@@ -102,58 +87,36 @@ class HelpDeskView {
    * Inicializa la vista (método interno)
    */
   async inicializar() {
-    console.log('=== MÉTODO INICIALIZAR EJECUTÁNDOSE ===');
-    console.log('Estado de inicialización:', this.isInitialized);
-    console.log('Configuración disponible:', !!this.config);
-    console.log('URL de datos:', this.config ? this.config.datos.url : 'N/A');
-
     try {
       // Probar acceso al JSON primero
-      console.log('Iniciando prueba de acceso JSON...');
       const accesoExitoso = await this.probarAccesoJSON();
-      console.log('Resultado de prueba de acceso:', accesoExitoso);
 
       if (!accesoExitoso) {
-        console.error('No se pudo acceder al archivo JSON');
         this.mostrarError(
           'No se pudo cargar los datos. Verifique la conexión.'
         );
         return;
       }
 
-      console.log('Cargando datos iniciales...');
       await this.cargarDatosIniciales();
 
-      console.log('Generando headers de tabla...');
       this.generarHeadersTabla();
 
-      console.log('Cargando filtros...');
       this.cargarFiltros();
 
-      console.log('Agregando eventos...');
       this.agregarEventos();
 
-      console.log('Cargando tickets...');
       await this.cargarTickets();
 
       // Intentar inicializar Bootstrap Table, pero usar tabla simple como fallback
-      console.log('Intentando inicializar Bootstrap Table...');
       try {
         this.inicializarBootstrapTable();
       } catch (error) {
-        console.log(
-          'Error al inicializar Bootstrap Table, usando tabla simple:',
-          error.message
-        );
         this.renderizarTablaSimple();
       }
 
-      console.log('Configurando actualización automática...');
       this.configurarActualizacionAutomatica();
-
-      console.log('=== INICIALIZACIÓN COMPLETADA ===');
     } catch (error) {
-      console.error('Error durante la inicialización:', error);
       this.mostrarError('Error al inicializar la vista: ' + error.message);
     }
   }
@@ -202,19 +165,15 @@ class HelpDeskView {
    */
   async probarAccesoJSON() {
     try {
-      console.log('Probando acceso a:', this.config.datos.url);
       const response = await fetch(this.config.datos.url);
 
       if (!response.ok) {
-        console.error('Error HTTP:', response.status, response.statusText);
         return false;
       }
 
       const data = await response.json();
-      console.log('Acceso JSON exitoso, datos recibidos:', !!data);
       return !!data;
     } catch (error) {
-      console.error('Error al acceder al JSON:', error);
       return false;
     }
   }
@@ -224,7 +183,6 @@ class HelpDeskView {
    */
   async cargarDatosIniciales() {
     try {
-      console.log('Cargando datos desde:', this.config.datos.url);
       const response = await fetch(this.config.datos.url);
 
       if (!response.ok) {
@@ -232,7 +190,6 @@ class HelpDeskView {
       }
 
       const data = await response.json();
-      console.log('Datos cargados:', data);
 
       this.tickets = data.tickets || [];
       this.datosUsuario = data.usuario || null;
@@ -241,10 +198,7 @@ class HelpDeskView {
       if (data.resumen) {
         this.actualizarEstadisticas(data.resumen);
       }
-
-      console.log('Datos iniciales cargados exitosamente');
     } catch (error) {
-      console.error('Error al cargar datos iniciales:', error);
       throw error;
     }
   }
@@ -253,13 +207,7 @@ class HelpDeskView {
    * Carga los filtros dinámicamente desde los datos
    */
   cargarFiltros() {
-    console.log(
-      'Cargando filtros con tickets disponibles:',
-      this.tickets.length
-    );
-
     if (this.tickets.length === 0) {
-      console.warn('No hay tickets disponibles para cargar filtros');
       return;
     }
 
@@ -272,12 +220,10 @@ class HelpDeskView {
    */
   cargarFiltroEstados() {
     if (!this.tickets || this.tickets.length === 0) {
-      console.warn('No hay tickets para cargar estados');
       return;
     }
 
     const estados = [...new Set(this.tickets.map(ticket => ticket.estado))];
-    console.log('Estados encontrados:', estados);
 
     const select = document.getElementById('filtro-estado');
     if (select) {
@@ -287,9 +233,6 @@ class HelpDeskView {
           .map(estado => `<option value="${estado}">${estado}</option>`)
           .join('')}
       `;
-      console.log('Filtro de estados cargado con', estados.length, 'opciones');
-    } else {
-      console.error('Elemento filtro-estado no encontrado');
     }
   }
 
@@ -298,14 +241,12 @@ class HelpDeskView {
    */
   cargarFiltroCategorias() {
     if (!this.tickets || this.tickets.length === 0) {
-      console.warn('No hay tickets para cargar categorías');
       return;
     }
 
     const categorias = [
       ...new Set(this.tickets.map(ticket => ticket.categoria)),
     ];
-    console.log('Categorías encontradas:', categorias);
 
     const select = document.getElementById('filtro-categoria');
     if (select) {
@@ -317,13 +258,6 @@ class HelpDeskView {
           )
           .join('')}
       `;
-      console.log(
-        'Filtro de categorías cargado con',
-        categorias.length,
-        'opciones'
-      );
-    } else {
-      console.error('Elemento filtro-categoria no encontrado');
     }
   }
 
@@ -484,15 +418,9 @@ class HelpDeskView {
    */
   async cargarTickets() {
     try {
-      console.log('Cargando tickets...');
-
       // Los tickets ya están cargados en cargarDatosIniciales()
-      console.log('Tickets cargados:', this.tickets.length);
-
-      // Renderizar tabla
       this.renderizarTabla();
     } catch (error) {
-      console.error('Error al cargar tickets:', error);
       this.mostrarError('Error al cargar los tickets: ' + error.message);
     }
   }
@@ -501,21 +429,16 @@ class HelpDeskView {
    * Verifica las dependencias necesarias
    */
   verificarDependencias() {
-    console.log('Verificando dependencias...');
-
     // Verificar jQuery
     if (typeof $ === 'undefined') {
-      console.warn('jQuery no está disponible');
       return false;
     }
 
     // Verificar Bootstrap Table
     if (typeof $.fn.bootstrapTable === 'undefined') {
-      console.warn('Bootstrap Table no está disponible');
       return false;
     }
 
-    console.log('Todas las dependencias están disponibles');
     return true;
   }
 
@@ -523,8 +446,6 @@ class HelpDeskView {
    * Inicializa Bootstrap Table
    */
   inicializarBootstrapTable() {
-    console.log('Inicializando Bootstrap Table...');
-
     // Verificar dependencias
     if (!this.verificarDependencias()) {
       throw new Error('Dependencias no disponibles');
@@ -549,8 +470,6 @@ class HelpDeskView {
       })),
     };
 
-    console.log('Configuración Bootstrap Table:', config);
-
     // Inicializar tabla
     $table.bootstrapTable(config);
     this.bootstrapTable = $table;
@@ -558,8 +477,6 @@ class HelpDeskView {
     // Mostrar tabla Bootstrap y ocultar tabla temporal
     $('#bootstrap-table-container').show();
     $('#tabla-temporal').hide();
-
-    console.log('Bootstrap Table inicializada correctamente');
   }
 
   /**
@@ -579,8 +496,6 @@ class HelpDeskView {
    * Renderiza la tabla simple (fallback)
    */
   renderizarTablaSimple() {
-    console.log('Renderizando tabla simple...');
-
     const tbody = document.getElementById('tickets-tbody');
     if (!tbody) return;
 
@@ -617,11 +532,7 @@ class HelpDeskView {
    * Filtra los tickets según los criterios actuales
    */
   filtrarTickets() {
-    console.log('Filtrando tickets...');
-    console.log('Filtros actuales:', this.filtros);
-
     const ticketsFiltrados = this.aplicarFiltros();
-    console.log('Tickets filtrados:', ticketsFiltrados.length);
 
     // Actualizar tabla
     this.renderizarTabla();
@@ -664,8 +575,6 @@ class HelpDeskView {
    * Actualiza las estadísticas en el dashboard
    */
   actualizarEstadisticas(stats) {
-    console.log('Actualizando estadísticas:', stats);
-
     const elementos = {
       'tickets-pendientes': stats.pendientes || 0,
       'tickets-proceso': stats.enProceso || 0,
@@ -685,30 +594,22 @@ class HelpDeskView {
    */
   configurarActualizacionAutomatica() {
     if (!this.config.datos.actualizacionAutomatica) {
-      console.log('Actualización automática deshabilitada');
       return;
     }
 
-    console.log('Configurando actualización automática...');
-
     this.intervaloActualizacion = setInterval(async () => {
-      console.log('Actualización automática ejecutándose...');
       try {
         await this.refrescarTickets();
       } catch (error) {
-        console.error('Error en actualización automática:', error);
+        // Error silencioso en actualización automática
       }
     }, this.config.datos.intervaloActualizacion);
-
-    console.log('Actualización automática configurada');
   }
 
   /**
    * Abre el modal para crear un nuevo ticket
    */
   abrirModalNuevoTicket() {
-    console.log('Abriendo modal nuevo ticket...');
-
     const modal = new bootstrap.Modal(
       document.getElementById('modal-nuevo-ticket')
     );
@@ -720,8 +621,6 @@ class HelpDeskView {
    * Guarda un nuevo ticket
    */
   async guardarNuevoTicket() {
-    console.log('Guardando nuevo ticket...');
-
     // Validar formulario
     const campos = ['asunto', 'descripcion', 'categoria', 'departamento'];
     const esValido = campos.every(campo => this.validarCampo(campo));
@@ -760,10 +659,7 @@ class HelpDeskView {
 
       // Mostrar mensaje de éxito
       this.mostrarExito('Ticket creado exitosamente');
-
-      console.log('Ticket guardado:', nuevoTicket);
     } catch (error) {
-      console.error('Error al guardar ticket:', error);
       this.mostrarError('Error al crear el ticket: ' + error.message);
     }
   }
@@ -792,14 +688,10 @@ class HelpDeskView {
    * Refresca los tickets desde el servidor
    */
   async refrescarTickets() {
-    console.log('Refrescando tickets...');
-
     try {
       await this.cargarDatosIniciales();
       this.renderizarTabla();
-      console.log('Tickets refrescados exitosamente');
     } catch (error) {
-      console.error('Error al refrescar tickets:', error);
       throw error;
     }
   }
@@ -808,8 +700,6 @@ class HelpDeskView {
    * Exporta los tickets a CSV
    */
   exportarTickets() {
-    console.log('Exportando tickets...');
-
     try {
       const ticketsFiltrados = this.aplicarFiltros();
       const csv = this.convertirACSV(ticketsFiltrados);
@@ -819,10 +709,7 @@ class HelpDeskView {
 
       this.descargarArchivo(csv, nombreArchivo, 'text/csv');
       this.mostrarExito('Tickets exportados exitosamente');
-
-      console.log('Tickets exportados:', ticketsFiltrados.length);
     } catch (error) {
-      console.error('Error al exportar tickets:', error);
       this.mostrarError('Error al exportar tickets: ' + error.message);
     }
   }
@@ -870,8 +757,6 @@ class HelpDeskView {
   mostrarExito(mensaje) {
     if (!this.config.notificaciones.mostrarExito) return;
 
-    console.log('Éxito:', mensaje);
-
     // Crear notificación
     const alerta = document.createElement('div');
     alerta.className = 'alert alert-success alert-dismissible fade show';
@@ -900,8 +785,6 @@ class HelpDeskView {
    */
   mostrarError(mensaje) {
     if (!this.config.notificaciones.mostrarError) return;
-
-    console.error('Error:', mensaje);
 
     // Crear notificación
     const alerta = document.createElement('div');
@@ -937,17 +820,14 @@ class HelpDeskView {
    * Métodos de acciones (placeholder)
    */
   verTicket(id) {
-    console.log('Ver ticket:', id);
     this.mostrarExito(`Viendo ticket ${id}`);
   }
 
   editarTicket(id) {
-    console.log('Editar ticket:', id);
     this.mostrarExito(`Editando ticket ${id}`);
   }
 
   eliminarTicket(id) {
-    console.log('Eliminar ticket:', id);
     this.mostrarExito(`Eliminando ticket ${id}`);
   }
 
@@ -955,8 +835,6 @@ class HelpDeskView {
    * Destruye la instancia y limpia recursos
    */
   destruir() {
-    console.log('Destruyendo HelpDeskView...');
-
     // Limpiar intervalo de actualización
     if (this.intervaloActualizacion) {
       clearInterval(this.intervaloActualizacion);
@@ -973,7 +851,6 @@ class HelpDeskView {
     }
 
     this.isInitialized = false;
-    console.log('HelpDeskView destruida');
   }
 }
 
