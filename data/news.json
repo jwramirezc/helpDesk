@@ -1,0 +1,101 @@
+{
+  "news": [
+    {
+      "id": 1,
+      "date": "2024-12-15",
+      "title": "Nuevas funcionalidades disponibles",
+      "content": "Hemos agregado nuevas características al portal para mejorar tu experiencia. Incluye mejoras en la interfaz de usuario y nuevas opciones de reportes.",
+      "type": "feature",
+      "priority": "high",
+      "icon": "fas fa-star",
+      "color": "text-success",
+      "active": true
+    },
+    {
+      "id": 2,
+      "date": "2024-12-10",
+      "title": "Mantenimiento programado",
+      "content": "El sistema estará en mantenimiento el próximo domingo de 2:00 AM a 6:00 AM. Durante este tiempo, el portal no estará disponible.",
+      "type": "maintenance",
+      "priority": "medium",
+      "icon": "fas fa-tools",
+      "color": "text-warning",
+      "active": true
+    },
+    {
+      "id": 3,
+      "date": "2024-12-08",
+      "title": "Actualización de seguridad",
+      "content": "Se han implementado nuevas medidas de seguridad para proteger mejor la información de los usuarios. Se recomienda cambiar la contraseña regularmente.",
+      "type": "security",
+      "priority": "high",
+      "icon": "fas fa-shield-alt",
+      "color": "text-danger",
+      "active": true
+    },
+    {
+      "id": 4,
+      "date": "2024-12-05",
+      "title": "Nuevo horario de soporte",
+      "content": "A partir del próximo mes, el horario de soporte técnico se extenderá hasta las 10:00 PM de lunes a viernes.",
+      "type": "announcement",
+      "priority": "medium",
+      "icon": "fas fa-clock",
+      "color": "text-info",
+      "active": true
+    },
+    {
+      "id": 5,
+      "date": "2024-12-01",
+      "title": "Portal móvil disponible",
+      "content": "Ya está disponible la versión móvil del portal HELP DESK. Accede desde cualquier dispositivo con total compatibilidad.",
+      "type": "feature",
+      "priority": "medium",
+      "icon": "fas fa-mobile-alt",
+      "color": "text-primary",
+      "active": true
+    },
+    {
+      "id": 6,
+      "date": "2024-11-28",
+      "title": "Mejoras en el sistema de tickets",
+      "content": "Se han implementado mejoras en el sistema de tickets para una gestión más eficiente. Ahora puedes adjuntar archivos y recibir notificaciones en tiempo real.",
+      "type": "improvement",
+      "priority": "high",
+      "icon": "fas fa-ticket-alt",
+      "color": "text-success",
+      "active": true
+    },
+    {
+      "id": 7,
+      "date": "2024-11-25",
+      "title": "Nuevos reportes disponibles",
+      "content": "Se han agregado nuevos tipos de reportes para un mejor análisis de los datos. Incluye reportes de rendimiento y estadísticas detalladas.",
+      "type": "feature",
+      "priority": "medium",
+      "icon": "fas fa-chart-bar",
+      "color": "text-info",
+      "active": true
+    },
+    {
+      "id": 8,
+      "date": "2024-11-20",
+      "title": "Capacitación de usuarios",
+      "content": "Se realizará una sesión de capacitación virtual el próximo miércoles a las 3:00 PM para mostrar las nuevas funcionalidades del portal.",
+      "type": "training",
+      "priority": "medium",
+      "icon": "fas fa-graduation-cap",
+      "color": "text-warning",
+      "active": true
+    }
+  ],
+  "config": {
+    "maxNewsToShow": 5,
+    "showDate": true,
+    "showIcon": true,
+    "showPriority": true,
+    "dateFormat": "DD MMM YYYY",
+    "sortBy": "date",
+    "sortOrder": "desc"
+  }
+}

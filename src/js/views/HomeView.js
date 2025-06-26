@@ -21,6 +21,9 @@ class HomeView {
     // Cargar estadísticas
     this.cargarEstadisticas();
 
+    // Inicializar el servicio de noticias
+    this.inicializarNewsService();
+
     // Inicializar eventos
     this.inicializarEventos();
 
@@ -242,6 +245,56 @@ class HomeView {
     // y deben permanecer para la navegación
 
     this.isInitialized = false;
+  }
+
+  /**
+   * Inicializa el servicio de noticias
+   */
+  inicializarNewsService() {
+    try {
+      console.log('HomeView: Inicializando NewsService...');
+
+      // Verificar que NewsService esté disponible
+      if (typeof NewsService === 'undefined') {
+        console.error('HomeView: NewsService no está disponible');
+        this.mostrarErrorNoticias('NewsService no está disponible');
+        return;
+      }
+
+      // Crear instancia y inicializar
+      const newsService = new NewsService();
+      newsService
+        .init('news-container')
+        .then(() => {
+          console.log('HomeView: NewsService inicializado correctamente');
+        })
+        .catch(error => {
+          console.error('HomeView: Error al inicializar NewsService:', error);
+          this.mostrarErrorNoticias('Error al cargar las noticias');
+        });
+    } catch (error) {
+      console.error('HomeView: Error en inicializarNewsService:', error);
+      this.mostrarErrorNoticias('Error al inicializar el servicio de noticias');
+    }
+  }
+
+  /**
+   * Muestra error en la sección de noticias
+   * @param {string} mensaje - Mensaje de error
+   */
+  mostrarErrorNoticias(mensaje) {
+    const container = document.getElementById('news-container');
+    if (container) {
+      container.innerHTML = `
+        <div class="text-center text-muted">
+          <i class="fas fa-exclamation-triangle fa-2x mb-2"></i>
+          <p>${mensaje}</p>
+          <button class="btn btn-outline-primary btn-sm" onclick="location.reload()">
+            <i class="fas fa-redo me-1"></i>Reintentar
+          </button>
+        </div>
+      `;
+    }
   }
 }
 

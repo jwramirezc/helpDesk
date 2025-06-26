@@ -41,13 +41,14 @@
             <div class="col-md-6 col-lg-6 mb-4">
                 <div class="home-card">
                     <div class="card-icon bg-info">
-                        <i class="fas fa-search"></i>
+                        <i class="fas fa-chart-bar"></i>
                     </div>
                     <div class="card-content">
-                        <h4>Consultas</h4>
+                        <h4>Reportes</h4>
                         <p>Consulta información y reportes</p>
-                        <button class="btn btn-info btn-sm" onclick="navigateToConsultas()">
-                            Ir a Consultas
+                        <button class="btn btn-info btn-sm"
+                            onclick="window.location.href='views/html/tickets_pendientes.html'">
+                            Ir a Reportes
                         </button>
                     </div>
                 </div>
@@ -109,18 +110,13 @@
                         <h5><i class="fas fa-bullhorn me-2"></i>Noticias y Anuncios</h5>
                     </div>
                     <div class="card-body">
-                        <div class="news-item">
-                            <div class="news-date">15 Dic 2024</div>
-                            <div class="news-content">
-                                <h6>Nuevas funcionalidades disponibles</h6>
-                                <p>Hemos agregado nuevas características al portal para mejorar tu experiencia.</p>
-                            </div>
-                        </div>
-                        <div class="news-item">
-                            <div class="news-date">10 Dic 2024</div>
-                            <div class="news-content">
-                                <h6>Mantenimiento programado</h6>
-                                <p>El sistema estará en mantenimiento el próximo domingo de 2:00 AM a 6:00 AM.</p>
+                        <div id="news-container">
+                            <!-- Las noticias se cargarán dinámicamente aquí -->
+                            <div class="text-center">
+                                <div class="spinner-border text-primary" role="status">
+                                    <span class="visually-hidden">Cargando noticias...</span>
+                                </div>
+                                <p class="mt-2">Cargando noticias...</p>
                             </div>
                         </div>
                     </div>
