@@ -2,29 +2,12 @@
    ESTILOS ESPECÍFICOS PARA LA VISTA HELP DESK
    ======================================== */
 
-/* Variables específicas de la vista */
-:root {
-  --helpdesk-primary: #007bff;
-  --helpdesk-secondary: #888f95;
-  --helpdesk-success: #28a745;
-  --helpdesk-warning: #ffc107;
-  --helpdesk-danger: #dc3545;
-  --helpdesk-info: #17a2b8;
-  --helpdesk-light: #f8f9fa;
-  --helpdesk-dark: #343a40;
-
-  --helpdesk-border-radius: 8px;
-  --helpdesk-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  --helpdesk-shadow-hover: 0 4px 8px rgba(0, 0, 0, 0.15);
-  --helpdesk-transition: all 0.3s ease;
-}
-
 /* ========================================
    CONTENEDOR PRINCIPAL
    ======================================== */
 .helpdesk-container {
   padding: 1.5rem;
-  background-color: var(--main-background-color);
+  background-color: var(--background-color);
   min-height: calc(100vh - var(--header-height));
 }
 
@@ -34,11 +17,11 @@
 .helpdesk-header {
   margin-bottom: 2rem;
   padding-bottom: 1rem;
-  border-bottom: 2px solid var(--main-light-color);
+  border-bottom: 2px solid var(--light-color);
 }
 
 .helpdesk-title {
-  color: var(--helpdesk-primary);
+  color: var(--primary-color);
   font-weight: 700;
   margin-bottom: 0.5rem;
   font-size: 2rem;
@@ -58,10 +41,10 @@
 
 .helpdesk-stat-card {
   background: white;
-  border-radius: var(--helpdesk-border-radius);
+  border-radius: var(--border-radius-md);
   padding: 1.5rem;
-  box-shadow: var(--main-shadow);
-  transition: var(--helpdesk-transition);
+  box-shadow: var(--shadow-sm);
+  transition: var(--transition-base);
   border: 1px solid #e9ecef;
   display: flex;
   align-items: center;
@@ -70,7 +53,7 @@
 }
 
 .helpdesk-stat-card:hover {
-  box-shadow: var(--main-shadow-hover);
+  box-shadow: var(--shadow-md);
   transform: translateY(-2px);
 }
 
@@ -98,12 +81,12 @@
   font-weight: 700;
   margin: 0;
   line-height: 1;
-  color: var(--main-dark-color);
+  color: var(--dark-color);
 }
 
 .stat-label {
   margin: 0;
-  color: var(--main-text-color-secondary);
+  color: var(--text-color-secondary);
   font-size: 0.9rem;
   font-weight: 500;
   text-transform: uppercase;
@@ -119,8 +102,8 @@
 
 .helpdesk-filtros .card {
   border: none;
-  box-shadow: var(--main-shadow);
-  border-radius: var(--helpdesk-border-radius);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-md);
 }
 
 .helpdesk-filtros .card-body {
@@ -129,7 +112,7 @@
 
 .helpdesk-filtros .form-label {
   font-weight: var(--font-weight-semibold);
-  color: var(--main-text-color);
+  color: var(--text-color);
   margin-bottom: var(--spacing-sm);
   font-size: var(--font-size-sm);
   text-transform: uppercase;
@@ -138,8 +121,8 @@
 
 .helpdesk-filtros .form-select,
 .helpdesk-filtros .form-control {
-  border-radius: var(--helpdesk-border-radius);
-  border: 1px solid var(--main-border-color);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
   transition: var(--transition-base);
 }
 
@@ -150,7 +133,7 @@
 }
 
 .helpdesk-filtros .input-group .btn {
-  border-radius: 0 var(--helpdesk-border-radius) var(--helpdesk-border-radius) 0;
+  border-radius: 0 var(--border-radius-md) var(--border-radius-md) 0;
 }
 
 /* ========================================
@@ -162,13 +145,13 @@
 
 .helpdesk-tabla .card {
   border: none;
-  box-shadow: var(--main-shadow);
-  border-radius: var(--helpdesk-border-radius);
+  box-shadow: var(--shadow-sm);
+  border-radius: var(--border-radius-md);
   overflow: hidden;
 }
 
 .helpdesk-tabla .card-header {
-  background: var(--helpdesk-secondary);
+  background: var(--primary-color);
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -195,8 +178,8 @@
   border: 1px solid rgba(255, 255, 255, 0.3);
   background: transparent;
   padding: 0.375rem 0.75rem;
-  border-radius: var(--helpdesk-border-radius);
-  transition: var(--helpdesk-transition);
+  border-radius: var(--border-radius-md);
+  transition: var(--transition-base);
 }
 
 .helpdesk-tabla .card-header .btn-group .btn:hover {
@@ -241,7 +224,7 @@
 }
 
 .bootstrap-table .table tbody td {
-  border-bottom: 1px solid #e9ecef;
+  border-top: 1px solid #e9ecef;
   border-right: 1px solid #e9ecef;
   padding: 0.75rem;
   vertical-align: middle;
@@ -252,18 +235,17 @@
 }
 
 .bootstrap-table .table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: rgba(0, 123, 255, 0.05);
 }
 
 .bootstrap-table .table tbody tr:hover td {
-  background-color: #f8f9fa;
+  background-color: rgba(0, 123, 255, 0.05);
 }
 
 /* ========================================
    TABLA TEMPORAL (FALLBACK)
    ======================================== */
 #tabla-temporal .table {
-  margin-bottom: 0;
   border: 1px solid #e9ecef;
 }
 
@@ -283,7 +265,7 @@
 }
 
 #tabla-temporal .table tbody td {
-  border-bottom: 1px solid #e9ecef;
+  border-top: 1px solid #e9ecef;
   border-right: 1px solid #e9ecef;
   padding: 0.75rem;
   vertical-align: middle;
@@ -294,474 +276,348 @@
 }
 
 #tabla-temporal .table tbody tr:hover {
-  background-color: #f8f9fa;
+  background-color: rgba(0, 123, 255, 0.05);
 }
 
 /* ========================================
-   ELEMENTOS DE TICKETS
+   FORMATO DE TICKETS
    ======================================== */
 .ticket-asunto {
-  line-height: 1.4;
+  font-weight: 500;
 }
 
 .ticket-asunto strong {
-  display: block;
-  color: var(--main-dark-color);
+  color: var(--text-color);
   font-weight: 600;
+  display: block;
   margin-bottom: 0.25rem;
 }
 
 .ticket-asunto small {
-  color: var(--main-text-color-secondary);
+  color: var(--text-color-secondary);
   font-size: 0.875rem;
 }
 
 .helpdesk-tabla .badge {
   font-size: 0.75rem;
-  padding: 0.375rem 0.75rem;
-  border-radius: 0.375rem;
   font-weight: 500;
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--border-radius-sm);
 }
 
 /* ========================================
-   TOOLBAR DE BOOTSTRAP TABLE CON ÍCONOS
+   TOOLBAR DE BOOTSTRAP TABLE
    ======================================== */
-
-/* Estilos generales de la toolbar */
 .bootstrap-table .fixed-table-toolbar {
-  padding: 1rem;
+  padding: 0.5rem;
   background: #f8f9fa;
-  border-bottom: 1px solid #dee2e6;
+  border-bottom: 1px solid #e9ecef;
 }
 
 .bootstrap-table .fixed-table-toolbar .btn {
-  margin-right: 0.5rem;
-  border-radius: var(--helpdesk-border-radius);
+  margin-right: 0.25rem;
 }
 
 .bootstrap-table .fixed-table-toolbar .search {
-  margin-bottom: 0;
+  margin-bottom: 0.5rem;
 }
 
 .bootstrap-table .fixed-table-toolbar .search input {
-  border-radius: var(--helpdesk-border-radius);
+  border-radius: var(--border-radius-sm);
   border: 1px solid #ced4da;
-  padding: 0.375rem 0.75rem;
-}
-
-/* Botón de búsqueda */
-.bootstrap-table .toolbar .btn[data-toggle='search']::before {
-  content: '\f002'; /* Ícono de lupa de Font Awesome */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  margin-right: 0.5rem;
-}
-
-/* Botón de refresh */
-.bootstrap-table .toolbar .btn[data-toggle='refresh']::before {
-  content: '\f021'; /* Ícono de refresh de Font Awesome */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  margin-right: 0.5rem;
-}
-
-/* Botón de toggle */
-.bootstrap-table .toolbar .btn[data-toggle='toggle']::before {
-  content: '\f0c9'; /* Ícono de hamburguesa de Font Awesome */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  margin-right: 0.5rem;
-}
-
-/* Botón de columnas */
-.bootstrap-table .toolbar .btn[data-toggle='columns']::before {
-  content: '\f0db'; /* Ícono de columnas de Font Awesome */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  margin-right: 0.5rem;
-}
-
-/* Botón de export */
-.bootstrap-table .toolbar .btn[data-toggle='export']::before {
-  content: '\f56d'; /* Ícono de descarga de Font Awesome */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  margin-right: 0.5rem;
-}
-
-/* Estilos generales para botones de toolbar */
-.bootstrap-table .toolbar .btn {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0.375rem 0.75rem;
-  font-size: 0.875rem;
-  border: 1px solid #dee2e6;
-  background: transparent;
-  color: #495057;
-  transition: all 0.2s ease;
-  margin-left: 0.25rem;
-}
-
-.bootstrap-table .toolbar .btn:hover {
-  background: #f8f9fa;
-  border-color: #adb5bd;
-  color: #212529;
-}
-
-.bootstrap-table .toolbar .btn:focus {
-  box-shadow: none;
-  outline: none;
-}
-
-.bootstrap-table .toolbar .btn.active {
-  background: #e9ecef;
-  border-color: #6c757d;
-  color: #495057;
-}
-
-/* Responsive para botones de toolbar */
-@media (max-width: 768px) {
-  .bootstrap-table .toolbar .btn {
-    padding: 0.25rem 0.5rem;
-    font-size: 0.8rem;
-    margin-left: 0.125rem;
-  }
-
-  .bootstrap-table .toolbar .btn::before {
-    margin-right: 0.25rem;
-  }
 }
 
 /* ========================================
-   BOTONES DE COLUMNAS CON ÍCONOS ESPECÍFICOS
+   ICONOS DE TOOLBAR
+   ======================================== */
+.bootstrap-table .toolbar .btn[data-toggle='search']::before {
+  content: '\f002';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+.bootstrap-table .toolbar .btn[data-toggle='refresh']::before {
+  content: '\f021';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+.bootstrap-table .toolbar .btn[data-toggle='toggle']::before {
+  content: '\f0c9';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+.bootstrap-table .toolbar .btn[data-toggle='columns']::before {
+  content: '\f0db';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+.bootstrap-table .toolbar .btn[data-toggle='export']::before {
+  content: '\f56d';
+  font-family: 'Font Awesome 6 Free';
+  font-weight: 900;
+  margin-right: 0.5rem;
+}
+
+/* ========================================
+   BOTONES DE TOOLBAR
+   ======================================== */
+.bootstrap-table .toolbar .btn {
+  background: transparent;
+  border: 1px solid #dee2e6;
+  color: var(--text-color);
+  padding: 0.375rem 0.75rem;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-base);
+  font-size: 0.875rem;
+}
+
+.bootstrap-table .toolbar .btn:hover {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+.bootstrap-table .toolbar .btn:focus {
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
+}
+
+.bootstrap-table .toolbar .btn.active {
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
+}
+
+/* ========================================
+   BOTONES DE COLUMNAS
    ======================================== */
 .columns.columns-right.btn-group.float-right {
-  background: transparent !important;
-  border: none !important;
-  box-shadow: none !important;
+  background: transparent;
+  border: none;
 }
 
 .columns.columns-right.btn-group.float-right .btn {
-  background: transparent !important;
-  border: 1px solid #dee2e6 !important;
-  color: #495057 !important;
-  margin-left: 0.25rem;
-  transition: all 0.2s ease;
-  position: relative;
-  padding-left: 2rem !important; /* Espacio para el ícono */
+  background: transparent;
+  border: 1px solid #dee2e6;
+  color: var(--text-color);
+  padding: 0.25rem 0.5rem;
+  border-radius: var(--border-radius-sm);
+  transition: var(--transition-base);
+  font-size: 0.8rem;
+  margin-right: 0.25rem;
 }
 
-/* Íconos específicos para botones de columnas individuales */
+/* ========================================
+   ICONOS DE BOTONES DE COLUMNAS
+   ======================================== */
 .columns.columns-right.btn-group.float-right .btn[data-field='id']::before {
-  content: '\f02a'; /* Ícono de ID - Font Awesome */
+  content: '\f02a';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
 .columns.columns-right.btn-group.float-right .btn[data-field='asunto']::before {
-  content: '\f075'; /* Ícono de comentario/asunto */
+  content: '\f075';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
 .columns.columns-right.btn-group.float-right
   .btn[data-field='categoria']::before {
-  content: '\f02b'; /* Ícono de etiqueta/categoría */
+  content: '\f02d';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
 .columns.columns-right.btn-group.float-right .btn[data-field='estado']::before {
-  content: '\f111'; /* Ícono de círculo/estado */
+  content: '\f111';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
 .columns.columns-right.btn-group.float-right .btn[data-field='fecha']::before {
-  content: '\f073'; /* Ícono de calendario */
+  content: '\f073';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
 .columns.columns-right.btn-group.float-right
   .btn[data-field='departamento']::before {
-  content: '\f1ad'; /* Ícono de edificio/departamento */
+  content: '\f1ad';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Íconos para botones de control de columnas */
-.columns.columns-right.btn-group.float-right
-  .btn[data-toggle='dropdown']::before {
-  content: '\f0c9'; /* Ícono de hamburguesa para menú de columnas */
-  font-family: 'Font Awesome 6 Free';
-  font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
-}
-
-/* Botón de mostrar/ocultar todas las columnas */
+/* ========================================
+   ICONOS ADICIONALES PARA BOTONES DE COLUMNAS
+   ======================================== */
 .columns.columns-right.btn-group.float-right .btn[data-field='all']::before {
-  content: '\f0db'; /* Ícono de columnas múltiples */
+  content: '\f00b';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de configuración de columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='config']::before {
-  content: '\f013'; /* Ícono de engranaje/configuración */
+  content: '\f013';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de vista de columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='view']::before {
-  content: '\f06e'; /* Ícono de ojo/vista */
+  content: '\f06e';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de ordenar columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='sort']::before {
-  content: '\f0dc'; /* Ícono de ordenar */
+  content: '\f0dc';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de filtro de columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='filter']::before {
-  content: '\f0b0'; /* Ícono de filtro */
+  content: '\f0b0';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de exportar columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='export']::before {
-  content: '\f56d'; /* Ícono de descarga/exportar */
+  content: '\f56d';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de imprimir columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='print']::before {
-  content: '\f02f'; /* Ícono de impresora */
+  content: '\f02f';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de copiar columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='copy']::before {
-  content: '\f0c5'; /* Ícono de copiar */
+  content: '\f0c5';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de seleccionar columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='select']::before {
-  content: '\f00c'; /* Ícono de check/seleccionar */
+  content: '\f00c';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de ocultar columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='hide']::before {
-  content: '\f070'; /* Ícono de ojo tachado/ocultar */
+  content: '\f070';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Botón de mostrar columnas */
 .columns.columns-right.btn-group.float-right .btn[data-field='show']::before {
-  content: '\f06e'; /* Ícono de ojo/mostrar */
+  content: '\f06e';
   font-family: 'Font Awesome 6 Free';
   font-weight: 900;
-  position: absolute;
-  left: 0.5rem;
-  top: 50%;
-  transform: translateY(-50%);
-  font-size: 0.75rem;
-  color: #6c757d;
+  margin-right: 0.25rem;
 }
 
-/* Efectos hover para todos los botones */
+/* ========================================
+   ESTADOS DE BOTONES DE COLUMNAS
+   ======================================== */
 .columns.columns-right.btn-group.float-right .btn:hover {
-  background: #f8f9fa !important;
-  border-color: #adb5bd !important;
-  color: #212529 !important;
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
 }
 
 .columns.columns-right.btn-group.float-right .btn:hover::before {
-  color: #495057;
+  color: white;
 }
 
 .columns.columns-right.btn-group.float-right .btn:focus {
-  background: transparent !important;
-  border-color: #dee2e6 !important;
-  box-shadow: none !important;
+  box-shadow: 0 0 0 0.2rem rgba(0, 123, 255, 0.25);
 }
 
 .columns.columns-right.btn-group.float-right .btn.active {
-  background: #e9ecef !important;
-  border-color: #6c757d !important;
-  color: #495057 !important;
+  background: var(--primary-color);
+  border-color: var(--primary-color);
+  color: white;
 }
 
 .columns.columns-right.btn-group.float-right .btn.active::before {
-  color: #495057;
+  color: white;
 }
 
-/* Estilos específicos para botones de columnas individuales */
+/* ========================================
+   ESTILOS ESPECÍFICOS PARA BOTONES CON DATA-FIELD
+   ======================================== */
 .columns.columns-right.btn-group.float-right .btn[data-field] {
-  background: transparent !important;
-  border: 1px solid #dee2e6 !important;
-  color: #495057 !important;
-  font-size: 0.875rem;
-  padding: 0.375rem 0.75rem 0.375rem 2rem !important; /* Padding izquierdo para ícono */
-  min-width: 120px; /* Ancho mínimo para consistencia */
-  text-align: left;
+  position: relative;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 120px;
 }
 
 .columns.columns-right.btn-group.float-right .btn[data-field]:hover {
-  background: #f8f9fa !important;
-  border-color: #adb5bd !important;
-  color: #212529 !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
 .columns.columns-right.btn-group.float-right .btn[data-field].active {
-  background: #e9ecef !important;
-  border-color: #6c757d !important;
-  color: #495057 !important;
+  transform: translateY(-1px);
+  box-shadow: var(--shadow-sm);
 }
 
-/* Responsive para botones de columnas */
+/* ========================================
+   RESPONSIVE PARA BOTONES DE COLUMNAS
+   ======================================== */
 @media (max-width: 768px) {
   .columns.columns-right.btn-group.float-right .btn {
-    padding: 0.25rem 0.5rem 0.25rem 1.5rem !important;
-    font-size: 0.8rem;
-    min-width: 100px;
+    padding: 0.2rem 0.4rem;
+    font-size: 0.75rem;
+    max-width: 100px;
   }
 
   .columns.columns-right.btn-group.float-right .btn::before {
-    left: 0.25rem;
     font-size: 0.7rem;
+    margin-right: 0.2rem;
   }
 }
 
 /* ========================================
-   MODAL Y FORMULARIOS
+   MODAL
    ======================================== */
 #modal-nuevo-ticket .modal-content {
   border: none;
-  border-radius: var(--helpdesk-border-radius);
-  box-shadow: var(--helpdesk-shadow-hover);
+  border-radius: var(--border-radius-md);
+  box-shadow: var(--shadow-lg);
 }
 
 #modal-nuevo-ticket .modal-header {
-  background: var(--helpdesk-secondary);
+  background: var(--primary-color);
   color: white;
   border-bottom: none;
-  border-radius: var(--helpdesk-border-radius) var(--helpdesk-border-radius) 0 0;
+  border-radius: var(--border-radius-md) var(--border-radius-md) 0 0;
 }
 
 #modal-nuevo-ticket .modal-title {
@@ -776,7 +632,7 @@
 
 #modal-nuevo-ticket .form-label {
   font-weight: var(--font-weight-semibold);
-  color: var(--main-text-color);
+  color: var(--text-color);
   margin-bottom: var(--spacing-sm);
   font-size: var(--font-size-sm);
   text-transform: uppercase;
@@ -785,8 +641,8 @@
 
 #modal-nuevo-ticket .form-control,
 #modal-nuevo-ticket .form-select {
-  border-radius: var(--helpdesk-border-radius);
-  border: 1px solid var(--main-border-color);
+  border-radius: var(--border-radius-md);
+  border: 1px solid var(--border-color);
   transition: var(--transition-base);
 }
 
@@ -797,20 +653,20 @@
 }
 
 #modal-nuevo-ticket .modal-footer {
-  border-top: 1px solid var(--main-border-color);
+  border-top: 1px solid var(--border-color);
   padding: 1.5rem 2rem;
 }
 
 #modal-nuevo-ticket .btn {
-  border-radius: var(--helpdesk-border-radius);
+  border-radius: var(--border-radius-md);
   font-weight: 500;
   padding: 0.5rem 1.5rem;
-  transition: var(--helpdesk-transition);
+  transition: var(--transition-base);
 }
 
 #modal-nuevo-ticket .btn:hover {
   transform: translateY(-1px);
-  box-shadow: var(--helpdesk-shadow);
+  box-shadow: var(--shadow-sm);
 }
 
 /* ========================================
@@ -818,26 +674,26 @@
    ======================================== */
 .form-control.is-valid,
 .form-select.is-valid {
-  border-color: var(--helpdesk-success);
+  border-color: var(--success-color);
   box-shadow: 0 0 0 0.2rem rgba(40, 167, 69, 0.25);
 }
 
 .form-control.is-invalid,
 .form-select.is-invalid {
-  border-color: var(--helpdesk-danger);
+  border-color: var(--danger-color);
   box-shadow: 0 0 0 0.2rem rgba(220, 53, 69, 0.25);
 }
 
 .valid-feedback {
   display: block;
-  color: var(--helpdesk-success);
+  color: var(--success-color);
   font-size: 0.875rem;
   margin-top: 0.25rem;
 }
 
 .invalid-feedback {
   display: block;
-  color: var(--helpdesk-danger);
+  color: var(--danger-color);
   font-size: 0.875rem;
   margin-top: 0.25rem;
 }
@@ -847,21 +703,21 @@
    ======================================== */
 .alert {
   border: none;
-  border-radius: var(--helpdesk-border-radius);
+  border-radius: var(--border-radius-md);
   font-weight: 500;
-  box-shadow: var(--helpdesk-shadow);
+  box-shadow: var(--shadow-sm);
 }
 
 .alert-success {
   background: rgba(40, 167, 69, 0.1);
-  color: var(--helpdesk-success);
-  border-left: 4px solid var(--helpdesk-success);
+  color: var(--success-color);
+  border-left: 4px solid var(--success-color);
 }
 
 .alert-danger {
   background: rgba(220, 53, 69, 0.1);
-  color: var(--helpdesk-danger);
-  border-left: 4px solid var(--helpdesk-danger);
+  color: var(--danger-color);
+  border-left: 4px solid var(--danger-color);
 }
 
 .alert i {
@@ -999,7 +855,7 @@
 }
 
 /* ========================================
-   ESTADOS ESPECIALES
+   ESTADOS DE TICKETS
    ======================================== */
 .ticket-row.urgente {
   background-color: rgba(220, 53, 69, 0.05);
@@ -1014,26 +870,26 @@
 }
 
 /* ========================================
-   ESTADOS DE CARGA Y VACÍO
+   ESTADOS DE CARGA
    ======================================== */
 .helpdesk-loading {
   display: flex;
   justify-content: center;
   align-items: center;
-  padding: 3rem;
-  color: var(--main-text-color-secondary);
+  padding: 2rem;
+  color: var(--text-color-secondary);
 }
 
 .helpdesk-loading .spinner-border {
-  width: 3rem;
-  height: 3rem;
+  width: 2rem;
+  height: 2rem;
   margin-right: 1rem;
 }
 
 .helpdesk-empty {
   text-align: center;
   padding: 3rem;
-  color: var(--main-text-color-secondary);
+  color: var(--text-color-secondary);
 }
 
 .helpdesk-empty i {
@@ -1044,10 +900,10 @@
 
 .helpdesk-empty h4 {
   margin-bottom: 0.5rem;
-  color: var(--main-text-color);
+  color: var(--text-color);
 }
 
 .helpdesk-empty p {
-  margin: 0;
-  font-size: 1.1rem;
+  margin-bottom: 0;
+  font-size: 0.9rem;
 }

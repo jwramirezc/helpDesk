@@ -3,7 +3,6 @@
  *
  * Este archivo contiene todas las configuraciones relacionadas con:
  * - Datos y URLs
- * - Filtros y opciones
  * - Configuración de Bootstrap Table
  * - Formatters y formateo
  * - Configuración de desarrollo
@@ -14,43 +13,6 @@ const helpdeskConfig = {
     url: 'data/helpdesk-tickets.json',
     actualizacionAutomatica: true,
     intervaloActualizacion: 30000, // 30 segundos
-  },
-
-  // Opciones de filtros (centralizadas)
-  opciones: {
-    estados: [
-      { value: '', label: 'Todos los estados' },
-      { value: 'Pendiente', label: 'Pendiente' },
-      { value: 'En Proceso', label: 'En Proceso' },
-      { value: 'Resuelto', label: 'Resuelto' },
-      { value: 'Cerrado', label: 'Cerrado' },
-    ],
-    categorias: [
-      { value: '', label: 'Todas las categorías' },
-      { value: 'Soporte Técnico', label: 'Soporte Técnico' },
-      { value: 'Hardware', label: 'Hardware' },
-      { value: 'Software', label: 'Software' },
-      { value: 'Red', label: 'Red' },
-      { value: 'Sistema', label: 'Sistema' },
-      { value: 'Base de Datos', label: 'Base de Datos' },
-      { value: 'Aplicación Web', label: 'Aplicación Web' },
-      { value: 'Correo Electrónico', label: 'Correo Electrónico' },
-      { value: 'Accesos', label: 'Accesos' },
-      { value: 'Servidor', label: 'Servidor' },
-      { value: 'Otros', label: 'Otros' },
-    ],
-    departamentos: [
-      { value: '', label: 'Todos los departamentos' },
-      { value: 'IT', label: 'IT' },
-      { value: 'Finanzas', label: 'Finanzas' },
-      { value: 'Recursos Humanos', label: 'Recursos Humanos' },
-      { value: 'Proyectos', label: 'Proyectos' },
-      { value: 'Ventas', label: 'Ventas' },
-      { value: 'Marketing', label: 'Marketing' },
-      { value: 'Diseño', label: 'Diseño' },
-      { value: 'Operaciones', label: 'Operaciones' },
-      { value: 'Contabilidad', label: 'Contabilidad' },
-    ],
   },
 
   // Configuración de Bootstrap Table
@@ -77,7 +39,7 @@ const helpdeskConfig = {
     },
   },
 
-  // Configuración de columnas
+  // Configuración de columnas (centralizada)
   columnas: [
     {
       key: 'id',
@@ -85,6 +47,7 @@ const helpdeskConfig = {
       sortable: true,
       width: '100px',
       visible: true,
+      field: 'id',
     },
     {
       key: 'asunto',
@@ -92,6 +55,7 @@ const helpdeskConfig = {
       sortable: true,
       width: 'auto',
       visible: true,
+      field: 'asunto',
     },
     {
       key: 'categoria',
@@ -99,6 +63,7 @@ const helpdeskConfig = {
       sortable: true,
       width: '120px',
       visible: true,
+      field: 'categoria',
     },
     {
       key: 'estado',
@@ -106,6 +71,7 @@ const helpdeskConfig = {
       sortable: true,
       width: '120px',
       visible: true,
+      field: 'estado',
     },
     {
       key: 'fecha',
@@ -113,6 +79,7 @@ const helpdeskConfig = {
       sortable: true,
       width: '100px',
       visible: true,
+      field: 'fecha',
     },
     {
       key: 'departamento',
@@ -120,6 +87,7 @@ const helpdeskConfig = {
       sortable: true,
       width: '150px',
       visible: true,
+      field: 'departamento',
     },
   ],
 

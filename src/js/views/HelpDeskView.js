@@ -17,7 +17,7 @@ class HelpDeskView {
       busqueda: '',
     };
     this.paginaActual = 1;
-    this.ticketsPorPagina = 10; // Valor por defecto
+    this.ticketsPorPagina = 10;
     this.modal = null;
     this.isInitialized = false;
     this.config = helpdeskConfig;
@@ -124,6 +124,9 @@ class HelpDeskView {
       console.log('Cargando datos iniciales...');
       await this.cargarDatosIniciales();
 
+      console.log('Generando headers de tabla...');
+      this.generarHeadersTabla();
+
       console.log('Cargando filtros...');
       this.cargarFiltros();
 
@@ -152,6 +155,45 @@ class HelpDeskView {
     } catch (error) {
       console.error('Error durante la inicialización:', error);
       this.mostrarError('Error al inicializar la vista: ' + error.message);
+    }
+  }
+
+  /**
+   * Genera los headers de tabla dinámicamente desde la configuración
+   */
+  generarHeadersTabla() {
+    const columnas = this.config.columnas;
+
+    // Generar headers para tabla temporal
+    const tablaTemporalHeader = document.getElementById(
+      'tabla-temporal-header'
+    );
+    if (tablaTemporalHeader) {
+      tablaTemporalHeader.innerHTML = columnas
+        .filter(col => col.visible)
+        .map(col => `<th>${col.label}</th>`)
+        .join('');
+    }
+
+    // Generar headers para Bootstrap Table
+    const bootstrapTableHeader = document.getElementById(
+      'bootstrap-table-header'
+    );
+    if (bootstrapTableHeader) {
+      bootstrapTableHeader.innerHTML = columnas
+        .filter(col => col.visible)
+        .map(col => {
+          const attrs = [
+            `data-field="${col.field}"`,
+            col.sortable ? 'data-sortable="true"' : '',
+            col.width !== 'auto' ? `data-width="${col.width}"` : '',
+          ]
+            .filter(Boolean)
+            .join(' ');
+
+          return `<th ${attrs}>${col.label}</th>`;
+        })
+        .join('');
     }
   }
 
@@ -201,8 +243,6 @@ class HelpDeskView {
       }
 
       console.log('Datos iniciales cargados exitosamente');
-      console.log('Tickets cargados:', this.tickets.length);
-      console.log('Usuario:', this.datosUsuario);
     } catch (error) {
       console.error('Error al cargar datos iniciales:', error);
       throw error;
@@ -210,105 +250,81 @@ class HelpDeskView {
   }
 
   /**
-   * Carga los filtros con las opciones de la configuración
+   * Carga los filtros dinámicamente desde los datos
    */
   cargarFiltros() {
-    console.log('Cargando filtros...');
+    console.log(
+      'Cargando filtros con tickets disponibles:',
+      this.tickets.length
+    );
+
+    if (this.tickets.length === 0) {
+      console.warn('No hay tickets disponibles para cargar filtros');
+      return;
+    }
+
     this.cargarFiltroEstados();
     this.cargarFiltroCategorias();
-    this.cargarOpcionesFormulario();
   }
 
   /**
-   * Carga las opciones del filtro de estados
+   * Carga las opciones de estados desde los datos
    */
   cargarFiltroEstados() {
-    const selectEstado = document.getElementById('filtro-estado');
-    if (!selectEstado) return;
+    if (!this.tickets || this.tickets.length === 0) {
+      console.warn('No hay tickets para cargar estados');
+      return;
+    }
 
-    const opciones = this.config.opciones.estados;
-    selectEstado.innerHTML = opciones
-      .map(opcion => `<option value="${opcion.value}">${opcion.label}</option>`)
-      .join('');
+    const estados = [...new Set(this.tickets.map(ticket => ticket.estado))];
+    console.log('Estados encontrados:', estados);
+
+    const select = document.getElementById('filtro-estado');
+    if (select) {
+      select.innerHTML = `
+        <option value="">Todos los estados</option>
+        ${estados
+          .map(estado => `<option value="${estado}">${estado}</option>`)
+          .join('')}
+      `;
+      console.log('Filtro de estados cargado con', estados.length, 'opciones');
+    } else {
+      console.error('Elemento filtro-estado no encontrado');
+    }
   }
 
   /**
-   * Carga las opciones del filtro de categorías
+   * Carga las opciones de categorías desde los datos
    */
   cargarFiltroCategorias() {
-    const selectCategoria = document.getElementById('filtro-categoria');
-    if (!selectCategoria) return;
+    if (!this.tickets || this.tickets.length === 0) {
+      console.warn('No hay tickets para cargar categorías');
+      return;
+    }
 
-    const opciones = this.config.opciones.categorias;
-    selectCategoria.innerHTML = opciones
-      .map(opcion => `<option value="${opcion.value}">${opcion.label}</option>`)
-      .join('');
-  }
+    const categorias = [
+      ...new Set(this.tickets.map(ticket => ticket.categoria)),
+    ];
+    console.log('Categorías encontradas:', categorias);
 
-  /**
-   * Carga las opciones del formulario
-   */
-  cargarOpcionesFormulario() {
-    this.cargarOpcionesCategoria();
-    this.cargarOpcionesDepartamento();
-    this.cargarOpcionesEstado();
-  }
-
-  /**
-   * Carga las opciones de categoría en el formulario
-   */
-  cargarOpcionesCategoria() {
-    const selectCategoria = document.getElementById('ticket-categoria');
-    if (!selectCategoria) return;
-
-    const opciones = this.config.opciones.categorias.filter(
-      opcion => opcion.value !== ''
-    );
-    selectCategoria.innerHTML =
-      '<option value="">Seleccionar...</option>' +
-      opciones
-        .map(
-          opcion => `<option value="${opcion.value}">${opcion.label}</option>`
-        )
-        .join('');
-  }
-
-  /**
-   * Carga las opciones de departamento en el formulario
-   */
-  cargarOpcionesDepartamento() {
-    const selectDepartamento = document.getElementById('ticket-departamento');
-    if (!selectDepartamento) return;
-
-    const opciones = this.config.opciones.departamentos.filter(
-      opcion => opcion.value !== ''
-    );
-    selectDepartamento.innerHTML =
-      '<option value="">Seleccionar...</option>' +
-      opciones
-        .map(
-          opcion => `<option value="${opcion.value}">${opcion.label}</option>`
-        )
-        .join('');
-  }
-
-  /**
-   * Carga las opciones de estado en el formulario
-   */
-  cargarOpcionesEstado() {
-    const selectEstado = document.getElementById('ticket-estado');
-    if (!selectEstado) return;
-
-    const opciones = this.config.opciones.estados.filter(
-      opcion => opcion.value !== ''
-    );
-    selectEstado.innerHTML =
-      '<option value="">Seleccionar...</option>' +
-      opciones
-        .map(
-          opcion => `<option value="${opcion.value}">${opcion.label}</option>`
-        )
-        .join('');
+    const select = document.getElementById('filtro-categoria');
+    if (select) {
+      select.innerHTML = `
+        <option value="">Todas las categorías</option>
+        ${categorias
+          .map(
+            categoria => `<option value="${categoria}">${categoria}</option>`
+          )
+          .join('')}
+      `;
+      console.log(
+        'Filtro de categorías cargado con',
+        categorias.length,
+        'opciones'
+      );
+    } else {
+      console.error('Elemento filtro-categoria no encontrado');
+    }
   }
 
   /**
@@ -326,17 +342,17 @@ class HelpDeskView {
    */
   agregarEventosBotones() {
     // Botón nuevo ticket
-    const btnNuevoTicket = document.getElementById('nuevo-ticket-btn');
-    if (btnNuevoTicket) {
-      btnNuevoTicket.addEventListener('click', () =>
+    const nuevoTicketBtn = document.getElementById('nuevo-ticket-btn');
+    if (nuevoTicketBtn) {
+      nuevoTicketBtn.addEventListener('click', () =>
         this.abrirModalNuevoTicket()
       );
     }
 
     // Botón guardar ticket
-    const btnGuardarTicket = document.getElementById('btn-guardar-ticket');
-    if (btnGuardarTicket) {
-      btnGuardarTicket.addEventListener('click', () =>
+    const guardarTicketBtn = document.getElementById('btn-guardar-ticket');
+    if (guardarTicketBtn) {
+      guardarTicketBtn.addEventListener('click', () =>
         this.guardarNuevoTicket()
       );
     }
@@ -368,81 +384,74 @@ class HelpDeskView {
    * Agrega eventos de búsqueda
    */
   agregarEventosBusqueda() {
-    const buscarTicket = document.getElementById('buscar-ticket');
-    if (!buscarTicket) return;
-
-    let timeoutId;
-    buscarTicket.addEventListener('input', e => {
-      clearTimeout(timeoutId);
-      timeoutId = setTimeout(() => {
-        this.filtros.busqueda = e.target.value;
-        this.filtrarTickets();
-      }, this.config.busqueda.tiempoDebounce);
-    });
+    const buscarInput = document.getElementById('buscar-ticket');
+    if (buscarInput) {
+      let timeoutId;
+      buscarInput.addEventListener('input', e => {
+        clearTimeout(timeoutId);
+        timeoutId = setTimeout(() => {
+          this.filtros.busqueda = e.target.value;
+          this.filtrarTickets();
+        }, this.config.busqueda.tiempoDebounce);
+      });
+    }
   }
 
   /**
-   * Agrega eventos al formulario
+   * Agrega eventos al formulario del modal
    */
   agregarEventosFormulario() {
-    const form = document.getElementById('form-nuevo-ticket');
-    if (!form) return;
-
     // Validación en tiempo real
-    const campos = [
-      'ticket-asunto',
-      'ticket-categoria',
-      'ticket-estado',
-      'ticket-descripcion',
-    ];
-    campos.forEach(campoId => {
-      const campo = document.getElementById(campoId);
-      if (campo) {
-        campo.addEventListener('blur', () => this.validarCampo(campoId));
-        campo.addEventListener('input', () => this.validarCampo(campoId));
-      }
-    });
+    const modal = document.getElementById('modal-nuevo-ticket');
+    if (modal) {
+      const inputs = modal.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.addEventListener('blur', () => this.validarCampo(input.id));
+        input.addEventListener('input', () => this.validarCampo(input.id));
+      });
+    }
   }
 
   /**
-   * Valida un campo del formulario
+   * Valida un campo específico del formulario
    */
   validarCampo(campoId) {
-    const campo = document.getElementById(campoId);
-    if (!campo) return;
+    const elemento = document.getElementById(campoId);
+    if (!elemento) return true;
 
-    const valor = campo.value.trim();
+    const valor = elemento.value.trim();
     let esValido = true;
     let mensaje = '';
 
+    // Validaciones específicas por campo
     switch (campoId) {
-      case 'ticket-asunto':
+      case 'asunto':
         if (valor.length < 5) {
           esValido = false;
           mensaje = 'El asunto debe tener al menos 5 caracteres';
         }
         break;
-      case 'ticket-categoria':
-        if (!valor) {
-          esValido = false;
-          mensaje = 'Debe seleccionar una categoría';
-        }
-        break;
-      case 'ticket-estado':
-        if (!valor) {
-          esValido = false;
-          mensaje = 'Debe seleccionar un estado';
-        }
-        break;
-      case 'ticket-descripcion':
+      case 'descripcion':
         if (valor.length < 10) {
           esValido = false;
           mensaje = 'La descripción debe tener al menos 10 caracteres';
         }
         break;
+      case 'categoria':
+        if (!valor) {
+          esValido = false;
+          mensaje = 'Debe seleccionar una categoría';
+        }
+        break;
+      case 'departamento':
+        if (!valor) {
+          esValido = false;
+          mensaje = 'Debe seleccionar un departamento';
+        }
+        break;
     }
 
-    this.mostrarValidacionCampo(campo, esValido, mensaje);
+    this.mostrarValidacionCampo(elemento, esValido, mensaje);
     return esValido;
   }
 
@@ -477,13 +486,10 @@ class HelpDeskView {
     try {
       console.log('Cargando tickets...');
 
-      if (this.tickets.length === 0) {
-        console.log('No hay tickets para cargar');
-        this.renderizarTabla();
-        return;
-      }
+      // Los tickets ya están cargados en cargarDatosIniciales()
+      console.log('Tickets cargados:', this.tickets.length);
 
-      console.log('Tickets disponibles:', this.tickets.length);
+      // Renderizar tabla
       this.renderizarTabla();
     } catch (error) {
       console.error('Error al cargar tickets:', error);
@@ -497,26 +503,15 @@ class HelpDeskView {
   verificarDependencias() {
     console.log('Verificando dependencias...');
 
-    const dependencias = {
-      jquery: typeof $ !== 'undefined',
-      bootstrap: typeof bootstrap !== 'undefined',
-      bootstrapTable: typeof $.fn.bootstrapTable !== 'undefined',
-    };
-
-    console.log('Estado de dependencias:', dependencias);
-
-    if (!dependencias.jquery) {
-      console.error('jQuery no está disponible');
+    // Verificar jQuery
+    if (typeof $ === 'undefined') {
+      console.warn('jQuery no está disponible');
       return false;
     }
 
-    if (!dependencias.bootstrap) {
-      console.error('Bootstrap no está disponible');
-      return false;
-    }
-
-    if (!dependencias.bootstrapTable) {
-      console.error('Bootstrap Table no está disponible');
+    // Verificar Bootstrap Table
+    if (typeof $.fn.bootstrapTable === 'undefined') {
+      console.warn('Bootstrap Table no está disponible');
       return false;
     }
 
@@ -528,65 +523,54 @@ class HelpDeskView {
    * Inicializa Bootstrap Table
    */
   inicializarBootstrapTable() {
-    console.log('=== INICIALIZANDO BOOTSTRAP TABLE ===');
+    console.log('Inicializando Bootstrap Table...');
 
     // Verificar dependencias
     if (!this.verificarDependencias()) {
       throw new Error('Dependencias no disponibles');
     }
 
-    const tabla = document.getElementById('tabla-tickets-bootstrap');
-    if (!tabla) {
+    const $table = $('#tabla-tickets-bootstrap');
+    if ($table.length === 0) {
       throw new Error('Tabla Bootstrap no encontrada');
     }
 
-    // Ocultar tabla temporal
-    const tablaTemporal = document.getElementById('tabla-temporal');
-    if (tablaTemporal) {
-      tablaTemporal.style.display = 'none';
-    }
-
-    // Mostrar contenedor de Bootstrap Table
-    const container = document.getElementById('bootstrap-table-container');
-    if (container) {
-      container.style.display = 'block';
-    }
-
-    // Configurar Bootstrap Table
-    const config = this.config.bootstrapTable.configuracion;
-    const opciones = {
-      ...config,
+    // Configuración de Bootstrap Table
+    const config = {
+      ...this.config.bootstrapTable.configuracion,
       data: this.tickets,
       columns: this.config.columnas.map(col => ({
-        field: col.key,
+        field: col.field,
         title: col.label,
         sortable: col.sortable,
         width: col.width,
         visible: col.visible,
-        formatter: this.config.formatters[col.key],
+        formatter: window[`${col.field}Formatter`] || undefined,
       })),
     };
 
-    console.log('Configuración Bootstrap Table:', opciones);
+    console.log('Configuración Bootstrap Table:', config);
 
-    // Inicializar Bootstrap Table
-    $(tabla).bootstrapTable(opciones);
+    // Inicializar tabla
+    $table.bootstrapTable(config);
+    this.bootstrapTable = $table;
 
-    this.bootstrapTable = $(tabla);
-    console.log('Bootstrap Table inicializado exitosamente');
+    // Mostrar tabla Bootstrap y ocultar tabla temporal
+    $('#bootstrap-table-container').show();
+    $('#tabla-temporal').hide();
+
+    console.log('Bootstrap Table inicializada correctamente');
   }
 
   /**
-   * Renderiza la tabla (método principal)
+   * Renderiza la tabla según el estado actual
    */
   renderizarTabla() {
-    console.log('Renderizando tabla...');
-
     if (this.bootstrapTable) {
-      console.log('Actualizando Bootstrap Table...');
-      this.bootstrapTable.bootstrapTable('load', this.tickets);
+      // Para Bootstrap Table, usar tickets filtrados
+      const ticketsFiltrados = this.aplicarFiltros();
+      this.bootstrapTable.bootstrapTable('load', ticketsFiltrados);
     } else {
-      console.log('Usando tabla simple...');
       this.renderizarTablaSimple();
     }
   }
@@ -598,144 +582,102 @@ class HelpDeskView {
     console.log('Renderizando tabla simple...');
 
     const tbody = document.getElementById('tickets-tbody');
-    if (!tbody) {
-      console.error('Tbody no encontrado');
-      return;
-    }
+    if (!tbody) return;
 
-    if (this.tickets.length === 0) {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="6" class="text-center text-muted py-4">
-            <i class="fas fa-inbox fa-2x mb-2"></i>
-            <p>No hay tickets disponibles</p>
-          </td>
-        </tr>
-      `;
-      return;
-    }
+    const ticketsFiltrados = this.aplicarFiltros();
 
-    tbody.innerHTML = this.tickets
+    tbody.innerHTML = ticketsFiltrados
       .map(ticket => this.generarFilaTabla(ticket))
       .join('');
+
+    // Mostrar tabla temporal y ocultar Bootstrap Table
+    $('#tabla-temporal').show();
+    $('#bootstrap-table-container').hide();
   }
 
   /**
    * Genera una fila de tabla para un ticket
    */
   generarFilaTabla(ticket) {
+    const formatters = this.config.formatters;
+
     return `
       <tr>
-        <td><span class="badge bg-secondary">${ticket.id}</span></td>
-        <td>
-          <div class="ticket-asunto">
-            <strong>${ticket.asunto}</strong>
-            <small class="text-muted d-block">${
-              ticket.descripcion
-                ? ticket.descripcion.substring(0, 50) + '...'
-                : ''
-            }</small>
-          </div>
-        </td>
-        <td><span class="badge bg-info">${ticket.categoria}</span></td>
-        <td>${this.formatearEstado(ticket.estado)}</td>
-        <td><small class="text-muted">${new Date(
-          ticket.fecha
-        ).toLocaleDateString('es-ES')}</small></td>
-        <td><span class="text-muted">${ticket.departamento}</span></td>
+        <td>${formatters.id(ticket.id)}</td>
+        <td>${formatters.asunto(ticket.asunto, ticket)}</td>
+        <td>${formatters.categoria(ticket.categoria)}</td>
+        <td>${formatters.estado(ticket.estado)}</td>
+        <td>${formatters.fecha(ticket.fecha)}</td>
+        <td>${formatters.departamento(ticket.departamento)}</td>
       </tr>
     `;
   }
 
   /**
-   * Formatea el estado de un ticket
-   */
-  formatearEstado(estado) {
-    const clases = {
-      Pendiente: 'bg-warning',
-      'En Proceso': 'bg-info',
-      Resuelto: 'bg-success',
-      Cerrado: 'bg-secondary',
-    };
-    return `<span class="badge ${
-      clases[estado] || 'bg-secondary'
-    }">${estado}</span>`;
-  }
-
-  /**
-   * Filtra los tickets según los criterios establecidos
+   * Filtra los tickets según los criterios actuales
    */
   filtrarTickets() {
     console.log('Filtrando tickets...');
     console.log('Filtros actuales:', this.filtros);
 
-    let ticketsFiltrados = [...this.tickets];
-
-    // Filtro por estado
-    if (this.filtros.estado) {
-      ticketsFiltrados = ticketsFiltrados.filter(
-        ticket => ticket.estado === this.filtros.estado
-      );
-    }
-
-    // Filtro por categoría
-    if (this.filtros.categoria) {
-      ticketsFiltrados = ticketsFiltrados.filter(
-        ticket => ticket.categoria === this.filtros.categoria
-      );
-    }
-
-    // Filtro por búsqueda
-    if (this.filtros.busqueda) {
-      const busqueda = this.filtros.busqueda.toLowerCase();
-      ticketsFiltrados = ticketsFiltrados.filter(ticket =>
-        this.config.busqueda.campos.some(
-          campo =>
-            ticket[campo] &&
-            ticket[campo].toString().toLowerCase().includes(busqueda)
-        )
-      );
-    }
-
+    const ticketsFiltrados = this.aplicarFiltros();
     console.log('Tickets filtrados:', ticketsFiltrados.length);
 
-    // Actualizar tabla con tickets filtrados
-    if (this.bootstrapTable) {
-      this.bootstrapTable.bootstrapTable('load', ticketsFiltrados);
-    } else {
-      this.tickets = ticketsFiltrados;
-      this.renderizarTablaSimple();
-    }
+    // Actualizar tabla
+    this.renderizarTabla();
   }
 
   /**
-   * Aplica los filtros actuales
+   * Aplica los filtros a los tickets
    */
   aplicarFiltros() {
-    this.filtrarTickets();
+    return this.tickets.filter(ticket => {
+      // Filtro por estado
+      if (this.filtros.estado && ticket.estado !== this.filtros.estado) {
+        return false;
+      }
+
+      // Filtro por categoría
+      if (
+        this.filtros.categoria &&
+        ticket.categoria !== this.filtros.categoria
+      ) {
+        return false;
+      }
+
+      // Filtro por búsqueda
+      if (this.filtros.busqueda) {
+        const busqueda = this.filtros.busqueda.toLowerCase();
+        const campos = this.config.busqueda.campos;
+        const coincide = campos.some(campo => {
+          const valor = ticket[campo];
+          return valor && valor.toString().toLowerCase().includes(busqueda);
+        });
+        if (!coincide) return false;
+      }
+
+      return true;
+    });
   }
 
   /**
-   * Actualiza las estadísticas mostradas
+   * Actualiza las estadísticas en el dashboard
    */
   actualizarEstadisticas(stats) {
     console.log('Actualizando estadísticas:', stats);
 
     const elementos = {
-      pendientes: document.getElementById('tickets-pendientes'),
-      proceso: document.getElementById('tickets-proceso'),
-      resueltos: document.getElementById('tickets-resueltos'),
+      'tickets-pendientes': stats.pendientes || 0,
+      'tickets-proceso': stats.enProceso || 0,
+      'tickets-resueltos': stats.resueltos || 0,
     };
 
-    if (elementos.pendientes) {
-      elementos.pendientes.textContent = stats.pendientes || 0;
-    }
-    if (elementos.proceso) {
-      elementos.proceso.textContent = stats.enProceso || 0;
-    }
-    if (elementos.resueltos) {
-      elementos.resueltos.textContent = stats.resueltos || 0;
-    }
+    Object.entries(elementos).forEach(([id, valor]) => {
+      const elemento = document.getElementById(id);
+      if (elemento) {
+        elemento.textContent = valor;
+      }
+    });
   }
 
   /**
@@ -747,16 +689,18 @@ class HelpDeskView {
       return;
     }
 
-    console.log(
-      'Configurando actualización automática cada',
-      this.config.datos.intervaloActualizacion,
-      'ms'
-    );
+    console.log('Configurando actualización automática...');
 
     this.intervaloActualizacion = setInterval(async () => {
       console.log('Actualización automática ejecutándose...');
-      await this.refrescarTickets();
+      try {
+        await this.refrescarTickets();
+      } catch (error) {
+        console.error('Error en actualización automática:', error);
+      }
     }, this.config.datos.intervaloActualizacion);
+
+    console.log('Actualización automática configurada');
   }
 
   /**
@@ -765,14 +709,11 @@ class HelpDeskView {
   abrirModalNuevoTicket() {
     console.log('Abriendo modal nuevo ticket...');
 
-    if (!this.modal) {
-      this.modal = new bootstrap.Modal(
-        document.getElementById('modal-nuevo-ticket')
-      );
-    }
-
-    this.limpiarFormulario();
-    this.modal.show();
+    const modal = new bootstrap.Modal(
+      document.getElementById('modal-nuevo-ticket')
+    );
+    modal.show();
+    this.modal = modal;
   }
 
   /**
@@ -782,37 +723,27 @@ class HelpDeskView {
     console.log('Guardando nuevo ticket...');
 
     // Validar formulario
-    const campos = [
-      'ticket-asunto',
-      'ticket-categoria',
-      'ticket-estado',
-      'ticket-descripcion',
-    ];
-    const camposValidos = campos.every(campo => this.validarCampo(campo));
+    const campos = ['asunto', 'descripcion', 'categoria', 'departamento'];
+    const esValido = campos.every(campo => this.validarCampo(campo));
 
-    if (!camposValidos) {
-      this.mostrarError(
-        'Por favor, complete todos los campos requeridos correctamente'
-      );
+    if (!esValido) {
+      this.mostrarError('Por favor, complete todos los campos correctamente');
       return;
     }
 
-    // Obtener datos del formulario
-    const nuevoTicket = {
-      id: `TKT-${Date.now()}`,
-      asunto: document.getElementById('ticket-asunto').value.trim(),
-      descripcion: document.getElementById('ticket-descripcion').value.trim(),
-      categoria: document.getElementById('ticket-categoria').value,
-      estado: document.getElementById('ticket-estado').value,
-      departamento:
-        document.getElementById('ticket-departamento').value || 'IT',
-      fecha: new Date().toISOString(),
-      usuario: this.datosUsuario ? this.datosUsuario.nombre : 'Usuario',
-    };
-
-    console.log('Nuevo ticket a guardar:', nuevoTicket);
-
     try {
+      // Recopilar datos del formulario
+      const nuevoTicket = {
+        id: `TKT-${Date.now()}`,
+        asunto: document.getElementById('asunto').value,
+        descripcion: document.getElementById('descripcion').value,
+        categoria: document.getElementById('categoria').value,
+        estado: 'Pendiente',
+        fecha: new Date().toISOString(),
+        departamento: document.getElementById('departamento').value,
+        usuario: this.datosUsuario ? this.datosUsuario.nombre : 'Usuario',
+      };
+
       // Agregar a la lista local
       this.tickets.unshift(nuevoTicket);
 
@@ -824,11 +755,13 @@ class HelpDeskView {
         this.modal.hide();
       }
 
+      // Limpiar formulario
+      this.limpiarFormulario();
+
       // Mostrar mensaje de éxito
       this.mostrarExito('Ticket creado exitosamente');
 
-      // Limpiar formulario
-      this.limpiarFormulario();
+      console.log('Ticket guardado:', nuevoTicket);
     } catch (error) {
       console.error('Error al guardar ticket:', error);
       this.mostrarError('Error al crear el ticket: ' + error.message);
@@ -836,37 +769,27 @@ class HelpDeskView {
   }
 
   /**
-   * Limpia el formulario de nuevo ticket
+   * Limpia el formulario del modal
    */
   limpiarFormulario() {
-    const campos = [
-      'ticket-asunto',
-      'ticket-categoria',
-      'ticket-departamento',
-      'ticket-estado',
-      'ticket-descripcion',
-      'ticket-adjuntos',
-    ];
+    const modal = document.getElementById('modal-nuevo-ticket');
+    if (modal) {
+      const inputs = modal.querySelectorAll('input, select, textarea');
+      inputs.forEach(input => {
+        input.value = '';
+        input.classList.remove('is-valid', 'is-invalid');
+      });
 
-    campos.forEach(campoId => {
-      const campo = document.getElementById(campoId);
-      if (campo) {
-        campo.value = '';
-        campo.classList.remove('is-valid', 'is-invalid');
-
-        // Remover mensajes de validación
-        const feedback = campo.parentNode.querySelector(
-          '.valid-feedback, .invalid-feedback'
-        );
-        if (feedback) {
-          feedback.remove();
-        }
-      }
-    });
+      // Limpiar mensajes de validación
+      const feedbacks = modal.querySelectorAll(
+        '.valid-feedback, .invalid-feedback'
+      );
+      feedbacks.forEach(feedback => feedback.remove());
+    }
   }
 
   /**
-   * Refresca los tickets
+   * Refresca los tickets desde el servidor
    */
   async refrescarTickets() {
     console.log('Refrescando tickets...');
@@ -877,57 +800,53 @@ class HelpDeskView {
       console.log('Tickets refrescados exitosamente');
     } catch (error) {
       console.error('Error al refrescar tickets:', error);
+      throw error;
     }
   }
 
   /**
-   * Exporta los tickets
+   * Exporta los tickets a CSV
    */
   exportarTickets() {
     console.log('Exportando tickets...');
 
-    if (this.tickets.length === 0) {
-      this.mostrarError('No hay tickets para exportar');
-      return;
+    try {
+      const ticketsFiltrados = this.aplicarFiltros();
+      const csv = this.convertirACSV(ticketsFiltrados);
+      const nombreArchivo = `tickets_${
+        new Date().toISOString().split('T')[0]
+      }.csv`;
+
+      this.descargarArchivo(csv, nombreArchivo, 'text/csv');
+      this.mostrarExito('Tickets exportados exitosamente');
+
+      console.log('Tickets exportados:', ticketsFiltrados.length);
+    } catch (error) {
+      console.error('Error al exportar tickets:', error);
+      this.mostrarError('Error al exportar tickets: ' + error.message);
     }
-
-    const csv = this.convertirACSV(this.tickets);
-    const nombreArchivo =
-      this.config.bootstrapTable.configuracion.exportOptions.fileName ||
-      'mis-tickets';
-
-    this.descargarArchivo(csv, `${nombreArchivo}.csv`, 'text/csv');
-    this.mostrarExito('Tickets exportados exitosamente');
   }
 
   /**
    * Convierte los tickets a formato CSV
    */
   convertirACSV(tickets) {
-    const headers = [
-      'ID',
-      'Asunto',
-      'Categoría',
-      'Estado',
-      'Fecha',
-      'Departamento',
-      'Usuario',
-    ];
-    const rows = tickets.map(ticket => [
-      ticket.id,
-      ticket.asunto,
-      ticket.categoria,
-      ticket.estado,
-      new Date(ticket.fecha).toLocaleDateString('es-ES'),
-      ticket.departamento,
-      ticket.usuario,
-    ]);
+    const headers = this.config.columnas
+      .filter(col => col.visible)
+      .map(col => col.label);
 
-    const csvContent = [headers, ...rows]
-      .map(row => row.map(cell => `"${cell}"`).join(','))
-      .join('\n');
+    const rows = tickets.map(ticket =>
+      this.config.columnas
+        .filter(col => col.visible)
+        .map(col => {
+          const valor = ticket[col.field];
+          // Escapar comillas en CSV
+          return `"${String(valor || '').replace(/"/g, '""')}"`;
+        })
+        .join(',')
+    );
 
-    return csvContent;
+    return [headers.join(','), ...rows].join('\n');
   }
 
   /**
@@ -954,27 +873,24 @@ class HelpDeskView {
     console.log('Éxito:', mensaje);
 
     // Crear notificación
-    const notificacion = document.createElement('div');
-    notificacion.className =
-      'alert alert-success alert-dismissible fade show position-fixed';
-    notificacion.style.cssText = `
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-      min-width: 300px;
-    `;
-    notificacion.innerHTML = `
-      <i class="fas fa-check-circle me-2"></i>
+    const alerta = document.createElement('div');
+    alerta.className = 'alert alert-success alert-dismissible fade show';
+    alerta.innerHTML = `
+      <i class="fas fa-check-circle"></i>
       ${mensaje}
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
 
-    document.body.appendChild(notificacion);
+    // Insertar en el contenedor
+    const contenedor = document.querySelector('.helpdesk-container');
+    if (contenedor) {
+      contenedor.insertBefore(alerta, contenedor.firstChild);
+    }
 
     // Auto-remover después del tiempo configurado
     setTimeout(() => {
-      if (notificacion.parentNode) {
-        notificacion.remove();
+      if (alerta.parentNode) {
+        alerta.remove();
       }
     }, this.config.notificaciones.duracion);
   }
@@ -988,27 +904,24 @@ class HelpDeskView {
     console.error('Error:', mensaje);
 
     // Crear notificación
-    const notificacion = document.createElement('div');
-    notificacion.className =
-      'alert alert-danger alert-dismissible fade show position-fixed';
-    notificacion.style.cssText = `
-      top: 20px;
-      right: 20px;
-      z-index: 9999;
-      min-width: 300px;
-    `;
-    notificacion.innerHTML = `
-      <i class="fas fa-exclamation-triangle me-2"></i>
+    const alerta = document.createElement('div');
+    alerta.className = 'alert alert-danger alert-dismissible fade show';
+    alerta.innerHTML = `
+      <i class="fas fa-exclamation-triangle"></i>
       ${mensaje}
       <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
     `;
 
-    document.body.appendChild(notificacion);
+    // Insertar en el contenedor
+    const contenedor = document.querySelector('.helpdesk-container');
+    if (contenedor) {
+      contenedor.insertBefore(alerta, contenedor.firstChild);
+    }
 
     // Auto-remover después del tiempo configurado
     setTimeout(() => {
-      if (notificacion.parentNode) {
-        notificacion.remove();
+      if (alerta.parentNode) {
+        alerta.remove();
       }
     }, this.config.notificaciones.duracion);
   }
@@ -1021,7 +934,7 @@ class HelpDeskView {
   }
 
   /**
-   * Métodos placeholder para acciones futuras
+   * Métodos de acciones (placeholder)
    */
   verTicket(id) {
     console.log('Ver ticket:', id);
@@ -1039,7 +952,7 @@ class HelpDeskView {
   }
 
   /**
-   * Destruye la vista y limpia recursos
+   * Destruye la instancia y limpia recursos
    */
   destruir() {
     console.log('Destruyendo HelpDeskView...');
@@ -1047,19 +960,16 @@ class HelpDeskView {
     // Limpiar intervalo de actualización
     if (this.intervaloActualizacion) {
       clearInterval(this.intervaloActualizacion);
-      this.intervaloActualizacion = null;
     }
 
-    // Destruir Bootstrap Table si existe
+    // Limpiar Bootstrap Table
     if (this.bootstrapTable) {
       this.bootstrapTable.bootstrapTable('destroy');
-      this.bootstrapTable = null;
     }
 
-    // Destruir modal si existe
+    // Limpiar modal
     if (this.modal) {
       this.modal.dispose();
-      this.modal = null;
     }
 
     this.isInitialized = false;
