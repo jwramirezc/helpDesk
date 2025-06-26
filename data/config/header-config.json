@@ -22,7 +22,7 @@
       "icon": "fas fa-bell",
       "tooltip": "Ver notificaciones",
       "type": "popover",
-      "enabled": true,
+      "enabled": false,
       "movil": true,
       "order": 1,
       "permissions": {
@@ -60,26 +60,6 @@
               "enabled": true,
               "order": 2,
               "class": "submenu-item"
-            },
-            {
-              "id": "notification-settings",
-              "label": "Configurar notificaciones",
-              "icon": "fas fa-cog",
-              "action": "notification-settings",
-              "type": "item",
-              "enabled": true,
-              "order": 4,
-              "class": "submenu-item"
-            },
-            {
-              "id": "mark-all-read",
-              "label": "Marcar todas como leídas",
-              "icon": "fas fa-check-double",
-              "action": "mark-all-read",
-              "type": "item",
-              "enabled": true,
-              "order": 5,
-              "class": "submenu-item"
             }
           ]
         }
@@ -91,7 +71,7 @@
       "icon": "fas fa-question-circle",
       "tooltip": "Ayuda y soporte",
       "type": "popover",
-      "enabled": true,
+      "enabled": false,
       "movil": false,
       "order": 4,
       "permissions": {
